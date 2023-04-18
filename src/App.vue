@@ -15,7 +15,7 @@ export default {
     getData(){
       axios.post(`http://47.115.231.184:5555/api/login`).then((response)=>{
         this.xinwenList = response.data
-        console.log('我是数据TEST',this.xinwenList)
+        console.log('我是数据TEST33',this.xinwenList)
       })
     }
   }
