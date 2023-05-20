@@ -1,32 +1,30 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-  <div>
+  <div style="">
     <!-- 头部背景图片 -->
     <div class="headImgBox">
       <div class="scene">
         <div style="margin-top: 150px;"><span id="luke"></span></div>
       </div>
-      <div class="h-information" >
+      <div class="h-information">
         <a href="">
           <img src="../../assets/Images/headBg.jpg">
         </a>
         <h2 class="h-description">
           <a>
-            {{"ようこそSPURAのブログへ！"}}
+            {{ "ようこそSPURAのブログへ！" }}
           </a>
         </h2>
       </div>
     </div>
-    <div id="layout-body" >
-    <router-view></router-view>
-    <backTop :defaultProps="55" :date="1000" :color="blue"></backTop>
-    <Home></Home>
-    <ArtLists></ArtLists>
-    <MyDemo></MyDemo>
+    <div id="layout-body">
+      <router-view></router-view>
+      <backTop :defaultProps="55" :date="1000" :color="blue"></backTop>
+      <Home></Home>
+      <ArtLists></ArtLists>
+      <MyDemo></MyDemo>
+    </div>
   </div>
-  </div>
-  
-    
 </template>
 
 <script>
@@ -34,19 +32,17 @@ import backTop from '../nav/ToTap.vue'
 import ArtLists from '../Body/ArtLists.vue'
 import MyDemo from '../Body/MyDemo.vue'
 import Home from '../../views/HomeSss.vue'
-import {
-	Typeit
-} from '../../utils/plug.js'
+import {Typeit } from '../../utils/plug.js'
 export default {
   name: "layout-body",
   data() {
     return {
-      show:true,
+      show: true,
       minHeight: 600,
-      test:''
+      test: ''
     }
   },
-  components: { backTop,ArtLists,MyDemo,Home },
+  components: { backTop, ArtLists, MyDemo, Home },
   mounted() {//页面元素加载完成
     window.addEventListener('scroll', this.watchScroll)
     // 首页字体
@@ -57,12 +53,12 @@ export default {
     你可以在回调函数之前先将 this 存储在另一个变量中，
     然后在回调函数中使用该变量
     */
-    var timer = setTimeout(function() {
-			Typeit(that.test, "#luke"); //打字机效果
-			clearTimeout(timer);
-		}, 500);
+    var timer = setTimeout(function () {
+      Typeit(that.test, "#luke"); //打字机效果
+      clearTimeout(timer);
+    }, 500);
   },
-  methods:{},
+  methods: {},
 }
 </script>
 
@@ -78,7 +74,8 @@ export default {
   /*使也页面滚动更顺滑*/
   scroll-behavior: smooth;
 }
-  /*overflow: hidden;*/
+
+/*overflow: hidden;*/
 
 /*****/
 @media (max-width: 800px) {
@@ -223,6 +220,7 @@ export default {
 }
 
 @keyframes caret {
+
   0%,
   100% {
     opacity: 1;

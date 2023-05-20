@@ -1,153 +1,210 @@
+
 <template>
-  <div class="message-board">
-    <h1 class="title">留言板</h1>
-    <form class="message-form" @submit.prevent="submitMessage">
-      <div class="form-item">
-        <label for="username">用户名：</label>
-        <input type="text" id="username" v-model="username" required />
-      </div>
-      <div class="form-item">
-        <label for="content">留言内容：</label>
-        <textarea id="content" v-model="content" required></textarea>
-      </div>
-      <button type="submit" class="submit-button">提交留言</button>
-    </form>
-    <ul class="message-list">
-      <li
-        v-for="message in displayedMessages"
-        :key="message.id"
-        class="message-item"
-      >
-        <div class="message-header">
-          <span class="username">{{ message.username }}</span>
-          <span class="date">{{ formatDate(message.date) }}</span>
-        </div>
-        <p class="content">{{ message.content }}</p>
-        <div class="reply-form" v-show="message.showReplyForm">
-          <form @submit.prevent="submitReply(message)">
-            <div class="form-item">
-              <label for="replyUsername">用户名：</label>
-              <input
-                type="text"
-                id="replyUsername"
-                v-model="message.replyUsername"
-                required
-              />
+  <div class="body">
+    <h1 class="board-body">留言板</h1>
+    <div class="message-board">
+      <div class="message-list">
+        <div
+          v-for="(message) in displayedMessages"
+          :key="message.id"
+          class="message"
+        >
+          <div class="message-header">
+            <span class="message-name">{{ message.name }}</span>
+            <span class="message-time">{{ formatDate(message.timestamp) }}</span>
+          </div>
+          <div class="message-body">{{ message.content }}</div>
+          <div class="message-footer">
+            <div class="floor">楼层 {{ message.floor }}</div>
+            <button @click="replyTo(message)">回复</button>
+            <div v-if="message.replies">
+              <div
+                v-for="(reply) in message.replies"
+                :key="reply.id"
+                class="reply"
+              >
+                <div class="reply-header">
+                  <span class="reply-name">{{ reply.name }}</span>
+                  <span class="reply-time">{{ formatDate(reply.timestamp) }}</span>
+                </div>
+                <div class="reply-body">{{ reply.content }}</div>
+                <div class="floor">楼层 {{ reply.floor }}</div>
+              </div>
             </div>
-            <div class="form-item">
-              <label for="replyContent">回复内容：</label>
-              <textarea
-                id="replyContent"
-                v-model="message.replyContent"
-                required
-              ></textarea>
-            </div>
-            <button type="submit" class="submit-button">提交回复</button>
-          </form>
-        </div>
-        <div class="reply-list">
-          <div
-            v-for="reply in message.replies"
-            :key="reply.id"
-            class="reply-item"
-          >
-            <div class="reply-header">
-              <span class="username">{{ reply.username }}</span>
-              <span class="date">{{ formatDate(reply.date) }}</span>
-            </div>
-            <p class="content">{{ reply.content }}</p>
           </div>
         </div>
-        <div class="reply-button" v-show="!message.showReplyForm">
-          <button @click="toggleReplyForm(message)">回复</button>
+        <div class="pagination">
+          <button :disabled="currentPage === 1" @click="currentPage--">
+            上一页
+          </button>
+          <span>{{ currentPage }} / {{ pageCount }}</span>
+          <button :disabled="currentPage === pageCount" @click="currentPage++">
+            下一页
+          </button>
         </div>
-      </li>
-    </ul>
-    <div class="pagination">
-      <button @click="changePage(-1)" :disabled="currentPage === 1">
-        上一页
-      </button>
-      <button
-        v-for="page in pages"
-        :key="page"
-        @click="changePage(page)"
-        :class="{ active: currentPage === page }"
-      >
-        {{ page }}
-      </button>
-      <button @click="changePage(1)" :disabled="currentPage === pageCount">
-        下一页
-      </button>
+      </div>
+      <div class="message-form">
+        <div class="message-editor">
+          <quill-editor v-model="message" :options="editorOptions" />
+        </div>
+        <div class="message-submit">
+          <button @click="submitMessage">提交</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
-<script>
-import axios from "axios";
 
-export default {
-  data() {
-    return {
-      username: "",
-      content: "",
-      messages: [],
-      currentPage: 1,
-      pageCount: 1,
-    };
-  },
-  mounted() {
-    this.fetchMessages();
-  },
-  computed: {
-    displayedMessages() {
-      const start = (this.currentPage - 1) * 10;
-      const end = start + 10;
-      return this.messages.slice(start, end);
+<script>
+  import axios from "axios";
+
+  const baseURL = "http://47.115.231.184:5555";
+
+  const formatErrorMessage = (error) => {
+    const errorMessage = error.response.data.message;
+    const errorStatus = error.response.status;
+    return `${errorStatus}: ${errorMessage}`;
+  };
+
+  export default {
+    data() {
+      return {
+        displayedMessages: [],
+        currentPage: 1,
+        pageCount: 1,
+        message: "",
+        editorOptions: {
+          placeholder: "请留言...",
+        },
+      };
     },
-    pages() {
-      return Array(Math.ceil(this.messageCount / 10))
-        .fill()
-        .map((_, i) => i + 1);
+    methods: {
+      async submitMessage() {
+        try {
+          const { data } = await axios.post(`${baseURL}/messages`, {
+            content: this.message,
+          });
+          this.message = "";
+          this.displayedMessages = [data, ...this.displayedMessages];
+        } catch (error) {
+          alert(formatErrorMessage(error));
+        }
+      },
+      async fetchMessages() {
+        try {
+          const { data } = await axios.get(`${baseURL}/messages`, {
+            params: {
+              page: this.currentPage,
+            },
+          });
+          this.displayedMessages = data.results;
+          this.pageCount = data.pageCount;
+        } catch (error) {
+          alert(formatErrorMessage(error));
+        }
+      },
+      async replyTo(message) {
+        const replyContent = prompt("请输入回复内容：");
+        if (replyContent) {
+          try {
+            const { data } = await axios.post(
+              `${baseURL}/messages/${message.id}/replies`,
+              {
+                content: replyContent,
+              }
+            );
+            message.replies = [data, ...(message.replies || [])];
+          } catch (error) {
+            alert(formatErrorMessage(error));
+          }
+        }
+      },
+      formatDate(timestamp) {
+        return formatDate(timestamp);
+      },
     },
-  },
-  methods: {
-    async fetchMessages() {
-      const response = await axios.get("/api/messages");
-      this.messages = response.data.messages;
-      this.messageCount = response.data.messageCount;
-      this.pageCount = Math.ceil(this.messageCount / 10);
+    async created() {
+      await this.fetchMessages();
     },
-    formatDate(date) {
-      return new Date(date).toLocaleString();
-    },
-    async submitMessage() {
-      const response = await axios.post("/api/messages", {
-        username: this.username,
-        content: this.content,
-      });
-      const message = response.data;
-      this.messages.unshift(message);
-      this.username = "";
-      this.content = "";
-    },
-    toggleReplyForm(message) {
-      message.showReplyForm = !message.showReplyForm;
-      message.replyUsername = "";
-      message.replyContent = "";
-    },
-    async submitReply(message) {
-      const response = await axios.post(`/api/messages/${message.id}/replies`, {
-        username: message.replyUsername,
-        content: message.replyContent,
-      });
-      const reply = response.data;
-      message.replies.push(reply);
-      message.showReplyForm = false;
-      message.replyUsername = "";
-      message.replyContent = "";
-    },
-    changePage(page) {
-      this.currentPage = Math.max(1, Math.min(page, this.pageCount));
-    },
-  },
-};
+  };
 </script>
+
+
+
+<style>
+.body {
+  margin-top: 80px;
+  padding: 10px 100px;
+}
+.board-body {
+  text-align: center;
+}
+.message-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.message-list {
+  width: 100%;
+}
+.message {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+.message-header {
+  font-weight: bold;
+}
+.message-body {
+  margin: 10px 0;
+}
+.reply {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+.reply-header {
+  font-weight: bold;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+.pagination button:hover {
+  background-color: #eee;
+}
+.message-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.message-editor {
+  width: 100%;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+.message-submit button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #008cba;
+  color: #fff;
+  cursor: pointer;
+}
+.message-submit button:hover {
+  background-color: #0077a3;
+}
+</style>
