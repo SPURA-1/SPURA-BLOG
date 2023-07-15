@@ -5,5 +5,5 @@ module.exports = defineConfig({
 })
 module.exports = {
   publicPath: './',
-  outputDir: 'dist'
+  outputDir: 'dist',
 }

@@ -1,29 +1,6 @@
 <template>
   <div id="layout-footer">
     <div class="footer-main">
-      <div class="footer-item" v-if="socials.length">
-        <div v-for="item in socials" :key="item.id">
-          <a v-if="item.href" target="_blank" class="out-link" :href="item.href">
-            <i class="iconfont" :class="item.icon"></i>{{ item.title }}</a>
-          <el-popover
-              v-else
-              placement="bottom"
-              width="100"
-              trigger="click"
-              content="这是一段内容">
-            <el-image
-                v-if="item.img"
-                style="width: 100px; height: 100px;"
-                :src="item.img"
-                :preview-src-list="[item.img]"
-                fit="contain"
-            ></el-image>
-            <p v-if="item.text">{{ item.text }}</p>
-            <span slot="reference" class="out-link cus">
-              <i class="iconfont" :class="item.icon"></i>{{ item.title }}</span>
-          </el-popover>
-        </div>
-      </div>
       <div class="footer-item">
         <div style="font-size:17px;font-weight: bold;">资源</div>
         <div><a target="_blank" class="out-link" href="https://segmentfault.com/weekly?utm_source=sf-footer">每周精选</a>
@@ -56,28 +33,8 @@ export default {
   name: "layout-footer",
   data() {
     return {
-      socials: []
     }
   },
-  components: {
-    
-  },
-  computed: {
-    runTimeInterval() {
-      return this.$store.state.runTimeInterval;
-    }
-  },
-  methods: {
-    getSocial() {
-      this.$store.dispatch('getSocials').then(data => {
-        this.socials = data
-      })
-    },
-  },
-  created() {
-    this.getSocial();
-    this.$store.dispatch('initComputeTime');
-  }
 }
 </script>
 
@@ -154,13 +111,4 @@ export default {
   }
 }
 
-/*****/
-
-.cus {
-  cursor: pointer;
-
-  &:hover {
-    color: #ff6d6d;
-  }
-}
 </style>

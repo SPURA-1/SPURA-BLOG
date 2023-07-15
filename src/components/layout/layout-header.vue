@@ -26,7 +26,7 @@
         <router-link to="/blockly">编程</router-link>
       </div>
       <div class="menu-item">
-        <router-link to="/MessageBoard">友链</router-link>
+        <router-link to="/MessageBoard">留言板</router-link>
       </div>
       <div class="menu-item">
         <router-link to="/about">关于</router-link>

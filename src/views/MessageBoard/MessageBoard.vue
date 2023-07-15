@@ -9,63 +9,265 @@
       <div class="left-column">
         <div class="comment-module">
           <div class="comment-title">发表评论</div>
-          <textarea class="comment-input" placeholder="请输入评论内容"></textarea>
+          <textarea class="comment-input" placeholder="请输入评论内容" v-model="commentContent"></textarea>
+          <!-- 表情 -->
           <div class="emoji-selector">
-            <button class="emoji-button">OwO表情</button>
-            <div class="emoji-panel">
-              <!-- 表情选择面板内容 -->
+            <button class="emoji-button" @click="toggleEmojiPicker">OwO表情</button>
+            <div class="emoji-panel" v-show="showEmojiPicker">
+              <picker @select="handleEmojiClick"></picker>
             </div>
           </div>
-          <button class="submit-button">提交评论</button>
+          <!-- 名称 -->
+          <div class="name-option">
+            <label class="name-option-label">
+              <input type="radio" value="auto" v-model="nameOption">
+              自动设置名称
+            </label>
+            <label class="name-option-label">
+              <input type="radio" value="custom" v-model="nameOption">
+              留下你的名称
+            </label>
+            <div v-if="nameOption === 'custom'" class="name-input">
+              <input type="text" placeholder="请输入你的名称" v-model="customName">
+            </div>
+          </div>
+          <button class="submit-button" @click="submitComment">提交评论</button>
         </div>
         <div class="comment-module">
-          <div class="comment-title">评论列表||活捉 {{ commentCount }} 条</div>
+          <div class="comment-title">评论列表 || 活捉 {{ comments.length }} 条</div>
           <h2 class="comment-title"></h2>
           <div class="comment-list">
-            <!-- 评论项内容 -->
+            <div v-for="comment in visibleComments" :key="comment.id" class="comment-item">
+              <div class="comment-user">{{ comment.username }}</div>
+              <div class="comment-content">{{ comment.content }}</div>
+              <div class="comment-time">{{ formatTime(comment.created_time) }}</div>
+              <div class="comment-time">
+                <div style="margin-left: 10px;">{{ comment.city }}</div>
+              </div>
+            </div>
           </div>
-          <button class="load-more-button">查看更多</button>
+          <button class="load-more-button" @click="loadMoreComments" v-if="commentCount < comments.length">查看更多</button>
           <p v-if="noMoreComments" class="no-more-comments">没有更多评论了</p>
         </div>
+
       </div>
       <div class="right-column">
         <div class="profile-box">
-          <div class="comment-title">个人信息展示框内容</div>
+          <div class="comment-title">个人信息展示框</div>
           个人信息展示框内容
         </div>
         <div class="likebox">
-          <div class="comment-title">点赞框内容</div>
-          点赞框内容
+          <div class="comment-title">点赞框</div>
+          <div class="like-info">
+            <div class="heart" @click="handleLikeClick"></div>
+            <div class="likecounts">{{ likecounts }}</div>
+          </div>
         </div>
         <div class="popular-locations-box">
-          <div class="comment-title">热门地区展示框内容</div>
-          热门地区展示框内容
+          <div class="comment-title">热门地区</div>
+          <canvas id="ip-chart" style="width: 150px; height: 150px;"></canvas>
         </div>
       </div>
     </div>
-    <backTop :defaultProps="55" :date="1000" :color="blue"></backTop>
+    <backTop :defaultProps="55" :date="1000" color="blue"></backTop>
   </div>
 </template>
 
 <script>
-import {Typeit } from '../../utils/plugMsg.js'
-import backTop from '../../components/nav/ToTap.vue'
+import chart from '../../assets/JS/chart';
+import { Typeit } from '../../utils/plugMsg.js';
+import backTop from '../../components/nav/ToTap.vue';
+import axios from 'axios';
+
+// 引入表情
+import { Picker } from 'emoji-mart-vue';
+
 export default {
   data() {
     return {
-      commentCount: 0,
-      noMoreComments: false,
-      // other data
+      // 评论区
+      commentContent: '',
+      nameOption: 'auto',
+      customName: '',
+      likecounts: null,
+      comments: [],  // 评论数据
+      commentCount: 5,  // 当前显示的评论数量
+      noMoreComments: false,  // 是否没有更多评论了
+      // 表情包
+      showEmojiPicker: false,
+      // 饼图
+      ipChart: null,
+      cityMapping: {
+        Beijing: '北京',
+        Shanghai: '上海',
+        Guangzhou: '广州',
+        Chengdu: '成都',
+        Shenzhen: '深圳',
+        Hangzhou: '杭州',
+        Xian: '西安',
+        Wuhan: '武汉',
+        Chongqing: '重庆',
+        Nanjing: '南京',
+        Tianjin: '天津',
+        Suzhou: '苏州',
+        Dalian: '大连',
+        Qingdao: '青岛',
+        Xiamen: '厦门',
+        Kunming: '昆明',
+        Zhengzhou: '郑州',
+        Changsha: '长沙',
+        Shenyang: '沈阳',
+        Ningbo: '宁波',
+        Fuzhou: '福州',
+        Hefei: '合肥',
+        Jinan: '济南',
+        Nanning: '南宁',
+        Changchun: '长春',
+        Harbin: '哈尔滨',
+        Urumqi: '乌鲁木齐',
+        Lanzhou: '兰州',
+        Guiyang: '贵阳',
+        Haikou: '海口',
+        Taiyuan: '太原',
+        Xining: '西宁',
+        Hohhot: '呼和浩特',
+        Nanchang: '南昌',
+        Yinchuan: '银川',
+        Shijiazhuang: '石家庄',
+        Wenzhou: '温州',
+        Tangshan: '唐山',
+        Luoyang: '洛阳',
+        Jilin: '吉林',
+        Foshan: '佛山',
+        Wuxi: '无锡',
+        Nantong: '南通',
+        Xuzhou: '徐州',
+        Weifang: '潍坊',
+        Taizhou: '泰州',
+        Yantai: '烟台',
+        Huizhou: '惠州',
+        Bengbu: '蚌埠',
+        Huaian: '淮安',
+        Datong: '大同',
+        Yichang: '宜昌',
+        Zibo: '淄博',
+        Anshan: '鞍山',
+        Fushun: '抚顺',
+        Zhenjiang: '镇江',
+        Zhuhai: '珠海',
+        Liuzhou: '柳州',
+        Jinhua: '金华',
+        Shaoxing: '绍兴',
+        Linyi: '临沂',
+        Yangzhou: '扬州',
+        Huainan: '淮南',
+        Quanzhou: '泉州',
+        Xiangtan: '湘潭',
+        Nanyang: '南阳',
+        Wuhu: '芜湖',
+        Handan: '邯郸',
+        Luan: '六安',
+        Leshan: '乐山',
+        Yiwu: '义乌',
+        Changzhou: '常州',
+        Zhanjiang: '湛江',
+        Qujing: '曲靖',
+        Suqian: '宿迁',
+        Benxi: '本溪',
+        Huaihua: '怀化',
+        Jiaxing: '嘉兴',
+        Zunyi: '遵义',
+        Xiangyang: '襄阳',
+        Zhuzhou: '株洲',
+        Taizhou: '台州',
+        Xuchang: '许昌',
+        Loudi: '娄底',
+        Fuyang: '阜阳',
+        Panjin: '盘锦',
+        Zigong: '自贡',
+        Yueyang: '岳阳',
+        Jiujiang: '九江',
+        Yibin: '宜宾',
+        Maanshan: '马鞍山',
+        Zhangzhou: '漳州',
+        Anyang: '安阳',
+        Linfen: '临汾',
+        Huaibei: '淮北',
+        Nanchong: '南充',
+        Pingdingshan: '平顶山',
+        Neijiang: '内江',
+        Fuling: '涪陵',
+        Xinyang: '信阳',
+        Xianyang: '咸阳',
+        Yancheng: '盐城',
+        Jingzhou: '荆州',
+        Pingxiang: '萍乡',
+        Jinzhou: '锦州',
+        Zhaotong: '昭通',
+        Wuhai: '乌海',
+        Tongliao: '通辽',
+        Qinhuangdao: '秦皇岛',
+        Jiangmen: '江门',
+        Dandong: '丹东',
+        Putian: '莆田',
+        Hengyang: '衡阳',
+        Zhangjiakou: '张家口',
+        Qiqihar: '齐齐哈尔',
+        Jingdezhen: '景德镇',
+        Jining: '济宁',
+        Yangjiang: '阳江',
+        Xinxiang: '新乡',
+        Dongying: '东营',
+        Liaocheng: '聊城',
+        Quzhou: '衢州',
+        Shangqiu: '商丘',
+        Anqing: '安庆',
+        Xingtai: '邢台',
+        Bazhong: '巴中',
+        Jiaozuo: '焦作',
+        Xuancheng: '宣城',
+        Zhongshan: '中山',
+        Yingkou: '营口',
+        Chifeng: '赤峰',
+        Luzhou: '泸州',
+        Jiamusi: '佳木斯',
+        Shantou: '汕头',
+        Jinjiang: '晋江',
+        Dongguan: '东莞',
+        Zhuhai: '珠海',
+        Shenzhen: '深圳',
+        Guangzhou: '广州',
+        Foshan: '佛山',
+        Huainan: '淮南',
+        Hefei: '合肥',
+        Maoming: '茂名',
+      }
     };
   },
-  components: { backTop },
+  components: { backTop, Picker },
+  computed: {
+    visibleComments() {
+      return this.comments.slice(0, this.commentCount);
+    }
+  },
   mounted() {
     // 监听滚动事件
     window.addEventListener('scroll', this.watchScroll);
+    // 监听表情包点击事件
+    document.addEventListener('click', this.handleOutsideClick);
     // 初始化 Typeit 函数
     this.initializeTypeit();
+    // 获取评论列表
+    this.getComments();
+    // 获取点赞数量
+    this.getLikeCounts();
   },
   methods: {
+    // 时间格式
+    formatTime(time) {
+      const formattedTime = new Date(time).toLocaleString();
+      return formattedTime;
+    },
     initializeTypeit() {
       const that = this;
       // 延迟执行 Typeit 函数，以防止找不到 Vue 实例
@@ -76,8 +278,182 @@ export default {
     watchScroll() {
       // 滚动事件逻辑
     },
+    // 表情包 
+    toggleEmojiPicker() {
+      this.showEmojiPicker = !this.showEmojiPicker; // 切换 showEmojiPicker 的值
+    },
+    handleEmojiClick(emoji) {
+      console.log(emoji);
+      // 处理选中的表情
+      this.commentContent += emoji.native; // 将选中的表情添加到输入框中
+      this.showEmojiPicker = false
+
+    },
+    handleOutsideClick(event) {
+      const emojiButton = document.querySelector('.emoji-button');
+      const emojiPanel = document.querySelector('.emoji-panel');
+
+      // 检查点击的位置是否在表情包栏以外
+      if (emojiButton && emojiPanel && !emojiButton.contains(event.target) && !emojiPanel.contains(event.target)) {
+        this.showEmojiPicker = false; // 关闭表情包
+      }
+    },
+    // 评论区
+    submitComment() {
+      console.log(this.commentContent, 'ss');
+      // 检查评论内容是否为空
+      if (!this.commentContent) {
+        this.$message.error('评论内容不能为空');
+        return;
+      }
+      // 定义卡通名称数组
+      const cartoonNames = ['Tom', 'Jerry', 'Mickey', 'Donald', 'Goofy'];
+
+      // 从卡通名称数组中随机选择一个名称
+      const randomIndex = Math.floor(Math.random() * cartoonNames.length);
+      const randomCartoonName = cartoonNames[randomIndex];
+
+      // 将随机卡通名称赋给 this.commentUsername
+      const commentUsername = randomCartoonName;
+      // 获取当前时间
+      const commentTime = new Date().toISOString();
+      // 发表评论
+      const token = sessionStorage.token;
+      const params = new URLSearchParams();
+      params.append('content', this.commentContent);
+      if (this.nameOption === 'custom') {
+        params.append('username', this.customName);
+      } else {
+        params.append('username', commentUsername);
+      }
+      // params.append('created_time', commentTime);
+      // 发送评论请求
+      axios({
+        method: 'post',
+        url: 'http://47.115.231.184:5555/comment/comment',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          "Authorization": token
+        },
+      })
+        .then((res) => {
+          this.$message.success('评论成功');
+          // 清空评论输入框
+          this.commentContent = '';
+          // 更新评论列表
+          this.getComments();
+        })
+        .catch((error) => {
+          this.$message.error('评论失败，请稍后再试');
+          console.log(error);
+        });
+    },
+    getComments() {
+      // 获取评论列表
+      axios
+        .get('http://47.115.231.184:5555/comment/comments')
+        .then(response => {
+          const comments = response.data.comments;
+          // 遍历评论数据，将城市名称转换为中文
+      const transformedComments = comments.map((comment) => {
+        const chineseCity = this.cityMapping[comment.city];
+        return {
+          ...comment,
+          city: chineseCity || comment.city, // 使用中文城市名称，如果映射关系不存在，则保持原始值
+        };
+      });
+
+      this.comments = transformedComments;
+          // 绘制IP地址的饼状图
+          this.drawIPChart();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    loadMoreComments() {
+      this.commentCount += 5;  // 每次点击"查看更多"按钮，增加5条评论的显示数量
+      if (this.commentCount >= this.comments.length) {
+        this.noMoreComments = true;  // 如果评论全部显示完毕，则显示"没有更多评论了"的提示
+      }
+    },
+
+    // 点赞区
+    handleLikeClick() {
+      this.saveLikeCounts();
+    },
+    saveLikeCounts() {
+      // 将counts发送到后台保存
+      axios.post('http://47.115.231.184:5555/likes/like')
+        .then(response => {
+          // 请求成功处理
+          console.log('点赞数保存成功');
+          this.getLikeCounts();
+        })
+        .catch(error => {
+          // 请求失败处理
+          console.error('点赞数保存失败', error);
+        });
+    },
+    getLikeCounts() {
+      axios
+        .get('http://47.115.231.184:5555/likes/likeCounts')
+        .then((response) => {
+          this.likecounts = response.data.counts;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    // 饼图
+    // 绘制IP地址的饼状图
+    drawIPChart() {
+      // 销毁之前的图表实例
+      if (this.ipChart) {
+        this.ipChart.destroy();
+      }
+      // 获取所有 IP 地址
+      const ipAddresses = this.comments.map(comment => comment.city);
+      // 计算每个 IP 地址的数量
+      const ipAddressCounts = ipAddresses.reduce((counts, ipAddress) => {
+        counts[ipAddress] = (counts[ipAddress] || 0) + 1;
+        return counts;
+      }, {});
+
+      // 提取 IP 地址和对应的数量
+      const labels = Object.keys(ipAddressCounts);
+      const data = Object.values(ipAddressCounts);
+
+      // 创建饼状图
+      this.ipChart = new Chart('ip-chart', {
+        type: 'pie',
+        data: {
+          labels,
+          datasets: [{
+            data,
+            backgroundColor: [
+              '#FF6384',
+              '#36A2EB',
+              '#FFCE56',
+              '#33FF99',
+              '#FF6384',
+              '#FF8C00',
+              '#8A2BE2',
+              '#00FF7F',
+              '#FF1493',
+              '#00BFFF',
+              '#FFD700',
+              // 添加更多颜色...
+            ],
+          }],
+        },
+      });
+    },
+
+
   },
-}
+};
 </script>
 
 <style scoped>
@@ -125,6 +501,7 @@ export default {
 .left-column {
   flex-grow: 1;
   margin-right: 20px;
+  max-width: 900px;
 }
 
 .right-column {
@@ -144,6 +521,11 @@ export default {
   margin-bottom: 10px;
 }
 
+canvas {
+  width: 150px;
+  height: 150px;
+}
+
 .comment-input {
   width: 100%;
   height: 100px;
@@ -154,8 +536,10 @@ export default {
   margin-bottom: 10px;
 }
 
+/* 表情面板样式 */
 .emoji-selector {
   margin-bottom: 10px;
+  position: relative;
 }
 
 .emoji-button {
@@ -169,9 +553,38 @@ export default {
 }
 
 .emoji-panel {
-  display: none;
-  /* 表情面板样式 */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1;
 }
+
+/* 留下名称 */
+.name-option {
+  display: flex;
+  height: 25px;
+  align-items: center;
+  margin: 10px 0 10px 0;
+}
+
+.name-option-label {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.name-input {
+  display: flex;
+  align-items: center;
+}
+
+.name-input input {
+  width: 200px;
+  height: 30px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 
 .submit-button {
   background-color: #ffcc00;
@@ -188,6 +601,47 @@ export default {
   /* 评论列表样式 */
 }
 
+.comment-item {
+  position: relative;
+  padding: 10px;
+  background-color: #f2f2f2;
+  box-shadow: 0 0 5px rgba(0, 198, 255, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.comment-item:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(0, 198, 255, 0.2), rgba(0, 198, 255, 0.5));
+  pointer-events: none;
+  z-index: -1;
+}
+
+
+
+.comment-user {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-content {
+  margin-top: 5px;
+  color: #555;
+  margin-left: 20px;
+  word-wrap: break-word;
+}
+
+.comment-time {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .load-more-button {
   margin-top: 10px;
   background-color: #ffcc00;
@@ -198,6 +652,15 @@ export default {
   font-weight: bold;
   color: #fff;
   cursor: pointer;
+}
+
+.no-more-comments {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  padding: 10px;
+  background-color: #f2f2f2;
+  /* Add any other styles you want */
 }
 
 .profile-box {
@@ -212,6 +675,72 @@ export default {
   background-color: #f2f2f2;
   border-radius: 10px;
   padding: 20px;
+}
+
+.likebox .comment-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.likebox .like-info {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 150px;
+}
+
+.likebox .heart {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  animation: pulsate 2s infinite;
+  margin-left: 50px;
+  margin-top: 20px;
+  /* 爱心与标题之间的间距 */
+}
+
+.likebox .likecounts {
+  text-align: center;
+  font-weight: bold;
+  color: rgba(23, 20, 219, 0.3);
+}
+
+.likebox .heart::before,
+.likebox .heart::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 52px;
+  height: 80px;
+  border-radius: 50px 50px 0 0;
+  background-color: red;
+}
+
+.likebox .heart::before {
+  left: 50px;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.likebox .heart::after {
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .popular-locations-box {
