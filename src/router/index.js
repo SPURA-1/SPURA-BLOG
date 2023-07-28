@@ -11,7 +11,6 @@ import AdminSet from '../components/ServeAdmin/AdminSet.vue'
 import TextEditor from '../components/ServeAdmin/TextEditor.vue'
 // 前台主页组件
 import SpuraBlog from '../views/SpuraBlog.vue'
-import Test from '../views/Main/TestMain.vue'
 
 import ElementUI from 'element-ui'
 Vue.use(ElementUI);
@@ -77,10 +76,6 @@ const routes = [
         component: UserList
       },
       {
-        path: '/Test',
-        component: Test
-      }, 
-      {
         path: '/Main',
         name: 'Main',
         component: () => import('../components/layout/layout-body.vue')
@@ -89,16 +84,18 @@ const routes = [
         path: '/blockly',
         name: 'blockly',
         component: () => import('../components/blockly/BlocklyBlock.vue')
-      },  
+      }, 
+      // 留言板
       {
         path: '/MessageBoard',
         name: 'MessageBoard',
         component: () => import('../views/MessageBoard/MessageBoard.vue')
-      },  
+      },
+      // 游戏界面  
       {
-        path: '/MessageTest',
-        name: 'MessageTest',
-        component: () => import('../views/MessageBoard/MessageTest.vue')
+        path: '/GameBoard',
+        name: 'GameBoard',
+        component: () => import('../views/Games/GameBoard.vue')
       },  
     ]
   },
