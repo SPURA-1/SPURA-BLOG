@@ -5,24 +5,36 @@ import Vue from 'vue'
 // 配置axios实例
 // URL(绝对的) = baseURL + url(相对的)
 const service = axios.create({
-  baseURL : "http://127.0.0.1:80",
-  timeout : 5000
-})
+  // baseURL : "http://127.0.0.1:80",
+  //配置对象
+  baseURL: '/',
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8'
+  }
+});
 
 // 请求拦截器
 // .request就是一个请求拦截器
 // 使用use函数为请求拦截器挂载一个回调函数
 // 在发送请求时，会优先调用use函数
-service.interceptors.request.use(
-  (config)=>{
-    // 为请求头对象，添加 Token 验证的 Authorization 字段
-    const token = sessionStorage.getItem('token')
-    if(token){
-      config.headers.Authorization = token
-    }else{
-      return config
-    }
-  },
+service.interceptors.request.use(config => {
+  console.log(config, 'config');
+  if (config.FORMDATE) {
+    config.headers["Content-Type"] = "multipart/form-data;";
+  } else if (config.FORM) {
+    config.FORM = true;
+    config.headers["Content-Type"] =
+      "application/x-www-form-urlencoded;charset=UTF-8;";
+  }
+  // 为请求头对象，添加 Token 验证的 Authorization 字段
+  const token = sessionStorage.getItem('token')
+  if (token) {
+    console.log(token, 'youtoken');
+    config.headers.Authorization = token
+  }
+  return config;
+},
   (error) => Promise.reject(error),
 )
 
@@ -30,56 +42,63 @@ service.interceptors.request.use(
 // 后续加一个Error页面
 service.interceptors.response.use(
   (response) => response,
-  ({ response }) => {
-    const { status, data } = response
-    const { message } = data
-    Message.error(message)
+  // ({ response }) => {
+  //   const { status, data } = response
+  //   const { message } = data
+  //   Message.error(message)
+  (error) => {
+    const { response } = error; // 从错误对象中提取响应信息
+    const { status, data } = response;
+    const { message } = data;
+    Message.error(message);
     if (status) {
-        switch (status) {
-        case 400:
-         $message("请求错误(400)，请重新申请");
-         break;
-        case 401:
-         $message("登录错误(401)，请重新登录");
-         return this.$router.replace("/login");
-        case 403:
-         $message("拒绝访问(403)");
-         break;
-        case 404:
-         $message("请求出错(404)");
-         break;
-        case 408:
-         $message("请求超时(408)");
-         break;
-        case 500:
-         $message("服务器错误(500)，请重启软件或切换功能页！");
-         break;
-        case 501:
-         $message("服务未实现(501)");
-         break;
-        case 502:
-         $message("网络错误(502)");
-         break;
-        case 503:
-         text = "服务不可用(503)";
-         break;
-        case 504:
-         text = "网络超时(504)";
-         break;
-        case 505:
-         text = "HTTP版本不受支持(505)";
-         break;
-        default:
-         text = "网络连接出错";
-        }
-       } else {
-        text = "连接服务器失败,请退出重试!";
-       }
-    return Promise.reject(error)
+      console.log(status, 'status');
+      switch (status) {
+        case 400:
+          // Message.error("请求错误(400)，请重新申请");
+          break;
+        case 401:
+          Message.error("登录错误(401)，请重新登录");
+          return this.$router.replace("/login");
+        case 403:
+          Message.error("拒绝访问(403)");
+          break;
+        case 404:
+          Message.error("请求出错(404)");
+          break;
+        case 408:
+          Message.error("请求超时(408)");
+          break;
+        case 500:
+          Message.error("服务器错误(500)，请重启软件或切换功能页！");
+          break;
+        case 501:
+          Message.error("服务未实现(501)");
+          break;
+        case 502:
+          Message.error("网络错误(502)");
+          break;
+        case 503:
+          Message.error("服务不可用(503)");
+          break;
+        case 504:
+          Message.error("网络超时(504)");
+          break;
+        case 505:
+          Message.error("HTTP版本不受支持(505)");
+          break;
+        default:
+          Message.error("网络连接出错");
+      }
+    } else {
+      Message.error("连接服务器失败,请退出重试!");
+    }
+    return Promise.reject(error);
   }
 )
-
-Vue.prototype.$http=service
+// 使用 Vue.prototype.$http = service，那么在每个组件中都可以直接使用 this.$http，省去了导入和设置的过程
+// Vue.prototype.$http = service
+// 没有将 request 实例设置为 Vue 的原型属性，所以需要在每个组件中导入和使用。
 export default service
 // export {
 // 	GET,

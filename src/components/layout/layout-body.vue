@@ -21,16 +21,12 @@
       <router-view></router-view>
       <backTop :defaultProps="55" :date="1000" :color="blue"></backTop>
       <Home></Home>
-      <ArtLists></ArtLists>
-      <MyDemo></MyDemo>
     </div>
   </div>
 </template>
 
 <script>
 import backTop from '../nav/ToTap.vue'
-import ArtLists from '../Body/ArtLists.vue'
-import MyDemo from '../Body/MyDemo.vue'
 import Home from '../../views/HomeSss.vue'
 import {Typeit } from '../../utils/plug.js'
 export default {
@@ -42,7 +38,7 @@ export default {
       test: ''
     }
   },
-  components: { backTop, ArtLists, MyDemo, Home },
+  components: { backTop, Home },
   mounted() {//页面元素加载完成
     window.addEventListener('scroll', this.watchScroll)
     // 首页字体

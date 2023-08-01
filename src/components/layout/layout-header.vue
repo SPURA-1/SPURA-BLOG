@@ -26,6 +26,9 @@
         <router-link to="/blockly">编程</router-link>
       </div>
       <div class="menu-item">
+        <router-link to="/GameBoard">娱乐</router-link>
+      </div>
+      <div class="menu-item">
         <router-link to="/MessageBoard">留言板</router-link>
       </div>
       <div class="menu-item">

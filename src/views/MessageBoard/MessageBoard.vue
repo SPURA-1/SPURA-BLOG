@@ -5,8 +5,13 @@
         <span id="luke"></span>
       </div>
     </div>
+    <div class="message_board">
+      <div v-for="(message, index) in visibleMessages" :key="index" :class="['message', { 'new-message': message.isNew }]" :style="{ top: `${message.top}px` }">{{ message.text }}
+      </div>
+    </div>
     <div class="content">
       <div class="left-column">
+        <!-- 发送评论 -->
         <div class="comment-module">
           <div class="comment-title">发表评论</div>
           <textarea class="comment-input" placeholder="请输入评论内容" v-model="commentContent"></textarea>
@@ -31,8 +36,10 @@
               <input type="text" placeholder="请输入你的名称" v-model="customName">
             </div>
           </div>
-          <button class="submit-button" @click="submitComment">提交评论</button>
+          <!-- <button class="submit-button" @click="submitComment">提交评论</button> -->
+          <CustomButton buttonText="提交评论" @button-click="submitComment" />
         </div>
+        <!-- 评论列表 -->
         <div class="comment-module">
           <div class="comment-title">评论列表 || 活捉 {{ comments.length }} 条</div>
           <h2 class="comment-title"></h2>
@@ -78,19 +85,26 @@ import chart from '../../assets/JS/chart';
 import { Typeit } from '../../utils/plugMsg.js';
 import backTop from '../../components/nav/ToTap.vue';
 import axios from 'axios';
-
+import { sendComment, getComment, saveLikes, getLikes } from '@/api/api'
 // 引入表情
 import { Picker } from 'emoji-mart-vue';
+import CustomButton from '@/components/button/ShinButton.vue';
 
 export default {
+  components: { backTop, Picker, CustomButton },
   data() {
     return {
       // 评论区
       commentContent: '',
       nameOption: 'auto',
       customName: '',
+      sendname: '',   // 保存的名称
       likecounts: null,
       comments: [],  // 评论数据
+      barrageData: [],  // 弹幕数据
+      visibleMessages: [], // 用于显示的消息数组
+      currentIndex: 0, // 当前显示的消息索引
+      interval: null, // 定时器
       commentCount: 5,  // 当前显示的评论数量
       noMoreComments: false,  // 是否没有更多评论了
       // 表情包
@@ -241,10 +255,12 @@ export default {
         Huainan: '淮南',
         Hefei: '合肥',
         Maoming: '茂名',
-      }
+      },
     };
   },
-  components: { backTop, Picker },
+  created() {
+
+  },
   computed: {
     visibleComments() {
       return this.comments.slice(0, this.commentCount);
@@ -261,6 +277,8 @@ export default {
     this.getComments();
     // 获取点赞数量
     this.getLikeCounts();
+    // 设置定时器，每隔5秒显示下一条消息（根据需要调整间隔时间）
+    this.interval = setInterval(this.showNextMessage, 5000);
   },
   methods: {
     // 时间格式
@@ -300,7 +318,6 @@ export default {
     },
     // 评论区
     submitComment() {
-      console.log(this.commentContent, 'ss');
       // 检查评论内容是否为空
       if (!this.commentContent) {
         this.$message.error('评论内容不能为空');
@@ -319,52 +336,92 @@ export default {
       const commentTime = new Date().toISOString();
       // 发表评论
       const token = sessionStorage.token;
-      const params = new URLSearchParams();
-      params.append('content', this.commentContent);
-      if (this.nameOption === 'custom') {
-        params.append('username', this.customName);
-      } else {
-        params.append('username', commentUsername);
-      }
+      // 创建了一个URLSearchParams对象params，用于存储要发送的参数数据。
+      // const params = new URLSearchParams();
+      // params.append('content', this.commentContent);
+      // if (this.nameOption === 'custom') {
+      //   params.append('username', this.customName);
+      // } else {
+      //   params.append('username', commentUsername);
+      // }
       // params.append('created_time', commentTime);
       // 发送评论请求
-      axios({
-        method: 'post',
-        url: 'http://47.115.231.184:5555/comment/comment',
-        data: params,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          "Authorization": token
-        },
-      })
-        .then((res) => {
-          this.$message.success('评论成功');
-          // 清空评论输入框
-          this.commentContent = '';
-          // 更新评论列表
-          this.getComments();
+      // axios({
+      //   method: 'post',
+      //   // url: 'http://47.115.231.184:5555/comment/comment',
+      //   url: 'http://127.0.0.1/comment/comment',
+      //   data: params,
+      //   headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded',
+      //   },
+      // })
+      if (this.nameOption === 'custom') {
+        this.sendname = this.customName
+      } else {
+        this.sendname = commentUsername
+      }
+      const listData = {
+        'content': this.commentContent,
+        'username': this.sendname
+      }
+      console.log(listData, '发送的数据');
+
+      sendComment(listData)
+        .then(res => {
+          console.log(res.status, 'ressss');
+          if (res.status === 200) {
+            this.$message.success('评论成功');
+            // 添加评论到弹幕消息数组，并设置isNew为true
+            this.visibleMessages.unshift({
+              text: this.commentContent.trim(),
+              isNew: true,
+              top: Math.floor(Math.random() * 170)
+            });
+            // 清空评论输入框
+            this.commentContent = '';
+            // 更新评论列表
+            this.getComments();
+            //   // 清除之前的定时器
+            //   clearInterval(this.interval);
+
+            //   // 设置新的定时器，以确保新的弹幕消息会立即显示
+            //   this.currentIndex = 0;
+            //   this.interval = setInterval(this.showNextMessage, 5000);
+          } else {
+            this.$message.error(res.data.message);
+            console.log('错误！')
+          }
         })
         .catch((error) => {
-          this.$message.error('评论失败，请稍后再试');
-          console.log(error);
+          this.$message.error('评论失败，请稍后再试', error);
+          console.log(error, 's');
         });
     },
+    // 获取评论列表
     getComments() {
-      // 获取评论列表
-      axios
-        .get('http://47.115.231.184:5555/comment/comments')
+      // axios
+      //   // .get('http://47.115.231.184:5555/comment/comments')
+      //   .get('http://127.0.0.1/comment/comments')
+      getComment()
         .then(response => {
           const comments = response.data.comments;
+          // 将评论转换为弹幕数据格式
+          this.barrageData = comments.map(comment => ({
+            text: comment.content.trim(),
+            isNew: false,
+            top: Math.floor(Math.random() * 180) + 10
+          }));
+          console.log(this.barrageData, '222');
           // 遍历评论数据，将城市名称转换为中文
-      const transformedComments = comments.map((comment) => {
-        const chineseCity = this.cityMapping[comment.city];
-        return {
-          ...comment,
-          city: chineseCity || comment.city, // 使用中文城市名称，如果映射关系不存在，则保持原始值
-        };
-      });
+          const transformedComments = comments.map((comment) => {
+            const chineseCity = this.cityMapping[comment.city];
+            return {
+              ...comment,
+              city: chineseCity || comment.city, // 使用中文城市名称，如果映射关系不存在，则保持原始值
+            };
+          });
 
-      this.comments = transformedComments;
+          this.comments = transformedComments;
           // 绘制IP地址的饼状图
           this.drawIPChart();
         })
@@ -385,7 +442,9 @@ export default {
     },
     saveLikeCounts() {
       // 将counts发送到后台保存
-      axios.post('http://47.115.231.184:5555/likes/like')
+      // axios.post('http://47.115.231.184:5555/likes/like')
+      // axios.post('http://127.0.0.1/likes/like')
+      saveLikes()
         .then(response => {
           // 请求成功处理
           console.log('点赞数保存成功');
@@ -397,8 +456,9 @@ export default {
         });
     },
     getLikeCounts() {
-      axios
-        .get('http://47.115.231.184:5555/likes/likeCounts')
+      // .get('http://47.115.231.184:5555/likes/likeCounts')
+      // axios.get('http://127.0.0.1/likes/likeCounts')
+      getLikes()
         .then((response) => {
           this.likecounts = response.data.counts;
         })
@@ -406,7 +466,6 @@ export default {
           console.error(error);
         });
     },
-    // 饼图
     // 绘制IP地址的饼状图
     drawIPChart() {
       // 销毁之前的图表实例
@@ -450,8 +509,15 @@ export default {
         },
       });
     },
-
-
+    // 弹幕区
+    showNextMessage() {
+      if (this.currentIndex < this.barrageData.length) {
+        this.visibleMessages.push(this.barrageData[this.currentIndex]);
+        this.currentIndex++;
+      } else {
+        clearInterval(this.interval); // 当所有消息显示完毕后，清除定时器
+      }
+    },
   },
 };
 </script>
@@ -477,12 +543,12 @@ export default {
   text-align: center;
   margin-top: 0px;
   font-size: 80px;
-  font-weight: 2000;
+  height: 106px;
   color: #fff;
-  font-family: 'Sigmar One', Arial;
+  font-family: "Sigmar One", Arial;
   background-color: rgba(117, 197, 221, 0.3);
   border-radius: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .text-container {
@@ -491,6 +557,49 @@ export default {
   background: linear-gradient(to bottom right, #ffcc00, #ff6699);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* 弹幕区 */
+.message_board {
+  position: relative;
+  height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+/* 文字留言 */
+.message {
+  position: absolute;
+  left: 100%;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+  font-size: 16px; /* 设置合适的字号 */
+  color: #000000;
+  padding: 5px;
+}
+
+@keyframes marquee {
+  from {
+    left: 100%;
+    /* 动画从容器的最右边开始 */
+  }
+
+  to {
+    left: -100%;
+    /* 消失到容器的最左边 */
+  }
+}
+
+.new-message {
+  padding: 2px;
+  border: 2px solid rgb(221, 218, 15);
+  animation: scrollIn 5s linear; /* 5秒内从右侧滚动进入屏幕 */
 }
 
 .content {
@@ -585,7 +694,6 @@ canvas {
   border-radius: 4px;
 }
 
-
 .submit-button {
   background-color: #ffcc00;
   border: none;
@@ -618,12 +726,14 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, rgba(0, 198, 255, 0.2), rgba(0, 198, 255, 0.5));
+  background: linear-gradient(
+    45deg,
+    rgba(0, 198, 255, 0.2),
+    rgba(0, 198, 255, 0.5)
+  );
   pointer-events: none;
   z-index: -1;
 }
-
-
 
 .comment-user {
   font-weight: bold;
