@@ -6,11 +6,8 @@
       </div>
     </div>
     <div class="message_board">
-      <<<<<<< HEAD <div v-for="(message, index) in visibleMessages" :key="index" :class="['message', { 'new-message': message.isNew }]" :style="{ top: `${message.top}px` }">{{ message.text }}
-        =======
-        <div v-for="(message, index) in visibleMessages" :key="index" :class="['message', { 'new-message': message.isNew }]" :style="{ top: `${message.top}px` }">{{ message.text }}
-          >>>>>>> 79ae71a86373297f3a3a85a6b951deb049493208
-        </div>
+      <div v-for="(message, index) in visibleMessages" :key="index" :class="['message', { 'new-message': message.isNew }]" :style="{ top: `${message.top}px` }">{{ message.text }}
+      </div>
     </div>
     <div class="content">
       <div class="left-column">
@@ -94,11 +91,7 @@ import { Picker } from 'emoji-mart-vue';
 import CustomButton from '@/components/button/ShinButton.vue';
 
 export default {
-<<<<<<< HEAD
   components: { backTop, Picker, CustomButton },
-=======
-  components: { backTop, Picker },
->>>>>>> 79ae71a86373297f3a3a85a6b951deb049493208
   data() {
     return {
       // 评论区
@@ -266,11 +259,6 @@ export default {
     };
   },
   created() {
-<<<<<<< HEAD
-
-=======
-
->>>>>>> 79ae71a86373297f3a3a85a6b951deb049493208
   },
   computed: {
     visibleComments() {
@@ -410,16 +398,10 @@ export default {
     },
     // 获取评论列表
     getComments() {
-<<<<<<< HEAD
       // axios
       //   // .get('http://47.115.231.184:5555/comment/comments')
       //   .get('http://127.0.0.1/comment/comments')
       getComment()
-=======
-      axios
-        .get('http://47.115.231.184:5555/comment/comments')
-        // .get('http://127.0.0.1/comment/comments')
->>>>>>> 79ae71a86373297f3a3a85a6b951deb049493208
         .then(response => {
           const comments = response.data.comments;
           // 将评论转换为弹幕数据格式
