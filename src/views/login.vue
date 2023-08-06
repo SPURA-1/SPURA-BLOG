@@ -8,75 +8,35 @@
           <p>Welcome</p>
           <p>Spura后台系统</p>
         </div>
-        <el-button
-          class="button"
-          round
-          size="small"
-          @click="toRegister(), play()"
-          >去注册</el-button
-        >
+        <el-button class="button" round size="small" @click="toRegister(), play()">去注册</el-button>
       </div>
       <div class="right" v-show="right_show">
         <div>
           <p>Welcome</p>
           <p>Spura后台系统</p>
         </div>
-        <el-button class="button" round size="small" @click="toLogin(), play()"
-          >去登录</el-button
-        >
+        <el-button class="button" round size="small" @click="toLogin(), play()">去登录</el-button>
       </div>
     </div>
 
     <!-- elementUI 表单组件 -->
-    <div
-      class="form-box"
-      :class="{ move: isMove, back: isBack, newPosition: isNew }"
-      :style="{ left: nowLeft + '%' }"
-    >
+    <div class="form-box" :class="{ move: isMove, back: isBack, newPosition: isNew }" :style="{ left: nowLeft + '%' }">
       <transition name="el-fade-in">
-        <el-form
-          :model="loginForm"
-          status-icon
-          :rules="Rules"
-          ref="loginForm"
-          label-width="100px"
-          class="demo-ruleForm"
-          size="small"
-          @keyup.enter.native="loginHeadler"
-        >
+        <el-form :model="loginForm" status-icon :rules="Rules" ref="loginForm" label-width="100px" class="demo-ruleForm" size="small" @keyup.enter.native="loginHeadler">
           <!-- ⬆ keyup 监视键盘的键抬起来的事件，限定范围 回车 按键，native是原生事件-->
 
           <!-- 登录 -->
           <div class="right-form" v-show="login_show">
             <el-form-item label="账 号" prop="username">
-              <el-input
-                ref="inputUsername"
-                type="text"
-                v-model="loginForm.username"
-                autocomplete="off"
-                placeholder="请输入用户名"
-                clearable
-              ></el-input>
+              <el-input ref="inputUsername" type="text" v-model="loginForm.username" autocomplete="off" placeholder="请输入用户名" clearable></el-input>
             </el-form-item>
             <el-form-item label="密 码" prop="Password">
-              <el-input
-                type="password"
-                v-model="loginForm.Password"
-                autocomplete="off"
-                placeholder="请输入密码"
-                show-password
-              ></el-input>
+              <el-input type="password" v-model="loginForm.Password" autocomplete="off" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item>
               <!-- @click="loginHeadler()" -->
               <!-- @click="$router.push('/login')" -->
-              <el-button
-                type="primary"
-                @click="loginHeadler()"
-                size="small"
-                round
-                >登录</el-button
-              >
+              <el-button type="primary" @click="loginHeadler()" size="small" round>登录</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -84,55 +44,20 @@
 
       <!-- elementUI 表单组件 -->
       <transition name="el-fade-in">
-        <el-form
-          :model="registerForm"
-          status-icon
-          :rules="Rules"
-          ref="registerForm"
-          label-width="100px"
-          class="demo-ruleForm2"
-          size="small"
-          @keyup.enter.native="wecomeNewUser"
-        >
+        <el-form :model="registerForm" status-icon :rules="Rules" ref="registerForm" label-width="100px" class="demo-ruleForm2" size="small" @keyup.enter.native="wecomeNewUser">
           <!-- 注册 -->
           <div class="left-form" v-show="!login_show">
             <el-form-item label="昵 称" prop="name">
-              <el-input
-                ref="inputName"
-                type="text"
-                v-model="registerForm.name"
-                autocomplete="off"
-                placeholder="请输入昵称"
-                clearable
-              ></el-input>
+              <el-input ref="inputName" type="text" v-model="registerForm.name" autocomplete="off" placeholder="请输入昵称" clearable></el-input>
             </el-form-item>
             <el-form-item label="密 码" prop="password">
-              <el-input
-                ref="registerPass"
-                type="password"
-                v-model="registerForm.password"
-                autocomplete="off"
-                placeholder="请输入密码"
-                show-password
-              ></el-input>
+              <el-input ref="registerPass" type="password" v-model="registerForm.password" autocomplete="off" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="checkPass">
-              <el-input
-                type="password"
-                v-model="registerForm.checkPass"
-                autocomplete="off"
-                placeholder="请输入密码"
-                show-password
-              ></el-input>
+              <el-input type="password" v-model="registerForm.checkPass" autocomplete="off" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button
-                type="primary"
-                size="small"
-                round
-                @click="wecomeNewUser()"
-                >注册</el-button
-              >
+              <el-button type="primary" size="small" round @click="wecomeNewUser()">注册</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -143,7 +68,7 @@
 
 <script>
 import axios from "axios";
-import {userLogin} from "@/utils/api";
+import { userLogin } from "@/utils/api";
 export default {
   name: "LoginAndRegisterView",
   data() {
@@ -306,7 +231,7 @@ export default {
         this.nowLeft = 50;
       }
     },
-      // 登录的 AXIOS 
+    // 登录的 AXIOS 
     loginHeadler() {
       // 获取键盘输入的账号密码
       const Uid = this.loginForm.username
@@ -323,7 +248,7 @@ export default {
         .then((res) => {
           // console.log(res.data);
           // console.log(res)
-          if(res.data.status === 200){ 
+          if (res.data.status === 200) {
             // 将用户token保存到session中
             sessionStorage.setItem('token', res.data.token);
             this.$message.success('登录成功！')
@@ -331,7 +256,7 @@ export default {
             this.$store.commit('updateToken', res.token)
             // 登录成功后的跳转
             this.$router.push({ path: '/Admin-Main' });
-          }else{
+          } else {
             this.$message.error("账号或密码错误");
           }
         })

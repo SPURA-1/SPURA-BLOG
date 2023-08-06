@@ -10,6 +10,8 @@
         <a href="">
           <img src="../../assets/Images/headBg.jpg">
         </a>
+        <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
+        <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">
         <h2 class="h-description">
           <a>
             {{ "ようこそSPURAのブログへ！" }}
@@ -28,7 +30,7 @@
 <script>
 import backTop from '../nav/ToTap.vue'
 import Home from '../../views/HomeSss.vue'
-import {Typeit } from '../../utils/plug.js'
+import { Typeit } from '../../utils/plug.js'
 export default {
   name: "layout-body",
   data() {
@@ -80,7 +82,6 @@ export default {
   }
 }
 
-
 /*头部背景图*/
 
 .headImgBox {
@@ -119,17 +120,17 @@ export default {
 
   80% {
     -webkit-transform: translateY(5px);
-    transform: translateY(5px)
+    transform: translateY(5px);
   }
 
   90% {
     -webkit-transform: translateY(-5px);
-    transform: translateY(-5px)
+    transform: translateY(-5px);
   }
 
   to {
     -webkit-transform: translateY(0);
-    transform: translateY(0)
+    transform: translateY(0);
   }
 }
 
@@ -141,17 +142,17 @@ export default {
 
   80% {
     -webkit-transform: translateY(5px);
-    transform: translateY(5px)
+    transform: translateY(5px);
   }
 
   90% {
     -webkit-transform: translateY(-5px);
-    transform: translateY(-5px)
+    transform: translateY(-5px);
   }
 
   to {
     -webkit-transform: translateY(0);
-    transform: translateY(0)
+    transform: translateY(0);
   }
 }
 
@@ -159,8 +160,8 @@ export default {
   width: 100px;
   height: 100px;
   border-radius: 100%;
-  transition: all .4s ease-in-out;
-  -webkit-transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
   object-fit: cover;
 }
 
@@ -177,7 +178,7 @@ export default {
 }
 
 .h-information h2 a {
-  background: linear-gradient(to right, #DF2050, #48456D);
+  background: linear-gradient(to right, #df2050, #48456d);
   -webkit-background-clip: text;
   color: transparent;
 }
@@ -192,9 +193,8 @@ export default {
   position: absolute;
   left: 0;
   top: 160px;
-  font-family: 'Sigmar One', Arial;
+  font-family: "Sigmar One", Arial;
   text-shadow: 0 2px 2px #47456d;
-
 }
 
 .headImgBox .scene span {
@@ -216,7 +216,6 @@ export default {
 }
 
 @keyframes caret {
-
   0%,
   100% {
     opacity: 1;
