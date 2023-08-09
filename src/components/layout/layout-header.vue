@@ -1,44 +1,43 @@
 <template>
   <div>
-  <div id="layout-header" :class="{ 'fixed': fixed, 'hidden': hidden }" @click.stop="mobileShow = false">
-    <div class="site-logo">
-      <router-link to="/">
-        <img src="@/assets/Main/logo.png" alt="Logo" title="首页">
-        <!--        <img :src="websiteInfo.avatar" alt="Logo" title="首页">-->
-      </router-link>
-    </div>
-    <div class="menus-btn" @click.stop="mobileShow = !mobileShow">
-      Menus
-    </div>
-    <div class="site-menus" :class="{ 'mobileShow': mobileShow }" @click.stop="mobileShow = !mobileShow">
-      <div class="menu-item header-search">
-        <header-search />
+    <div id="layout-header" :class="{ 'fixed': fixed, 'hidden': hidden }" @click.stop="mobileShow = false">
+      <div class="site-logo">
+        <router-link to="/">
+          <img src="@/assets/Main/logo.png" alt="Logo" title="首页">
+          <!--        <img :src="websiteInfo.avatar" alt="Logo" title="首页">-->
+        </router-link>
       </div>
+      <div class="menus-btn" @click.stop="mobileShow = !mobileShow">
+        Menus
+      </div>
+      <div class="site-menus" :class="{ 'mobileShow': mobileShow }" @click.stop="mobileShow = !mobileShow">
+        <div class="menu-item header-search">
+          <header-search />
+        </div>
 
-      <div class="menu-item">
-        <router-link to="/Admin-Main">首页</router-link>
-      </div>
-      <div class="menu-item">
-        <!-- target="_blank" 在新窗口中打开链接 -->
-        <router-link to="/Test" target="_parent">文章</router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/blockly">编程</router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/GameBoard">娱乐</router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/MessageBoard">留言板</router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/about">关于</router-link>
+        <div class="menu-item">
+          <router-link to="/Admin-Main">首页</router-link>
+        </div>
+        <div class="menu-item">
+          <!-- target="_blank" 在新窗口中打开链接 -->
+          <router-link to="/Article" target="_parent">文章</router-link>
+        </div>
+        <div class="menu-item">
+          <router-link to="/blockly">编程</router-link>
+        </div>
+        <div class="menu-item">
+          <router-link to="/GameBoard">娱乐</router-link>
+        </div>
+        <div class="menu-item">
+          <router-link to="/MessageBoard">留言板</router-link>
+        </div>
+        <div class="menu-item">
+          <router-link to="/about">关于</router-link>
+        </div>
       </div>
     </div>
+
   </div>
-    
-  
-</div>
 </template>
 
 <script>
@@ -57,7 +56,7 @@ export default {
       mobileShow: false,
     }
   },
-  mounted() {},
+  mounted() { },
   beforeDestroy() {
     window.removeEventListener("scroll", this.watchScroll)
   },
@@ -98,18 +97,18 @@ export default {
   background-color: #ffffff;
   justify-content: space-between;
   align-items: center;
-  transition: .3s all ease;
-  -webkit-transition: .3s all ease;
-  -moz-transition: .3s all linear;
-  -o-transition: .3s all ease;
-  -ms-transition: .3s all ease;
+  transition: 0.3s all ease;
+  -webkit-transition: 0.3s all ease;
+  -moz-transition: 0.3s all linear;
+  -o-transition: 0.3s all ease;
+  -ms-transition: 0.3s all ease;
 
   &.hidden {
     top: -100px;
   }
 
   &.fixed {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
 }
@@ -128,7 +127,7 @@ export default {
     font-weight: bold;
     position: relative;
     top: -10px;
-    font-family: 'monaco', 'Consolas', "Liberation Mono", Courier, monospace;
+    font-family: "monaco", "Consolas", "Liberation Mono", Courier, monospace;
   }
 }
 
@@ -173,7 +172,7 @@ export default {
 
   .childMenu {
     width: 130px;
-    background-color: #FDFDFD;
+    background-color: #fdfdfd;
     border-radius: 3px;
     border: 1px solid #ddd;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -182,15 +181,15 @@ export default {
     z-index: 2;
     opacity: 0;
     visibility: hidden;
-    transition: .7s all ease;
-    -webkit-transition: .6s all ease;
-    -moz-transition: .6s all linear;
-    -o-transition: .6s all ease;
-    -ms-transition: .6s all ease;
+    transition: 0.7s all ease;
+    -webkit-transition: 0.6s all ease;
+    -moz-transition: 0.6s all linear;
+    -o-transition: 0.6s all ease;
+    -ms-transition: 0.6s all ease;
 
     &:before,
     &:after {
-      content: '';
+      content: "";
       position: absolute;
       width: 0;
       height: 0;
@@ -211,7 +210,7 @@ export default {
       line-height: 40px;
       position: relative;
       cursor: pointer;
-      transition: all .2s linear;
+      transition: all 0.2s linear;
 
       &:hover {
         color: #ff6d6d;
@@ -219,7 +218,7 @@ export default {
 
       &:not(:last-child):after {
         /*position: absolute;*/
-        content: '';
+        content: "";
         width: 50%;
         height: 1px;
         color: #ff6d6d;
@@ -251,7 +250,7 @@ export default {
     position: absolute;
     display: none;
     visibility: hidden;
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
     width: 100%;
     left: 0;
     top: 80px;
@@ -271,7 +270,7 @@ export default {
       position: relative;
       width: 100%;
       top: 0;
-      background-color: #F3F3F3;
+      background-color: #f3f3f3;
       opacity: 1;
       visibility: visible;
       border: none;
@@ -279,7 +278,7 @@ export default {
 
       &:before,
       &:after {
-        content: '';
+        content: "";
         position: relative;
         width: 0;
         height: 0;
@@ -296,6 +295,4 @@ export default {
     z-index: 99;
   }
 }
-
-
 </style>

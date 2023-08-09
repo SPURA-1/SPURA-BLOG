@@ -2,14 +2,7 @@
   <div class="main_wrapper">
     <div class="game_page">
       <div class="game_area">
-        <div
-          class="game_container"
-          v-for="game in games"
-          :key="game.id"
-          @mouseover="showDescription(game)"
-          @touchstart="handleTouchStart(game)"
-          @touchend="handleTouchEnd()"
-        >
+        <div class="game_container" v-for="game in games" :key="game.id" @mouseover="showDescription(game)" @touchstart="handleTouchStart(game)" @touchend="handleTouchEnd()" @click="showGame(game)">
           <div class="game_cover">
             <img :src="game.cover" alt="Game Cover">
           </div>
@@ -23,15 +16,32 @@
           </div>
         </div>
       </div>
-      <div class="game_description_placeholder" v-else>
-        <p>触摸游戏封面以查看游戏介绍</p>
+      <div class="description_area" v-if="!selectedGame">
+        <p>外部触摸游戏封面以查看游戏介绍</p>
       </div>
     </div>
+    <!-- 游戏界面组件 -->
+    <!-- 游戏弹出界面过渡 -->
+    <transition name="game-popup">
+      <div v-if="showGamePopup" class="game-popup">
+        <h3>{{ selectedGame.name }}</h3>
+        <!-- 放置游戏比如马里奥的内容 -->
+        <!-- 在主页面中显示你的游戏组件 -->
+        <!-- <KillPlanetGame /> -->
+        <button @click="closeGamePopup" class="close-button">X</button>
+      </div>
+    </transition>
+    <!-- 遮罩层 -->
+    <div v-if="showGamePopup" class="overlay"></div>
   </div>
 </template>
 
 <script>
+// import KillPlanetGame from "@/views/Games/KillPlanetGame.vue";
 export default {
+  // components: {
+  //   KillPlanetGame,
+  // },
   data() {
     return {
       games: [
@@ -49,50 +59,51 @@ export default {
         },
         {
           id: 4,
-          name: "Game 2",
+          name: "Game 3",
           cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
+          description: "This is the description for Game 3.",
         },
         {
           id: 5,
-          name: "Game 2",
+          name: "Game 4",
           cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
+          description: "This is the description for Game 4.",
         },
         {
           id: 6,
-          name: "Game 2",
+          name: "Game 5",
           cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
+          description: "This is the description for Game 5.",
         },
         {
           id: 7,
-          name: "Game 2",
+          name: "Game 6",
           cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
+          description: "This is the description for Game 6.",
         },
         {
           id: 8,
-          name: "Game 2",
+          name: "Game 7",
           cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
+          description: "This is the description for Game 7.",
         },
         {
           id: 9,
-          name: "Game 2",
+          name: "Game 8",
           cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
+          description: "This is the description for Game 8.",
         },
         {
           id: 10,
-          name: "Game 2",
+          name: "Game 9",
           cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
+          description: "This is the description for Game 9.",
         },
       ],
       selectedGame: null,
       touchStartTime: 0,
       isMobile: false,
+      showGamePopup: false, // 控制游戏弹出界面的显示与隐藏
     };
   },
   mounted() {
@@ -129,6 +140,38 @@ export default {
         navigator.userAgent
       );
     },
+    // 游戏界面
+    // 打开游戏弹出界面
+    showGame(game) {
+      this.selectedGame = game;
+      this.showGamePopup = true;
+      this.stopScroll();
+      console.log(game)
+      // document.body.style.overflow = 'hidden'; // 禁止页面滚动,两个办法都可以
+      console.log(this.selectedGame, 'showgame');
+    },
+
+    // 关闭游戏弹出界面
+    closeGamePopup() {
+      this.selectedGame = null;
+      this.showGamePopup = false;
+      this.canScroll();
+    },
+    //禁止滚动
+
+    stopScroll() {
+      var mo = function (e) { e.preventDefault(); };
+      document.body.style.overflow = 'hidden';
+      document.addEventListener("touchmove", mo, false);//禁止页面滑动
+    },
+
+    /***取消滑动限制***/
+    canScroll() {
+      var mo = function (e) { e.preventDefault(); };
+      document.body.style.overflow = '';//出现滚动条
+      document.removeEventListener("touchmove", mo, false);
+    },
+
   },
 };
 </script>
@@ -196,7 +239,6 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
-  
 }
 
 .description_container {
@@ -214,14 +256,10 @@ export default {
   margin-bottom: 10px;
 }
 
-.game_description_placeholder {
-  text-align: center;
-}
-
 /* 移动设备样式调整 */
 @media (max-width: 768px) {
   .main_wrapper {
-    display: flex; 
+    display: flex;
     justify-content: center;
     padding-top: 80px;
     margin-left: 0px;
@@ -249,5 +287,58 @@ export default {
     height: auto;
     margin: 0px;
   }
+}
+
+/* 点击游戏后展开游戏界面的过渡效果 */
+.game-popup-enter-active,
+.game-popup-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.game-popup-enter,
+.game-popup-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* 游戏界面样式 */
+/* 游戏弹出界面样式 */
+.game-popup {
+  width: 80%;
+  height: 80%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 80%;
+  max-height: 80%;
+  overflow: auto;
+}
+
+/* 关闭按钮样式 */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* 遮罩层样式 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
 }
 </style>

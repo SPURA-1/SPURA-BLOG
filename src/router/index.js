@@ -1,18 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../views/login.vue'
-// 1. 导入后台主页组件
-import AdminMain from '../views/Admin-Main/Admin-Main.vue'
-import UpdateUserData from '../components/ServeAdmin/UpdateUserData.vue'
-import UpdateUser from '../components/ServeAdmin/UpdateUser.vue'
-import UserList from '../components/ServeAdmin/UserList.vue'
-import AdminHome from '../components/ServeAdmin/AdminHome.vue'
-import AdminSet from '../components/ServeAdmin/AdminSet.vue'
-import TextEditor from '../components/ServeAdmin/TextEditor.vue'
-// 前台主页组件
-import SpuraBlog from '../views/SpuraBlog.vue'
-
 import ElementUI from 'element-ui'
+import SpuraBlog from '../views/SpuraBlog.vue';
 Vue.use(ElementUI);
 Vue.use(VueRouter)
 
@@ -20,49 +9,62 @@ const routes = [
   // Blog主页
   {
     path: '/',
-    redirect:'/SpuraBlog'
+    redirect: '/SpuraBlog',
+    component: () => import('../views/SpuraBlog.vue'),
   },
   {
     name: 'Login',
     path: '/login',
-    component: Login,
-    
+    component: () => import('../views/login.vue'),
+
   },
   // 后台主页的路由
   {
     path: '/Admin-Main',
-    component: AdminMain,
+    name: 'Admin-Main',
+    component: () => import('../views/Admin-Main/Admin-Main.vue'),
     redirect: '/AdminHome',
-    meta: { requireAuth:true},
+    meta: { requireAuth: true },
     // meta 标记 需要登录才能使用
     // meta: { requireAuth:true}
     children: [
       // 子路由
       {
         path: '/AdminHome',
-        component: AdminHome
+        name: 'AdminHome',
+        component: () => import('../components/ServeAdmin/AdminHome.vue')
       },
       {
         path: '/UpdateUserData',
-        component: UpdateUserData
+        name: 'UpdateUserData',
+        component: () => import('../components/ServeAdmin/UpdateUserData.vue')
       },
       {
         path: '/UpdateUser',
-        component: UpdateUser
+        name: 'UpdateUser',
+        component: () => import('../components/ServeAdmin/UpdateUser.vue')
       },
       {
         path: '/UserList',
-        component: UserList,
+        name: 'UserList',
+        component: () => import('../components/ServeAdmin/UserList.vue')
       },
       {
         path: '/AdminSet',
-        component: AdminSet,
+        name: 'AdminSet',
+        component: () => import('../components/ServeAdmin/AdminSet.vue')
       },
       {
         path: '/TextEditor',
-        component: TextEditor,
+        name: 'TextEditor',
+        component: () => import('../components/ServeAdmin/TextEditor.vue')
       },
-      
+      {
+        path: '/ArtList',
+        name: 'ArtList',
+        component: () => import('../components/ServeAdmin/ArtList.vue')
+      },
+
     ]
   },
   {
@@ -72,19 +74,20 @@ const routes = [
     component: SpuraBlog,
     children: [
       {
-        path: '/UserList',
-        component: UserList
-      },
-      {
         path: '/Main',
         name: 'Main',
         component: () => import('../components/layout/layout-body.vue')
-      },  
+      },
+      {
+        path: '/Article',
+        name: 'Article',
+        component: () => import('../views/Main/ArticleList.vue')
+      },
       {
         path: '/blockly',
         name: 'blockly',
         component: () => import('../components/blockly/BlocklyBlock.vue')
-      }, 
+      },
       // 留言板
       {
         path: '/MessageBoard',
@@ -96,11 +99,11 @@ const routes = [
         path: '/GameBoard',
         name: 'GameBoard',
         component: () => import('../views/Games/GameBoard.vue')
-      },  
+      },
     ]
   },
- 
-  
+
+
 ]
 
 const router = new VueRouter({
@@ -121,38 +124,38 @@ const router = new VueRouter({
 
 
 //路由判断登录，根据路由配置文件的参数
-router.beforeEach((to, from, next) => {
-	//判断该路由是否需要登录权限
-	//record.meta.requireAuth是获取到该请求中携带的该参数
-	if (to.matched.some(record => record.meta.requireAuth)) {
-		//获取到会话的token
-		const token = sessionStorage.getItem("token")
-		// console.log("显示token----------：" + token)
+// router.beforeEach((to, from, next) => {
+//   //判断该路由是否需要登录权限
+//   //record.meta.requireAuth是获取到该请求中携带的该参数
+//   if (to.matched.some(record => record.meta.requireAuth)) {
+//     //获取到会话的token
+//     const token = sessionStorage.getItem("token")
+//     // console.log("显示token----------：" + token)
 
-		//判断当前的token是否存在，也就是登录时的token
-		if (token) {
-			//如果指向的是登录页面，不做任何操作
-			if (to.path === "/login") {
-			} else {
-				//如果不是登录页面，且token存在，就放行
-				next()
-			}
-		} else {
-			//    如果token不存在
-			//    前往登录
-			ElementUI.Message({
-			        message: '请先登录',
-			        type: 'warning'
-			    });
-			next({
-				path: '/login'
-			})
-		}
-	} else {
-		//如果不需要登录认证，就直接访问
-		next()
-	}
-})
+//     //判断当前的token是否存在，也就是登录时的token
+//     if (token) {
+//       //如果指向的是登录页面，不做任何操作
+//       if (to.path === "/login") {
+//       } else {
+//         //如果不是登录页面，且token存在，就放行
+//         next()
+//       }
+//     } else {
+//       //    如果token不存在
+//       //    前往登录
+//       ElementUI.Message({
+//         message: '请先登录',
+//         type: 'warning'
+//       });
+//       next({
+//         path: '/login'
+//       })
+//     }
+//   } else {
+//     //如果不需要登录认证，就直接访问
+//     next()
+//   }
+// })
 
 
 

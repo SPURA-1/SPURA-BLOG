@@ -8,34 +8,18 @@
       <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
       <!-- select	菜单激活回调 -->
       <!-- :default-active 与当前激活的菜单绑定“path” -->
-      <el-menu
-        class="el-menu-top"
-        mode="horizontal"
-        :default-active="activeIndex"
-        @select="handleSelect"
-        background-color="#23262E"
-        text-color="#fff"
-        active-text-color="#409EFF"
-      >
+      <el-menu class="el-menu-top" mode="horizontal" :default-active="activeIndex" @select="handleSelect" background-color="#23262E" text-color="#fff" active-text-color="#409EFF">
         <el-submenu index="1">
           <template slot="title">
             <!-- 头像 -->
             <img src="../../assets/Main/avatar.jpg" alt="" class="avatar" />
             <span>个人中心</span>
           </template>
-          <el-menu-item index="/UpdateUserData"
-            ><i class="el-icon-s-operation"></i>基本资料</el-menu-item
-          >
-          <el-menu-item index="/AdminSet"
-            ><i class="el-icon-camera"></i>更换头像</el-menu-item
-          >
-          <el-menu-item index="/UpdateUser"
-            ><i class="el-icon-key"></i>重置密码</el-menu-item
-          >
+          <el-menu-item index="/UpdateUserData"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
+          <el-menu-item index="/AdminSet"><i class="el-icon-camera"></i>更换头像</el-menu-item>
+          <el-menu-item index="/UpdateUser"><i class="el-icon-key"></i>重置密码</el-menu-item>
         </el-submenu>
-        <el-menu-item index="2" @click="logoutHandler"
-          ><i class="el-icon-switch-button"></i>退出</el-menu-item
-        >
+        <el-menu-item index="2" @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
       </el-menu>
     </el-header>
 
@@ -45,17 +29,7 @@
       <el-scrollbar class="page-scroll">
         <el-aside width="200px" class="el-aside">
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
-          <el-menu
-            unique-opened
-            :default-active="activePath"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-            @select="handleSelect"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b"
-          >
+          <el-menu unique-opened :default-active="activePath" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
             <!-- 一级菜单 用户信息 -->
             <el-submenu index="1" class="el-submenu">
               <!-- 一级菜单的模板区域 -->
@@ -104,7 +78,8 @@
 
               <el-submenu index="2-4">
                 <template slot="title">文章</template>
-                <el-menu-item index="TextEditor">文章编辑</el-menu-item>
+                <el-menu-item index="TextEditor">文章发表</el-menu-item>
+                <el-menu-item index="ArtList">文章编辑</el-menu-item>
               </el-submenu>
             </el-submenu>
 
@@ -157,12 +132,12 @@
 </template>
 
 <script>
-import {userLogin} from "@/utils/api";
+import { userLogin } from "@/utils/api";
 export default {
   data() {
     return {
       isCollapse: true,
-      activePath:'',
+      activePath: '',
     };
   },
   methods: {
@@ -194,7 +169,7 @@ export default {
     // 创建select菜单激活回调函数，实现路由跳转
     handleSelect(index) {
       //index 就是要跳转的路由
-      this.$router.push(index)       
+      this.$router.push(index)
     },
     // 保存链接的激活状态
     // saveNavState(activePath){
@@ -203,7 +178,7 @@ export default {
     //   this.activePath=activePath
     // }
   },
-  created(){
+  created() {
     // 从sessionStorage中把保存的激活菜单的地址取出来
     // this.activePath=window.sessionStorage.getItem('activePath')
   }
@@ -211,7 +186,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .main-container {
   height: 100%;
 }

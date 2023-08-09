@@ -17,8 +17,8 @@ export function sendComment(params) {
 }
 
 /**
- * @description 留言板发送评论请求
- * @url  /comment/comment
+ * @description 留言板评论详情
+ * @url  /comment/comments
  * */
 export function getComment(params) {
     return service.get('/comment/comments', params);
@@ -28,7 +28,7 @@ export function getComment(params) {
 
 /**
  * @description 将点赞数发送到后台保存
- * @url  /comment/comment
+ * @url  /likes/like
  * */
 export function saveLikes(params) {
     return service.post('/likes/like', params);
@@ -36,7 +36,7 @@ export function saveLikes(params) {
 
 /**
  * @description 获取点赞数
- * @url  /comment/comment
+ * @url  /likes/likeCounts
  * */
 export function getLikes(params) {
     return service.get('/likes/likeCounts', params);
