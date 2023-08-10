@@ -56,7 +56,8 @@
 </template>
 
 <script>
-import { getarticles, getCategoriesList, Updstatus } from '@/api/ArticleList.api'
+import { getarticles, getCategoriesList, Updstatus } from '@/api/ArticleList.api';
+
 export default {
   data() {
     return {
@@ -112,7 +113,7 @@ export default {
               category: this.categoryNames[item.category],
               content: item.content,
               image_path: item.image_path,
-              publish_date: item.publish_date,
+              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
               title: item.title,
               status: item.status
             }));
@@ -140,14 +141,14 @@ export default {
     //   this.getArtList();
     // },
     // 修改文章的显示
-    updateStatus(item) {
+    updateStatus(row) {
       const tableData = {
-        'status': item.status,
-        'articleId': item.id,
+        status: row.status,
+        articleId: row.id,
       }
       console.log(tableData, 'sss///');
       Updstatus(tableData)
-        .then((res) => {
+        .then(res => {
           console.log(res, '---------------');
           if (res.status === 200) {
             console.log(res.data);
@@ -157,7 +158,7 @@ export default {
             this.$message.error("状态更新失败");
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },

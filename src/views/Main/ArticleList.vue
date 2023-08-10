@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div>
+  <div class="body">
+    <div class="left-side">
       <div class="articles">
         <div v-for="article in articles" :key="article.id" class="article" @click="navigateToArticle(article.id)">
           <div class="image-container">
@@ -9,31 +9,44 @@
           <div class="article-details">
             <h2>{{ article.title }}</h2>
             <p class="article-content">{{ truncateContent(article.content) }}</p>
-            <p style="display:flex;justify-content: flex-end;">{{ article.category }}</p>
+            <div>
+              <p class="" style="display:flex;justify-content: flex-end;">{{ article.category }}</p>
+              <p style="display:flex;justify-content: flex-end;">{{ article.publish_date }}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="sidebar">
-      <div class="search-box">
-        <input type="text" v-model="searchQuery" placeholder="搜索文章" />
-        <button @click="searchArticles">搜索</button>
-      </div>
-      <div class="category-filter">
-        <h3>分类筛选</h3>
-        <select v-model="selectedCategory">
-          <option value="">全部分类</option>
-          <option v-for="category in categories" :key="category.id" :label="category.name">{{ category }}</option>
-        </select>
-        <button @click="filterByCategory">筛选</button>
+    <div class="right-side">
+      <div class="sidebar">
+        <div class="search-box">
+          <input type="text" v-model="searchQuery" placeholder="搜索文章" />
+          <button @click="searchArticles">搜索</button>
+        </div>
+        <div class="category-filter">
+          <h3>分类筛选</h3>
+          <select v-model="selectedCategory">
+            <option value="">全部分类</option>
+            <option v-for="category in categories" :key="category.id" :label="category.name">{{ category }}</option>
+          </select>
+          <button @click="filterByCategory">筛选</button>
+        </div>
+        <div class="svgicon">
+          <test></test>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
 import { getart, getCategoriesList } from '@/api/ArticleList.api'
+import test from '@/components/Svg/MySvgIcon.vue'
 export default {
+  components: {
+    test
+  },
   data() {
     return {
       articles: [],
@@ -82,7 +95,7 @@ export default {
               category: this.categoryNames[item.category],
               content: item.content,
               image_path: item.image_path,
-              publish_date: item.publish_date,
+              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
               title: item.title,
             }));
 
@@ -123,13 +136,19 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  margin: 100px;
+.body {
+  margin: 100px 250px 0 340px;
   padding-top: 80px;
-  padding-bottom: 20px;
   display: flex;
   justify-content: space-around; /* 添加居中对齐 */
-  align-items: center; /* 添加居中对齐 */
+}
+
+.left-side {
+  flex: 2;
+  margin-right: 10px;
+}
+
+.right-side {
 }
 
 /* 使用 Flexbox 来布局你的文章列表 */
@@ -137,12 +156,11 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 800px; /* 限制最大宽度，可以根据需要调整 */
+  max-width: 900px; /* 限制最大宽度，可以根据需要调整 */
 }
 
 .article {
   display: flex;
-  width: 1000px;
   background-color: #dfd5d5;
   border-radius: 10px;
   cursor: pointer;
@@ -209,4 +227,6 @@ export default {
   padding: 5px;
   margin-bottom: 10px;
 }
+
+/* SVG */
 </style>

@@ -56,7 +56,10 @@ export default {
       mobileShow: false,
     }
   },
-  mounted() { },
+  mounted() {
+    // 开启监听事件
+    window.addEventListener("scroll", this.watchScroll);
+  },
   beforeDestroy() {
     window.removeEventListener("scroll", this.watchScroll)
   },

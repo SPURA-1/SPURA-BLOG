@@ -54,5 +54,5 @@ export function getCategories(params) {
  * @url  /article/articles/Updstatus
  * */
 export function Updstatus(params) {
-    return service.post('/article/articles/updstatus', params);
+    return service.post('/article/articles/Updstatus', params);
 }
