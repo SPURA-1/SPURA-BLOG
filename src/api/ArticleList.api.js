@@ -6,7 +6,7 @@ import service from "@/utils/request"
  * @url  /article/articles/visible
  * */
 export function getart(params) {
-    return service.get('/article/articles/visible', params);
+    return service.get('/article/visible', params);
 }
 
 /**
@@ -19,18 +19,18 @@ export function getarticles(params) {
 
 /**
  * @description 获取单篇文章
- * @url  /article/articles/:id
+ * @url  /article/articlesID
  * */
 export function getarticlesId(params) {
-    return service.get('/article/articles/:id', params);
+    return service.post('/article/articlesID', params);
 }
 
 /**
  * @description 修改文章内容
- * @url  /article/articles/update/:id
+ * @url  /article/articles/updateArt
  * */
 export function updateArticlesId(params) {
-    return service.post('/article/articles/update/:id', params);
+    return service.post('/article/updateArt', params);
 }
 
 /**
@@ -54,5 +54,5 @@ export function getCategories(params) {
  * @url  /article/articles/Updstatus
  * */
 export function Updstatus(params) {
-    return service.post('/article/articles/Updstatus', params);
+    return service.post('/article/Updstatus', params);
 }

@@ -64,11 +64,6 @@ export default {
     window.removeEventListener("scroll", this.watchScroll)
   },
   methods: {
-    goCategory(val) {
-      localStorage.removeItem("category");
-      localStorage.setItem("category", JSON.stringify(val));
-      this.$router.push({ name: 'category', params: { cateId: val.id, cate: val.sort_name } });
-    },
     // 监听页面高度，给页头增加粘性位置
     watchScroll() {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop

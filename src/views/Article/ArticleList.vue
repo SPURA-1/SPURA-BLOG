@@ -8,7 +8,7 @@
           </div>
           <div class="article-details">
             <h2>{{ article.title }}</h2>
-            <p class="article-content">{{ truncateContent(article.content) }}</p>
+            <p class="article-content">{{ truncateContent(article.Introduction) }}</p>
             <div>
               <p class="" style="display:flex;justify-content: flex-end;">{{ article.category }}</p>
               <p style="display:flex;justify-content: flex-end;">{{ article.publish_date }}</p>
@@ -97,6 +97,7 @@ export default {
               image_path: item.image_path,
               publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
               title: item.title,
+              Introduction: item.Introduction
             }));
 
             console.log(this.articles, 'ss');
@@ -111,6 +112,8 @@ export default {
     navigateToArticle(articleId) {
       // 在这里添加页面跳转逻辑，使用 router.push() 或类似方法进行导航
       // 例如：this.$router.push(`/article/${articleId}`);
+      this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
+      console.log(articleId);
     },
     // 搜索文章
     searchArticles() {
@@ -124,7 +127,7 @@ export default {
       // 例如：调用 API 获取分类筛选结果，然后更新 this.articles
     },
     truncateContent(content) {
-      const maxLength = 100; // 限制内容显示的最大长度
+      const maxLength = 40; // 限制内容显示的最大长度
       if (content.length <= maxLength) {
         return content;
       } else {
