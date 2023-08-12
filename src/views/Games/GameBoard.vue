@@ -106,6 +106,10 @@ export default {
       showGamePopup: false, // 控制游戏弹出界面的显示与隐藏
     };
   },
+  created() {
+    // 在页面创建时重置滚动条位置
+    window.scrollTo(0, 0);
+  },
   mounted() {
     this.isMobile = this.isMobileDevice();
   },

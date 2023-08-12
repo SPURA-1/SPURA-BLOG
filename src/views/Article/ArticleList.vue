@@ -46,7 +46,7 @@
 
 <script>
 import moment from 'moment';
-import { getart, getCategoriesList } from '@/api/ArticleList.api'
+import { getart, getCategoriesList, searchArticles } from '@/api/ArticleList.api'
 import test from '@/components/Svg/MySvgIcon.vue'
 export default {
   components: {
@@ -101,8 +101,30 @@ export default {
     },
     // 搜索文章
     searchArticles() {
-      // 在这里执行搜索逻辑，根据 searchQuery 进行搜索
-      // 例如：调用 API 获取搜索结果，然后更新 this.articles
+      console.log(this.searchQuery);
+      const searchArtQuery = { searchQuery: this.searchQuery }
+      searchArticles(searchArtQuery)
+        .then(res => {
+          if (res.status === 200) {
+            this.articles = res.data.articles;
+            this.articles = this.articles.map(item => ({
+              id: item.id,
+              category: this.categoryNames[item.category],
+              content: item.content,
+              image_path: item.image_path,
+              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
+              title: item.title,
+              Introduction: item.Introduction
+            }));
+
+            console.log(this.articles, 'ss');
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(error => {
+          console.error('获取文章列表失败', error);
+        });
     },
 
     // 根据分类筛选文章

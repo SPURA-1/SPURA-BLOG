@@ -2,11 +2,18 @@ import service from "@/utils/request"
 
 
 /**
- * @description 获取所有状态为1的文章列表
- * @url  /article/articles/visible
+ * @description 获取所有状态为1的文章列表，根据分类筛选文章
+ * @url  /article/visible
  * */
 export function getart(params) {
     return service.post('/article/visible', params);
+}
+/**
+ * @description 模糊搜索文章列表
+ * @url  /article/searchArticles
+ * */
+export function searchArticles(params) {
+    return service.post('/article/searchArticles', params);
 }
 
 /**

@@ -3,27 +3,23 @@
     <div class="btnnav">
       <el-button @click="getLuaCode">获取Lua code</el-button>
       <el-button @click="getWorkspaceXml">保存代码</el-button>
-      <el-button @click="saveLuaCode = true" >保存</el-button>
+      <el-button @click="saveLuaCode = true">保存</el-button>
       <el-button type="text" @click="loadLuaCode" style="margin-left: 10px; color: #1e90ff;">导入用例</el-button>
       <!-- <LoadDialog :visible.sync="dialogVisible"></LoadDialog> -->
     </div>
 
-    <el-dialog title="用例导入" :visible.sync="dialogVisible"> 
-        <el-input placeholder="搜索" v-model="searchText"></el-input>
-        <el-table :data="tableData">
-          <el-table-column prop="name" label="名称"></el-table-column>
-          <el-table-column prop="description" label="描述"></el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button type="primary" @click="handleImport(scope.$index)">导入</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-dialog>
-
-
-
-
+    <el-dialog title="用例导入" :visible.sync="dialogVisible">
+      <el-input placeholder="搜索" v-model="searchText"></el-input>
+      <el-table :data="tableData">
+        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="description" label="描述"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="handleImport(scope.$index)">导入</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
 
     <!-- 编辑需要弹出的内容 -->
     <el-dialog title="保存" :visible.sync="saveLuaCode" width="470px" style="font-weight: bold;">
@@ -38,8 +34,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="用例描述" :label-width="formLabelWidth">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" placeholder="请输入内容" v-model="form.description"
-            style="width: 218px;">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" placeholder="请输入内容" v-model="form.description" style="width: 218px;">
           </el-input>
         </el-form-item>
       </el-form>
@@ -48,7 +43,6 @@
         <el-button type="primary" @click="saveLuaCode = false">确 定</el-button>
       </div>
     </el-dialog>
-
 
     <div class="rightaside">
       <div id="blocklyDiv"></div>
@@ -870,31 +864,35 @@ export default {
         ]
       },
       blocksJsonArray: [{
-          "type": "lib_add",
-          "message0": '求和 %1 %2',
-          "args0": [
-            {
-              "type": "input_value",
-              "name": "a",
-              "check": "Number"
-            },
-            {
-              "type": "input_value",
-              "name": "b",
-              "check": "Number"
-            }
-          ],
-          "output": "null",
-          "colour": 160,
-          "tooltip": "求和",
-        },
-        {
-          "type": "lib_add_define",
-          "message0": '红外发送',
-          "colour": 230,
-          "tooltip": "红外发送功能声明", //comment 提示
-        }],
+        "type": "lib_add",
+        "message0": '求和 %1 %2',
+        "args0": [
+          {
+            "type": "input_value",
+            "name": "a",
+            "check": "Number"
+          },
+          {
+            "type": "input_value",
+            "name": "b",
+            "check": "Number"
+          }
+        ],
+        "output": "null",
+        "colour": 160,
+        "tooltip": "求和",
+      },
+      {
+        "type": "lib_add_define",
+        "message0": '红外发送',
+        "colour": 230,
+        "tooltip": "红外发送功能声明", //comment 提示
+      }],
     }
+  },
+  created() {
+    // 在页面创建时重置滚动条位置
+    window.scrollTo(0, 0);
   },
   mounted() {
     this.workspace = Blockly.inject('blocklyDiv', { toolbox: this.toolboxJson });
@@ -993,74 +991,74 @@ export default {
 
     },
 
-//     getWorkspaceXml() {
-//       const code = luaGenerator.workspaceToCode(this.workspace);
-// console.log(code,'=================')
-//       axios({
-//         method: 'post',
-//         url: 'http://192.168.2.64:9510/blockly-lib/save-blocks',
-//         data: { code },
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       }).then(res => {
-//         if (res.data.code !== 400) {
-//           console.log(res,'resdata')
-//           return this.$message.error("获取失败");
-//         } else {
-//           console.log(res,'--------------------')
-//           return this.$message.success("获取成功");
-//         }
-        
-//       }).catch(error => {
-//         console.log(error)
-//       })
+    //     getWorkspaceXml() {
+    //       const code = luaGenerator.workspaceToCode(this.workspace);
+    // console.log(code,'=================')
+    //       axios({
+    //         method: 'post',
+    //         url: 'http://192.168.2.64:9510/blockly-lib/save-blocks',
+    //         data: { code },
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //       }).then(res => {
+    //         if (res.data.code !== 400) {
+    //           console.log(res,'resdata')
+    //           return this.$message.error("获取失败");
+    //         } else {
+    //           console.log(res,'--------------------')
+    //           return this.$message.success("获取成功");
+    //         }
 
-//     },
+    //       }).catch(error => {
+    //         console.log(error)
+    //       })
+
+    //     },
 
     loadLuaCode() {
       this.dialogVisible = true;
     }
 
     // eslint-disable-next-line vue/no-dupe-keys
-//     saveLuaCode() {
-//   // 获取表单数据
-//   const formData = {
-//     name: this.form.name,
-//     region: this.form.region,
-//     description: this.form.description,
-//   };
-//   // 获取工作区 XML 代码
-//   const data = {
-//   latestCode: this.latestCode,
-// };
-//   // 发送保存请求
-//   axios({
-//     method: 'post',
-//     url: 'http://192.168.2.64:9510/blockly-lib/save-blocks',
-//     data: {
-//       formData,
-//       data,
-//     },
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   })
-//     .then(res => {
-//         if (res.data.code !== 400) {
-//           console.log(res,'resdata')
-//           return this.$message.error("获取失败");
-//         } else {
-//           console.log(res)
-//           return this.$message.error("获取成功");
-//         }
-        
-//       }).catch(error => {
-//         console.log(error)
-//       })
-//   // 关闭保存对话框
-//   this.saveLuaCode = false;
-// },
+    //     saveLuaCode() {
+    //   // 获取表单数据
+    //   const formData = {
+    //     name: this.form.name,
+    //     region: this.form.region,
+    //     description: this.form.description,
+    //   };
+    //   // 获取工作区 XML 代码
+    //   const data = {
+    //   latestCode: this.latestCode,
+    // };
+    //   // 发送保存请求
+    //   axios({
+    //     method: 'post',
+    //     url: 'http://192.168.2.64:9510/blockly-lib/save-blocks',
+    //     data: {
+    //       formData,
+    //       data,
+    //     },
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //   })
+    //     .then(res => {
+    //         if (res.data.code !== 400) {
+    //           console.log(res,'resdata')
+    //           return this.$message.error("获取失败");
+    //         } else {
+    //           console.log(res)
+    //           return this.$message.error("获取成功");
+    //         }
+
+    //       }).catch(error => {
+    //         console.log(error)
+    //       })
+    //   // 关闭保存对话框
+    //   this.saveLuaCode = false;
+    // },
 
 
   }

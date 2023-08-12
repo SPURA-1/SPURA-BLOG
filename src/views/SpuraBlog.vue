@@ -19,6 +19,12 @@ export default {
     // layoutBody,
     layoutFooter
   },
+  data() {
+    return {
+    }
+  },
+  created() {
+  },
 };
 </script>
 

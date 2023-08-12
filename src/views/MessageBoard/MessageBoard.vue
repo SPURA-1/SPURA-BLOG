@@ -259,6 +259,8 @@ export default {
     };
   },
   created() {
+    // 在页面创建时重置滚动条位置
+    window.scrollTo(0, 0);
   },
   computed: {
     visibleComments() {
