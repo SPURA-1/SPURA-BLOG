@@ -20,7 +20,7 @@
         </div>
         <div class="menu-item">
           <!-- target="_blank" 在新窗口中打开链接 -->
-          <router-link to="/Article" target="_parent">文章</router-link>
+          <router-link to="/ArticleList" target="_parent">文章</router-link>
         </div>
         <div class="menu-item">
           <router-link to="/blockly">编程</router-link>
@@ -100,10 +100,6 @@ export default {
   -moz-transition: 0.3s all linear;
   -o-transition: 0.3s all ease;
   -ms-transition: 0.3s all ease;
-
-  &.hidden {
-    top: -100px;
-  }
 
   &.fixed {
     background-color: #ffffff;

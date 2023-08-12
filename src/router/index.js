@@ -79,8 +79,8 @@ const routes = [
         component: () => import('../components/layout/layout-body.vue')
       },
       {
-        path: '/Article',
-        name: 'Article',
+        path: '/ArticleList',
+        name: 'ArticleList',
         component: () => import('../views/Article/ArticleList.vue')
       },
       {

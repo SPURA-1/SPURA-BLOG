@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <div>
-      <router-link class="back-button" to="/Article">返回</router-link>
+      <router-link class="back-button" to="/ArticleList">返回</router-link>
     </div>
     <div class="container">
       <div class="left">
@@ -42,6 +42,8 @@ export default {
   },
   created() {
     this.searchPageList();
+    // 在页面创建时重置滚动条位置
+    window.scrollTo(0, 0);
   },
   mounted() {
     // 开启监听事件
@@ -163,7 +165,7 @@ export default {
   border-left: 1px solid #ccc;
   position: fixed;
   top: 200px;
-  right: 140px;
+  right: 120px;
   z-index: 100;
   display: flex;
   justify-content: space-between;

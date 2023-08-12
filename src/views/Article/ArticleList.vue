@@ -21,16 +21,21 @@
       <div class="sidebar">
         <div class="search-box">
           <input type="text" v-model="searchQuery" placeholder="搜索文章" />
-          <button @click="searchArticles">搜索</button>
+          <button class="filter-button" @click="searchArticles">搜索</button>
         </div>
         <div class="category-filter">
-          <h3>分类筛选</h3>
-          <select v-model="selectedCategory">
-            <option value="">全部分类</option>
-            <option v-for="category in categories" :key="category.id" :label="category.name">{{ category }}</option>
-          </select>
-          <button @click="filterByCategory">筛选</button>
+          <div class="filter-header">
+            <h3>分类筛选</h3>
+          </div>
+          <div class="filter-content">
+            <select class="category-select" v-model="selectedCategory">
+              <option value="">全部分类</option>
+              <option v-for="category in categories" :key="category.id" :label="category.name">{{ category.id }}</option>
+            </select>
+            <button class="filter-button" @click="filterByCategory">筛选</button>
+          </div>
         </div>
+
         <div class="svgicon">
           <test></test>
         </div>
@@ -57,7 +62,10 @@ export default {
   },
   created() {
     this.fetchCategoryList();
-    this.fetchArticles();
+
+  },
+  mounted() {
+
   },
   computed: {
     categoryNames() {
@@ -75,6 +83,7 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.categories = res.data.categories;
+            this.filterByCategory();
             console.log(this.categories, '1');
           } else {
             console.log('报错');
@@ -84,9 +93,22 @@ export default {
           console.log(err, 'axios报错');
         })
     },
-    // 获取文章列表
-    fetchArticles() {
-      getart()
+    navigateToArticle(articleId) {
+      // 在这里添加页面跳转逻辑，使用 router.push() 或类似方法进行导航
+      // 例如：this.$router.push(`/article/${articleId}`);
+      this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
+      console.log(articleId);
+    },
+    // 搜索文章
+    searchArticles() {
+      // 在这里执行搜索逻辑，根据 searchQuery 进行搜索
+      // 例如：调用 API 获取搜索结果，然后更新 this.articles
+    },
+
+    // 根据分类筛选文章
+    filterByCategory() {
+      const searchCategory = { category: parseInt(this.selectedCategory) }
+      getart(searchCategory)
         .then(res => {
           if (res.status === 200) {
             this.articles = res.data.articles;
@@ -109,23 +131,6 @@ export default {
           console.error('获取文章列表失败', error);
         });
     },
-    navigateToArticle(articleId) {
-      // 在这里添加页面跳转逻辑，使用 router.push() 或类似方法进行导航
-      // 例如：this.$router.push(`/article/${articleId}`);
-      this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
-      console.log(articleId);
-    },
-    // 搜索文章
-    searchArticles() {
-      // 在这里执行搜索逻辑，根据 searchQuery 进行搜索
-      // 例如：调用 API 获取搜索结果，然后更新 this.articles
-    },
-
-    // 根据分类筛选文章
-    filterByCategory() {
-      // 在这里执行分类筛选逻辑，根据 selectedCategory 进行筛选
-      // 例如：调用 API 获取分类筛选结果，然后更新 this.articles
-    },
     truncateContent(content) {
       const maxLength = 40; // 限制内容显示的最大长度
       if (content.length <= maxLength) {
@@ -142,6 +147,7 @@ export default {
 .body {
   margin: 100px 250px 0 340px;
   padding-top: 80px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: space-around; /* 添加居中对齐 */
 }
@@ -160,6 +166,7 @@ export default {
   flex-direction: column;
   gap: 20px;
   max-width: 900px; /* 限制最大宽度，可以根据需要调整 */
+  width: 100%; /* 添加固定宽度 */
 }
 
 .article {
@@ -195,6 +202,10 @@ export default {
 
 .article-details h2 {
   margin-top: 0;
+  max-width: 80%; /* 添加最大宽度，根据需要调整 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .article-content {
@@ -217,19 +228,41 @@ export default {
 }
 
 .search-box input {
-  width: 70%;
+  width: 200px;
   padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-right: 10px;
 }
 
-.category-filter h3 {
-  margin-top: 0;
-}
-
-.category-filter select {
-  width: 100%;
-  padding: 5px;
+.filter-header {
   margin-bottom: 10px;
 }
 
-/* SVG */
+.filter-content {
+  display: flex;
+  align-items: center;
+}
+
+.category-select {
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.filter-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
+}
 </style>

@@ -6,7 +6,7 @@ import service from "@/utils/request"
  * @url  /article/articles/visible
  * */
 export function getart(params) {
-    return service.get('/article/visible', params);
+    return service.post('/article/visible', params);
 }
 
 /**
