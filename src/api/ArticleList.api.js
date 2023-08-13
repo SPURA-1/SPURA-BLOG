@@ -63,3 +63,26 @@ export function getCategories(params) {
 export function Updstatus(params) {
     return service.post('/article/Updstatus', params);
 }
+
+/**
+ * @description 获取所有图片
+ * @url  /article/getImages
+ * */
+export function GetImages(params) {
+    return service.get('/article/getImages', params);
+}
+
+/**
+ * @description 文件上传
+ * @url  /article/articles/Updstatus
+ * */
+export function FileUpdate(file) {
+    // return service.post('/article/upload', params);
+    const formData = new FormData();
+    formData.append('image', file); // 'image' 应该对应后端接收文件的字段名
+    return service.post('/article/upload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}

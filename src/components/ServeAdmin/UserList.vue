@@ -32,11 +32,7 @@
       <el-table-column prop="nickname" label="角色"> </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="stateObj">
-          <el-switch
-            v-model="stateObj.row.mg_state"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
+          <el-switch v-model="stateObj.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
           </el-switch>
         </template>
       </el-table-column>
@@ -46,37 +42,16 @@
           <!-- 修改按钮 -->
           <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
           <!-- 删除按钮 -->
-          <el-button
-            type="danger"
-            icon="el-icon-delete"
-            size="mini"
-          ></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
           <!-- 分配角色按钮 -->
-          <el-tooltip
-            effect="dark"
-            content="分配角色"
-            placement="top"
-            :enterable="false"
-          >
-            <el-button
-              type="warning"
-              icon="el-icon-setting"
-              size="mini"
-            ></el-button>
+          <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+            <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页区域 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handeleCurrentChange"
-      :current-page="queryIofo.pagenum"
-      :page-sizes="[2, 4, 6, 8]"
-      :page-size="queryIofo.pagesize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    >
+    <el-pagination @size-change="handleSizeChange" @current-change="handeleCurrentChange" :current-page="queryIofo.pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="queryIofo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
   </div>
 </template>
@@ -103,7 +78,7 @@ export default {
   methods: {
     getUserList() {
       // 这里把要传进去的参数事先在数据区域写好，然后再用axios调用即可
-      
+
       const token = sessionStorage.token;
       const params = new URLSearchParams();
       axios({
@@ -122,7 +97,7 @@ export default {
           if (res.data.status !== 200) {
             return this.$message.error("获取用户失败");
           } else {
-            
+
             this.userList = res.data;
             this.total = res.data.total;
             console.log(this.userList)

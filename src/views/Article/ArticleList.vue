@@ -4,7 +4,7 @@
       <div class="articles">
         <div v-for="article in articles" :key="article.id" class="article" @click="navigateToArticle(article.id)">
           <div class="image-container">
-            <img :src="article.image_path" alt="文章图片" v-if="article.image_path" />
+            <img style="width:100%;height:100%" :src="article.image_path" alt="文章图片" v-if="article.image_path" />
           </div>
           <div class="article-details">
             <h2>{{ article.title }}</h2>

@@ -8,7 +8,7 @@
       <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
       <!-- select	菜单激活回调 -->
       <!-- :default-active 与当前激活的菜单绑定“path” -->
-      <el-menu class="el-menu-top" mode="horizontal" :default-active="activeIndex" @select="handleSelect" background-color="#23262E" text-color="#fff" active-text-color="#409EFF">
+      <el-menu class="el-menu-top" mode="horizontal" @select="handleSelect" background-color="#23262E" text-color="#fff" active-text-color="#409EFF">
         <el-submenu index="1">
           <template slot="title">
             <!-- 头像 -->
@@ -41,7 +41,7 @@
               </template>
 
               <!-- 二级菜单 -->
-              <el-submenu>
+              <el-submenu index="2">
                 <template slot="title">账号</template>
                 <el-menu-item index="/UpdateUserData">基本资料</el-menu-item>
                 <el-menu-item index="/UpdateUser">更新</el-menu-item>
@@ -61,7 +61,7 @@
             </el-submenu>
 
             <!-- 权限管理 -->
-            <el-submenu index="2">
+            <el-submenu index="3">
               <!-- 一级菜单的模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
@@ -70,13 +70,13 @@
                 <span>用户管理</span>
               </template>
               <!-- 二级菜单 -->
-              <el-submenu index="2-1">
+              <el-submenu index="3-1">
                 <template slot="title">账号</template>
                 <el-menu-item index="UserList">添加新账号</el-menu-item>
-                <el-menu-item index="2-3">更新</el-menu-item>
+                <el-menu-item index="3-2">更新</el-menu-item>
               </el-submenu>
 
-              <el-submenu index="2-4">
+              <el-submenu index="3-3">
                 <template slot="title">文章</template>
                 <el-menu-item index="TextEditor">文章发表</el-menu-item>
                 <el-menu-item index="ArtList">文章编辑</el-menu-item>
@@ -84,35 +84,35 @@
             </el-submenu>
 
             <!-- 文章管理 disabled 设置不可点击-->
-            <el-submenu index="3">
+            <el-submenu index="4">
               <!-- 一级菜单 -->
               <template slot="title">
                 <i class="el-icon-document"></i>
                 <span slot="title">生活</span>
               </template>
               <!-- 二级菜单 -->
-              <el-submenu index="2-1">
+              <el-submenu index="4-1">
                 <template slot="title">日常</template>
-                <el-menu-item index="2-2">日常</el-menu-item>
-                <el-menu-item index="2-3">更新模块</el-menu-item>
+                <el-menu-item index="4-1-2">日常</el-menu-item>
+                <el-menu-item index="4-1-3">更新模块</el-menu-item>
               </el-submenu>
 
-              <el-submenu index="2-4">
+              <el-submenu index="4-2">
                 <template slot="title">更新模块</template>
-                <el-menu-item>更新模块</el-menu-item>
+                <el-menu-item index="4-2-1">更新模块</el-menu-item>
               </el-submenu>
             </el-submenu>
 
-            <el-submenu index="4">
+            <el-submenu index="5">
               <!-- 一级菜单 -->
               <template slot="title">
                 <i class="el-icon-setting"></i>
                 <span slot="title">数据统计</span>
               </template>
               <!-- 二级菜单 -->
-              <el-submenu index="4-1">
+              <el-submenu index="5-1">
                 <template slot="title">去过的地方</template>
-                <el-menu-item index="4-2">地图锚点</el-menu-item>
+                <el-menu-item index="5-1-1">地图锚点</el-menu-item>
                 <el-menu-item index="/AdminHome">数据信息</el-menu-item>
               </el-submenu>
             </el-submenu>
