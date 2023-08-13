@@ -7,7 +7,7 @@
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="file_path" label="图片">
           <template slot-scope="scope">
-            <img :src="scope.row.file_path" class="uploaded-image" />
+            <img :src="imageUrl+scope.row.file_path" class="uploaded-image" />
           </template>
         </el-table-column>
         <el-table-column prop="comment" label="备注"></el-table-column>
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       fileList: [],
-      imageUrl: '',
+      imageUrl: 'http://47.115.231.184:5555',
       uploadedImages: [], // 用于存储已上传的图片 URL
     };
   },
