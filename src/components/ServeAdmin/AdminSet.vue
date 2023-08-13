@@ -100,7 +100,13 @@ export default {
     // 点击文件列表中已上传的文件时的钩子
     handlePreview(file) {
       console.log(file);
-    }
+    },
+    editImage(index) {
+      console.log(index);
+    },
+    deleteImage(index) {
+      console.log(index);
+    },
   }
 };
 </script>
