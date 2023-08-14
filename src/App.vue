@@ -8,16 +8,10 @@ export default {
   name: 'app',
   data() {
     return {
-      xinwenList: []
     }
   },
   methods: {
-    getData() {
-      axios.post(`http://47.115.231.184:5555/api/login`).then((response) => {
-        this.xinwenList = response.data
-        console.log('我是数据', this.xinwenList)
-      })
-    }
+
   }
 
 }
