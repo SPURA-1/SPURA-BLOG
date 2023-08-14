@@ -9,7 +9,7 @@
           <div class="article-details">
             <h2>{{ article.title }}</h2>
             <p class="article-content">{{ truncateContent(article.Introduction) }}</p>
-            <div>
+            <div class="article-meta">
               <p class="" style="display:flex;justify-content: flex-end;">{{ article.category }}</p>
               <p style="display:flex;justify-content: flex-end;">{{ article.publish_date }}</p>
             </div>
@@ -196,12 +196,15 @@ export default {
   display: flex;
   background-color: #dfd5d5;
   border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
 .article:hover {
   background-color: #cfc1c1;
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 .image-container {
@@ -236,7 +239,13 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
+/* .article-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  color: #999;
+  font-size: 12px;
+} */
 /* 右侧搜索框 */
 .sidebar {
   width: 350px;
