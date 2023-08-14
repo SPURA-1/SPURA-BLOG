@@ -21,18 +21,22 @@
       </el-row>
     </el-card>
     <!-- 用户列表区域 -->
-    <el-table :data="userList.data" border stripe>
+    <el-table :data="userList" border stripe>
       <!-- 在这里绑定表格的数据 userList -->
       <el-table-column type="index"></el-table-column>
       <!-- 添加索引列 -->
-      <el-table-column prop="username" label="姓名"> </el-table-column>
+      <el-table-column prop="username" label="用户ID"> </el-table-column>
+      <el-table-column prop="nickname" label="昵称"> </el-table-column>
       <!-- prop是取得userList中每一个对象中的对应属性值 -->
       <el-table-column prop="email" label="邮箱"> </el-table-column>
-      <el-table-column prop="user_pic" label="电话"> </el-table-column>
-      <el-table-column prop="nickname" label="角色"> </el-table-column>
+      <el-table-column prop="user_pic" label="头像">
+        <template slot-scope="scope">
+          <img style="width:150px;height:150px;" :src="scope.row.user_pic" alt="" />
+        </template>
+      </el-table-column>
       <el-table-column label="状态">
-        <template slot-scope="stateObj">
-          <el-switch v-model="stateObj.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.mg_state" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="upUserStarts(scope.row)">
           </el-switch>
         </template>
       </el-table-column>
@@ -57,6 +61,7 @@
 </template>
 
 <script>
+import { getUserMsg, userUpdstatus } from '@/api/UserInfo.api'
 import axios from 'axios';
 export default {
   data() {
@@ -76,37 +81,64 @@ export default {
     this.getUserList();
   },
   methods: {
+    // 获取用户列表
     getUserList() {
       // 这里把要传进去的参数事先在数据区域写好，然后再用axios调用即可
 
-      const token = sessionStorage.token;
-      const params = new URLSearchParams();
-      axios({
-        method: "get",
-        url: "http://47.115.231.184:5555/my/userinfo",
-        data: params,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": token,
-        },
-      })
+      // const token = sessionStorage.token;
+      // const params = new URLSearchParams();
+      // axios({
+      //   method: "get",
+      //   url: "http://47.115.231.184:5555/my/userinfo",
+      //   data: params,
+      //   headers: {
+      //     "Content-Type": "application/x-www-form-urlencoded",
+      //     "Authorization": token,
+      //   },
+      // })
+      getUserMsg()
         .then((res) => {
-          console.log(res.data.data);
-          console.log(res);
-          console.log('--------------')
-          if (res.data.status !== 200) {
-            return this.$message.error("获取用户失败");
-          } else {
-
-            this.userList = res.data;
+          if (res.data.status === 200) {
+            this.userList = res.data.data;
+            this.userList = this.userList.map(item => ({
+              id: item.id,
+              username: item.username,
+              email: item.email,
+              user_pic: item.user_pic,
+              nickname: item.nickname,
+              mg_state: item.mg_state
+            }));
             this.total = res.data.total;
             console.log(this.userList)
             console.log(this.total)
+          } else {
+            return this.$message.error("获取用户失败");
+
           }
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    // 修改用户状态
+    upUserStarts(row) {
+      const tableData = {
+        status: row.mg_state,
+        userId: row.id,
+      }
+      console.log(tableData, 's');
+      userUpdstatus(tableData)
+        .then(res => {
+          if (res.status === 200) {
+            console.log(res.data);
+            this.$message.success("状态更新成功");
+          } else {
+            this.$message.error("状态更新失败");
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS报错');
+        })
     },
     // 监听每页显示的条数
     handleSizeChange(newSize) {
@@ -116,7 +148,7 @@ export default {
       this.getUserList();
     },
     // 监听页码变化
-    handleCurrentChange(newPage) {
+    handeleCurrentChange(newPage) {
       this.queryIofo.pagenum = newPage;
       // 重新用新的queryIofo参数获取用户数据，渲染页面
       this.getUserList();

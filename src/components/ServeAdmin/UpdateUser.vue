@@ -4,12 +4,7 @@
       <span>更新密码</span>
     </div>
     <!-- 表单 -->
-    <el-form
-      :model="userForm"
-      :rules="userFormRules"
-      ref="userFormRef"
-      label-width="100px"
-    >
+    <el-form :model="userForm" :rules="userFormRules" ref="userFormRef" label-width="100px">
       <el-form-item label="原密码" prop="oldPwd">
         <el-input v-model="userForm.oldPwd"></el-input>
       </el-form-item>
@@ -38,7 +33,7 @@ export default {
   },
   created() {
     // 基于浅拷贝，把 Vuex 中的用户信息对象复制一份，交给 userForm
-    this.userForm = { ...this.$store.state.user.userInfo };
+    // this.userForm = { ...this.$store.state.user.userInfo };
   },
   methods: {
     // 登录的 AXIOS

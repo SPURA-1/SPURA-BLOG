@@ -11,7 +11,7 @@
           <img src="../../assets/Images/headBg.jpg">
         </a>
         <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
-        <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">
+        <img ref="loginBackgroundImg" src="" alt="Login Background" style="display: none;">
         <h2 class="h-description">
           <a>
             {{ "ようこそSPURAのブログへ！" }}
@@ -20,8 +20,8 @@
       </div>
     </div>
     <div id="layout-body">
-      <router-view></router-view>
-      <backTop :defaultProps="55" :date="1000" :color="blue"></backTop>
+      <!-- <router-view></router-view> -->
+      <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
       <Home></Home>
     </div>
   </div>
@@ -37,11 +37,13 @@ export default {
     return {
       show: true,
       minHeight: 600,
-      test: ''
+      test: '',
+      topColor: '#66ccff'
     }
   },
   components: { backTop, Home },
-  mounted() {//页面元素加载完成
+  mounted() {
+    //页面元素加载完成
     window.addEventListener('scroll', this.watchScroll)
     // 首页字体
     var that = this;
@@ -55,6 +57,12 @@ export default {
       Typeit(that.test, "#luke"); //打字机效果
       clearTimeout(timer);
     }, 500);
+
+    // 获取预加载登录界面背景图片的元素
+    const loginBackgroundImg = this.$refs.loginBackgroundImg;
+
+    // 设置图片的src属性，触发预加载
+    loginBackgroundImg.src = '../../assets/background.jpg';
   },
   methods: {},
 }

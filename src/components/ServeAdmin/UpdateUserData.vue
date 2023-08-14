@@ -4,22 +4,13 @@
       <span>基本资料</span>
     </div>
     <!-- 表单 -->
-    <el-form
-      :model="userForm"
-      :rules="userFormRules"
-      ref="userFormRef"
-      label-width="100px"
-    >
+    <el-form :model="userForm" :rules="userFormRules" ref="userFormRef" label-width="100px">
       <el-form-item label="登录名称" prop="username">
         <!-- 禁用用户名输入框 disabled -->
         <el-input v-model="userForm.username" disabled></el-input>
       </el-form-item>
       <el-form-item label="用户昵称" prop="nickname">
-        <el-input
-          v-model="userForm.nickname"
-          minlength="1"
-          maxlength="10"
-        ></el-input>
+        <el-input v-model="userForm.nickname" minlength="1" maxlength="10"></el-input>
       </el-form-item>
       <el-form-item label="用户邮箱" prop="email">
         <el-input v-model="userForm.email"></el-input>
@@ -42,7 +33,7 @@ export default {
       userFormRules: {},
     };
   },
-  created() {},
+  created() { },
 
   methods: {
     // 登录的 AXIOS

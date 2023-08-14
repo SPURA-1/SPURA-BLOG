@@ -15,9 +15,9 @@
             <img src="../../assets/Main/avatar.jpg" alt="" class="avatar" />
             <span>个人中心</span>
           </template>
-          <el-menu-item index="/UpdateUserData"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
-          <el-menu-item index="/AdminSet"><i class="el-icon-camera"></i>更换头像</el-menu-item>
-          <el-menu-item index="/UpdateUser"><i class="el-icon-key"></i>重置密码</el-menu-item>
+          <el-menu-item class="MenuTop" index="/UpdateUserData"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
+          <el-menu-item class="MenuTop" index="/AdminSet"><i class="el-icon-camera"></i>更换头像</el-menu-item>
+          <el-menu-item class="MenuTop" index="/UpdateUser"><i class="el-icon-key"></i>重置密码</el-menu-item>
         </el-submenu>
         <el-menu-item index="2" @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
       </el-menu>
@@ -162,7 +162,7 @@ export default {
             message: "退出成功!",
           });
           window.sessionStorage.clear();
-          this.$router.push("/login");
+          this.$router.push("/");
         })
         .catch((e) => e);
     },
@@ -239,5 +239,24 @@ export default {
 }
 .el-submenu {
   width: 200px;
+}
+/* 响应式布局的媒体查询 */
+@media screen and (min-width: 768px) {
+  /* 仅在屏幕宽度大于等于 768px 时应用这些样式 */
+
+  /* 头部 */
+  .el-header {
+    flex-direction: row; /* 恢复水平布局 */
+    padding: 0 10px; /* 恢复内边距 */
+    align-items: center; /* 水平对齐内容 */
+    .avatar {
+      margin: 0 10px; /* 在头像和文本之间添加一些间距 */
+    }
+  }
+
+  /* 侧边栏 */
+  .el-aside {
+    width: 200px; /* 恢复侧边栏宽度 */
+  }
 }
 </style>

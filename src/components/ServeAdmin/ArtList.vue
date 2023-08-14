@@ -140,6 +140,7 @@ export default {
     //   // 重新用新的queryIofo参数获取用户数据，渲染页面
     //   this.getArtList();
     // },
+
     // 修改文章的显示
     updateStatus(row) {
       const tableData = {
