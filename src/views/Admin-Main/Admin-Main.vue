@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header class="el-header">
       <!-- 左侧的 logo -->
-      <img src="../../assets/Main/logo.png" alt="" />
+      <img style="margin-left:30px;" src="../../assets/Main/logo.png" alt="" />
       <!-- 右侧的菜单 -->
       <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
       <!-- select	菜单激活回调 -->
@@ -17,7 +17,7 @@
           </template>
           <el-menu-item class="MenuTop" index="/UpdateUserData"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
           <el-menu-item class="MenuTop" index="/AdminSet"><i class="el-icon-camera"></i>更换头像</el-menu-item>
-          <el-menu-item class="MenuTop" index="/UpdateUser"><i class="el-icon-key"></i>重置密码</el-menu-item>
+          <el-menu-item class="MenuTop" index="/UpdateUser"><i class="el-icon-key"></i>更换密码</el-menu-item>
         </el-submenu>
         <el-menu-item index="2" @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
       </el-menu>
@@ -31,13 +31,17 @@
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
           <el-menu unique-opened :default-active="activePath" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
             <!-- 一级菜单 用户信息 -->
+            <el-menu-item index="/AdminHome">
+              <i class="el-icon-menu"></i>
+              <span slot="title">主页</span>
+            </el-menu-item>
             <el-submenu index="1" class="el-submenu">
               <!-- 一级菜单的模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
                 <i class="el-icon-user"></i>
                 <!-- 一级导航名称 -->
-                <span>用户信息</span>
+                <span>个人信息</span>
               </template>
 
               <!-- 二级菜单 -->
@@ -70,11 +74,7 @@
                 <span>用户管理</span>
               </template>
               <!-- 二级菜单 -->
-              <el-submenu index="3-1">
-                <template slot="title">账号</template>
-                <el-menu-item index="UserList">添加新账号</el-menu-item>
-                <el-menu-item index="3-2">更新</el-menu-item>
-              </el-submenu>
+              <el-menu-item index="/UserList">账号</el-menu-item>
 
               <el-submenu index="3-3">
                 <template slot="title">文章</template>

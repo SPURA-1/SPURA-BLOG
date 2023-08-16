@@ -114,12 +114,6 @@ export default {
 .site-logo {
   text-align: center;
 
-  // overflow: hidden;
-  img {
-    width: 200px;
-    height: 65px;
-  }
-
   p.site-name {
     font-size: 15px;
     font-weight: bold;

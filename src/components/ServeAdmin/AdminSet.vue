@@ -81,6 +81,7 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.uploadedImages = res.data.images
+            console.log(this.uploadedImages);
           } else {
             console.log('报错');
           }

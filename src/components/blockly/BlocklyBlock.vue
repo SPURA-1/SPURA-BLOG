@@ -80,6 +80,7 @@ import { luaGenerator } from 'blockly/lua';
 import * as Ch from 'blockly/msg/zh-hans';
 Blockly.setLocale(Ch);
 import axios from 'axios';
+import { getBlocklyCode } from '../../api/blockly.api'
 
 // import LoadDialog from '../dialog/LoadDialog.vue'
 
@@ -994,15 +995,16 @@ export default {
       const params = {
         xmlData: xmlString
       }
-      axios({
-        method: "post",
-        url: "http://47.115.231.184:5555/blockly/generateCode",
-        // data: params,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: params,
-      })
+      // axios({
+      //   method: "post",
+      //   url: "http://47.115.231.184:5555/blockly/generateCode",
+      //   // data: params,
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   data: params,
+      // })
+      getBlocklyCode(params)
         .then(res => {
           if (res.status === 200) {
             console.log(res.data.code, '**');
