@@ -9,8 +9,16 @@
 
 <script>
 export default {
-  name: 'LoadingPage'
-};
+  name: 'LoadingPage',
+  mounted() {
+    setTimeout(() => {
+      import('../../views/SpuraBlog.vue').then(() => {
+        this.$router.replace('/SpuraBlog');
+      });
+    }, 500);
+
+  },
+}
 </script>
 
 <style scoped>

@@ -11,9 +11,9 @@
         Menus
       </div>
       <div class="site-menus" :class="{ 'mobileShow': mobileShow }" @click.stop="mobileShow = !mobileShow">
-        <div class="menu-item header-search">
+        <!-- <div class="menu-item header-search">
           <header-search />
-        </div>
+        </div> -->
 
         <div class="menu-item">
           <router-link to="/Admin-Main">首页</router-link>
@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import HeaderSearch from '../nav/header-search.vue'
+// import HeaderSearch from '../nav/header-search.vue'
 
 export default {
   name: "layout-header",
-  components: { HeaderSearch },
+  // components: { HeaderSearch },
   data() {
     return {
       lastScrollTop: 0,
@@ -100,6 +100,10 @@ export default {
   -moz-transition: 0.3s all linear;
   -o-transition: 0.3s all ease;
   -ms-transition: 0.3s all ease;
+
+  // &.hidden {
+  //   top: -100px;
+  // }
 
   &.fixed {
     background-color: #ffffff;

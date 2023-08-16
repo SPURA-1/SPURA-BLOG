@@ -9,17 +9,32 @@
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->
-      <el-row :gutter="20">
+      <el-row :gutter="50">
         <el-col :span="8">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input v-model="searchQuery" placeholder="请输入内容">
+            <el-button slot="append" icon="el-icon-search" @click="searchUserList"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="getUserList">添加用户</el-button>
+          <el-button type="primary" @click="addUserShow">添加用户</el-button>
         </el-col>
       </el-row>
     </el-card>
+    <!-- 添加用户 -->
+    <el-dialog :visible.sync="addUser" title="添加" width="350px">
+      <el-form :model="addUserform" label-position="left">
+        <el-form-item label="用户ID">
+          <el-input v-model="addUserform.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="addUserform.password" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addUser = false">取消</el-button>
+        <el-button type="primary" @click="addNewUser">创建</el-button>
+      </div>
+    </el-dialog>
     <!-- 用户列表区域 -->
     <el-table :data="userList" border stripe>
       <!-- 在这里绑定表格的数据 userList -->
@@ -31,7 +46,9 @@
       <el-table-column prop="email" label="邮箱"> </el-table-column>
       <el-table-column prop="user_pic" label="头像">
         <template slot-scope="scope">
-          <img style="width:150px;height:150px;" :src="scope.row.user_pic" alt="" />
+          <!-- <img style="width:150px;height:150px;" :src="scope.row.user_pic" alt="" /> -->
+          <el-image style="width: 100px; height: 100px" :src="ImageUrl+scope.row.user_pic" :previewSrcList="evaluatePictureList" @click="clickevaluatePicture(scope.row)">
+          </el-image>
         </template>
       </el-table-column>
       <el-table-column label="状态">
@@ -61,19 +78,27 @@
 </template>
 
 <script>
-import { getUserMsg, userUpdstatus } from '@/api/UserInfo.api'
+import { getUserMsg, userUpdstatus, UserReg, userinfoSearch } from '@/api/UserInfo.api'
 import axios from 'axios';
 export default {
   data() {
     return {
+      ImageUrl: 'http://47.115.231.184:5555',
+      addUser: false,
       // 获取用户列表的参数
       queryIofo: {
         query: "",
         pagenum: 1,
         pagesize: 2,
       },
+      addUserform: {
+        username: '',
+        password: ''
+      },
+      searchQuery: '',
       userList: [],
       total: 0,
+      evaluatePictureList: [],
     };
   },
   created() {
@@ -120,6 +145,56 @@ export default {
           console.log(error);
         });
     },
+    // 打开添加用户dialog
+    addUserShow() {
+      this.addUser = true
+    },
+    // 添加用户
+    addNewUser() {
+      UserReg(this.addUserform)
+        .then(res => {
+          if (res.status === 200) {
+            this.addUser = false;
+            this.addUserform = {
+              username: '',
+              password: ''
+            }
+            this.$message({
+              type: 'success',
+              message: '新用户创建成功!'
+            });
+          } else {
+            console.log('AXIOS报错');
+            this.$message({
+              type: 'error',
+              message: '新用户创建失败!'
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err, '报错');
+          this.$message({
+            type: 'error',
+            message: '新用户创建失败!'
+          });
+        })
+    },
+    // 搜索用户
+    searchUserList() {
+      const search = { searchQuery: this.searchQuery }
+      userinfoSearch(search)
+        .then(res => {
+          if (res.status === 200) {
+            console.log(res.data);
+            this.userList = res.data.users
+          } else {
+
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     // 修改用户状态
     upUserStarts(row) {
       const tableData = {
@@ -153,6 +228,13 @@ export default {
       // 重新用新的queryIofo参数获取用户数据，渲染页面
       this.getUserList();
     },
+    // 点击评价图片，大图预览多张图片
+    clickevaluatePicture(row) {
+      var srclist = []
+      srclist.push(this.ImageUrl + row.user_pic)
+
+      this.evaluatePictureList = srclist// 赋值
+    }
   },
 };
 // this.userList=res.data.users

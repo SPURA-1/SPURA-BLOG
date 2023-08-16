@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ElementUI from 'element-ui'
-import SpuraBlog from '../views/SpuraBlog.vue';
+// import SpuraBlog from '../views/SpuraBlog.vue';
+// 定义加载页面组件
+const LoadingComponent = () => import('../components/Loading/Loading.vue');
+
 Vue.use(ElementUI);
 Vue.use(VueRouter)
 
@@ -9,8 +12,12 @@ const routes = [
   // Blog主页
   {
     path: '/',
-    redirect: '/SpuraBlog',
-    component: () => import('../views/SpuraBlog.vue'),
+    redirect: '/Loading',
+  },
+  //  加载页面
+  {
+    path: '/Loading',
+    component: LoadingComponent,
   },
   {
     name: 'Login',
@@ -71,7 +78,7 @@ const routes = [
     // Blog主页
     path: '/SpuraBlog',
     redirect: '/Main',
-    component: SpuraBlog,
+    component: () => import('../views/SpuraBlog.vue'),
     children: [
       {
         path: '/Main',
@@ -125,7 +132,6 @@ const router = new VueRouter({
 //     next()
 //   }
 // })
-
 
 
 //路由判断登录，根据路由配置文件的参数

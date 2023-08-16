@@ -53,7 +53,7 @@ export default {
     window.removeEventListener("scroll", this.watchScroll)
   },
   methods: {
-    // 监听页面高度，给页头增加粘性位置
+    // 监听页面高度，给侧边锚点增加粘性位置
     watchScroll() {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       if (scrollTop === 0) {
@@ -94,11 +94,8 @@ export default {
     scrollToAnchor(id) {
       const anchorElement = document.querySelector(`#${id}`);
       if (anchorElement) {
-        // 计算滚动偏移量，考虑导航栏的高度
-        const headerHeight = 80; // 你的导航栏高度
-        const offsetTop = anchorElement.offsetTop - headerHeight;
         anchorElement.scrollIntoView({
-          top: offsetTop,
+          block: "center",
           behavior: 'smooth', // 添加滚动动画效果
         });
       }

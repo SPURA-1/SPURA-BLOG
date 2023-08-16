@@ -2,14 +2,14 @@
   <div id="body" style="margin-top:80px;">
     <div class="btnnav">
       <el-button @click="getLuaCode">获取Lua code</el-button>
-      <el-button @click="getWorkspaceXml">保存代码</el-button>
+      <!-- <el-button @click="getWorkspaceXml">保存代码</el-button> -->
       <el-button @click="saveLuaCode = true">保存</el-button>
       <el-button type="text" @click="loadLuaCode" style="margin-left: 10px; color: #1e90ff;">导入用例</el-button>
       <!-- <LoadDialog :visible.sync="dialogVisible"></LoadDialog> -->
     </div>
 
     <el-dialog title="用例导入" :visible.sync="dialogVisible">
-      <el-input placeholder="搜索" v-model="searchText"></el-input>
+      <!-- <el-input placeholder="搜索" v-model="searchText"></el-input> -->
       <el-table :data="tableData">
         <el-table-column prop="name" label="名称"></el-table-column>
         <el-table-column prop="description" label="描述"></el-table-column>
@@ -101,6 +101,7 @@ export default {
         delivery: false,
         type: [],
       },
+      tableData: {},
       formLabelWidth: '120px',
       // 工具箱配置
       toolboxJson: {
@@ -109,7 +110,7 @@ export default {
         "contents": [
           {
             "kind": "category",
-            "name": "Logic",
+            "name": "逻辑",
             "categorystyle": "logic_category",
             "contents": [
               {
@@ -147,7 +148,7 @@ export default {
               },
               {
                 "kind": "category",
-                "name": "Boolean",
+                "name": "布尔值",
                 "categorystyle": "logic_category",
                 "contents": [
                   {
@@ -180,7 +181,7 @@ export default {
           },
           {
             "kind": "category",
-            "name": "Loops",
+            "name": "循环",
             "categorystyle": "loop_category",
             "contents": [
               {
@@ -262,7 +263,7 @@ export default {
           },
           {
             "kind": "category",
-            "name": "Math",
+            "name": "数学",
             "categorystyle": "math_category",
             "contents": [
               {
@@ -383,7 +384,7 @@ export default {
           },
           {
             "kind": "category",
-            "name": "Lists",
+            "name": "列表",
             "categorystyle": "list_category",
             "contents": [
               {
@@ -449,24 +450,24 @@ export default {
           },
           {
             "kind": "category",
-            "name": "Variables",
+            "name": "变量",
             "categorystyle": "variable_category",
             "custom": "VARIABLE"
           },
           {
             "kind": "category",
-            "name": "Functions",
+            "name": "函数",
             "categorystyle": "procedure_category",
             "custom": "PROCEDURE"
           },
           {
             "kind": "category",
-            "name": "Library",
+            "name": "记录",
             "expanded": "true",
             "contents": [
               {
                 "kind": "category",
-                "name": "Randomize",
+                "name": "随机",
                 "contents": [
                   {
                     "kind": "block",
@@ -737,7 +738,7 @@ export default {
               },
               {
                 "kind": "category",
-                "name": "Jabberwocky",
+                "name": "随意输出",
                 "contents": [
                   {
                     "kind": "block",
@@ -986,80 +987,38 @@ export default {
       // let code = Blockly.JavaScript.workspaceToCode(this.workspace);
       // console.log(code)
       this.latestCode = luaGenerator.workspaceToCode(this.workspace);
-      document.getElementById('screen-bottom').value = this.latestCode;
-      console.log(this.latestCode);
+      // document.getElementById('screen-bottom').value = this.latestCode;
+      const xmlData = Blockly.Xml.workspaceToDom(this.workspace);
+      const xmlString = new XMLSerializer().serializeToString(xmlData);
+      console.log(xmlString);
+      const params = {
+        xmlData: xmlString
+      }
+      axios({
+        method: "post",
+        url: "http://47.115.231.184:5555/blockly/generateCode",
+        // data: params,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: params,
+      })
+        .then(res => {
+          if (res.status === 200) {
+            console.log(res.data.code, '**');
 
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS报错');
+        })
     },
-
-    //     getWorkspaceXml() {
-    //       const code = luaGenerator.workspaceToCode(this.workspace);
-    // console.log(code,'=================')
-    //       axios({
-    //         method: 'post',
-    //         url: 'http://192.168.2.64:9510/blockly-lib/save-blocks',
-    //         data: { code },
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //       }).then(res => {
-    //         if (res.data.code !== 400) {
-    //           console.log(res,'resdata')
-    //           return this.$message.error("获取失败");
-    //         } else {
-    //           console.log(res,'--------------------')
-    //           return this.$message.success("获取成功");
-    //         }
-
-    //       }).catch(error => {
-    //         console.log(error)
-    //       })
-
-    //     },
 
     loadLuaCode() {
       this.dialogVisible = true;
     }
-
-    // eslint-disable-next-line vue/no-dupe-keys
-    //     saveLuaCode() {
-    //   // 获取表单数据
-    //   const formData = {
-    //     name: this.form.name,
-    //     region: this.form.region,
-    //     description: this.form.description,
-    //   };
-    //   // 获取工作区 XML 代码
-    //   const data = {
-    //   latestCode: this.latestCode,
-    // };
-    //   // 发送保存请求
-    //   axios({
-    //     method: 'post',
-    //     url: 'http://192.168.2.64:9510/blockly-lib/save-blocks',
-    //     data: {
-    //       formData,
-    //       data,
-    //     },
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //   })
-    //     .then(res => {
-    //         if (res.data.code !== 400) {
-    //           console.log(res,'resdata')
-    //           return this.$message.error("获取失败");
-    //         } else {
-    //           console.log(res)
-    //           return this.$message.error("获取成功");
-    //         }
-
-    //       }).catch(error => {
-    //         console.log(error)
-    //       })
-    //   // 关闭保存对话框
-    //   this.saveLuaCode = false;
-    // },
-
 
   }
 }
