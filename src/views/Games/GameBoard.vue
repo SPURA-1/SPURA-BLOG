@@ -18,6 +18,7 @@
       </div>
       <div class="description_area" v-if="!selectedGame">
         <p>外部触摸游戏封面以查看游戏介绍</p>
+        <p>TEST</p>
       </div>
     </div>
     <!-- 游戏界面组件 -->
