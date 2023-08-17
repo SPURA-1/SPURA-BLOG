@@ -4,7 +4,6 @@
       <div class="site-logo">
         <router-link to="/">
           <img src="@/assets/Main/logo.png" alt="Logo" title="首页">
-          <!--        <img :src="websiteInfo.avatar" alt="Logo" title="首页">-->
         </router-link>
       </div>
       <div class="menus-btn" @click.stop="mobileShow = !mobileShow">
@@ -15,7 +14,7 @@
           <router-link to="/Admin-Main">首页</router-link>
         </div>
         <div class="menu-item">
-          <router-link to="/ArticleList" target="_parent">文章</router-link>
+          <router-link to="/ArticleList">文章</router-link>
         </div>
         <div class="menu-item">
           <router-link to="/blockly">编程</router-link>
@@ -45,7 +44,6 @@ export default {
       fixed: false,
       hidden: false,
       category: [],
-      websiteInfo: {},
       mobileShow: false,
     }
   },

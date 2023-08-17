@@ -39,7 +39,7 @@
 
 <script>
 // import KillPlanetGame from "@/views/Games/KillPlanetGame.vue";
-import { getCategoriesList, GetImages, FileUpdate } from '@/api/GameList.api'
+import { getGamesList, GetImages, FileUpdate } from '@/api/GameList.api'
 export default {
   // components: {
   //   KillPlanetGame,
@@ -65,7 +65,7 @@ export default {
   methods: {
     // 获取所有游戏列表
     getGamesALLList() {
-      getCategoriesList()
+      getGamesList()
         .then(res => {
           if (res.status === 200) {
             this.games = res.data.games
