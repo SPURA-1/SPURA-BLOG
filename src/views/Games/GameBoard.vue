@@ -4,7 +4,7 @@
       <div class="game_area">
         <div class="game_container" v-for="game in games" :key="game.id" @mouseover="showDescription(game)" @touchstart="handleTouchStart(game)" @touchend="handleTouchEnd()" @click="showGame(game)">
           <div class="game_cover">
-            <img :src="game.cover" alt="Game Cover">
+            <img :src="ImageUrl+game.cover" alt="Game Cover">
           </div>
         </div>
       </div>
@@ -39,68 +39,15 @@
 
 <script>
 // import KillPlanetGame from "@/views/Games/KillPlanetGame.vue";
+import { getCategoriesList, GetImages, FileUpdate } from '@/api/GameList.api'
 export default {
   // components: {
   //   KillPlanetGame,
   // },
   data() {
     return {
-      games: [
-        {
-          id: 1,
-          name: "Game 1",
-          cover: "https://example.com/game1.jpg",
-          description: "This is the description for Game 1.",
-        },
-        {
-          id: 3,
-          name: "Game 2",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 2.",
-        },
-        {
-          id: 4,
-          name: "Game 3",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 3.",
-        },
-        {
-          id: 5,
-          name: "Game 4",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 4.",
-        },
-        {
-          id: 6,
-          name: "Game 5",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 5.",
-        },
-        {
-          id: 7,
-          name: "Game 6",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 6.",
-        },
-        {
-          id: 8,
-          name: "Game 7",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 7.",
-        },
-        {
-          id: 9,
-          name: "Game 8",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 8.",
-        },
-        {
-          id: 10,
-          name: "Game 9",
-          cover: "https://example.com/game2.jpg",
-          description: "This is the description for Game 9.",
-        },
-      ],
+      ImageUrl: 'http://47.115.231.184:5555',
+      games: [],
       selectedGame: null,
       touchStartTime: 0,
       isMobile: false,
@@ -110,11 +57,26 @@ export default {
   created() {
     // 在页面创建时重置滚动条位置
     window.scrollTo(0, 0);
+    this.getGamesALLList();
   },
   mounted() {
     this.isMobile = this.isMobileDevice();
   },
   methods: {
+    // 获取所有游戏列表
+    getGamesALLList() {
+      getCategoriesList()
+        .then(res => {
+          if (res.status === 200) {
+            this.games = res.data.games
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS');
+        })
+    },
     showDescription(game) {
       if (!this.isMobile) {
         this.selectedGame = game;

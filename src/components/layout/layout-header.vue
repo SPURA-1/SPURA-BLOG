@@ -11,15 +11,10 @@
         Menus
       </div>
       <div class="site-menus" :class="{ 'mobileShow': mobileShow }" @click.stop="mobileShow = !mobileShow">
-        <!-- <div class="menu-item header-search">
-          <header-search />
-        </div> -->
-
         <div class="menu-item">
           <router-link to="/Admin-Main">首页</router-link>
         </div>
         <div class="menu-item">
-          <!-- target="_blank" 在新窗口中打开链接 -->
           <router-link to="/ArticleList" target="_parent">文章</router-link>
         </div>
         <div class="menu-item">
@@ -41,11 +36,9 @@
 </template>
 
 <script>
-// import HeaderSearch from '../nav/header-search.vue'
 
 export default {
   name: "layout-header",
-  // components: { HeaderSearch },
   data() {
     return {
       lastScrollTop: 0,

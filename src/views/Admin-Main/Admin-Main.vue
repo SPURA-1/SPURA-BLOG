@@ -19,7 +19,7 @@
           <el-menu-item class="MenuTop" index="/AdminSet"><i class="el-icon-camera"></i>更换头像</el-menu-item>
           <el-menu-item class="MenuTop" index="/UpdateUser"><i class="el-icon-key"></i>更换密码</el-menu-item>
         </el-submenu>
-        <el-menu-item index="2" @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
+        <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
       </el-menu>
     </el-header>
 
@@ -91,11 +91,7 @@
                 <span slot="title">生活</span>
               </template>
               <!-- 二级菜单 -->
-              <el-submenu index="4-1">
-                <template slot="title">日常</template>
-                <el-menu-item index="4-1-2">日常</el-menu-item>
-                <el-menu-item index="4-1-3">更新模块</el-menu-item>
-              </el-submenu>
+              <el-menu-item index="/GameManage">游戏列表</el-menu-item>
 
               <el-submenu index="4-2">
                 <template slot="title">更新模块</template>

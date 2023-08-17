@@ -71,6 +71,11 @@ const routes = [
         name: 'ArtList',
         component: () => import('../components/ServeAdmin/ArtList.vue')
       },
+      {
+        path: '/GameManage',
+        name: 'GameManage',
+        component: () => import('../components/ServeAdmin/GameManage.vue')
+      },
 
     ]
   },
