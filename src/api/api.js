@@ -24,6 +24,14 @@ export function getComment(params) {
     return service.get('/comment/comments', params);
 }
 
+/**
+ * @description 留言板评论加载更多
+ * @url  /comment/getMoreComments
+ * */
+export function getMoreComments(params) {
+    return service.post('/comment/getMoreComments', params);
+}
+
 // 点赞区
 
 /**

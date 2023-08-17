@@ -38,7 +38,8 @@ export default {
       show: true,
       minHeight: 600,
       test: '',
-      topColor: '#66ccff'
+      // 回到顶部组件颜色
+      topColor: '#66ccff',
     }
   },
   components: { backTop, Home },

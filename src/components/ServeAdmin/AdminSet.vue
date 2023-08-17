@@ -67,10 +67,12 @@ export default {
           .then(res => {
             if (res.status === 200) {
               this.uploadedImages.push(res.data.filePath);
+              this.$message.success('文件上传成功');
             }
           })
           .catch(error => {
             console.error('文件上传失败', error);
+            this.$message.error('文件上传失败');
           });
       });
 

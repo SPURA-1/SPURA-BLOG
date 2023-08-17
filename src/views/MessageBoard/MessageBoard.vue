@@ -41,7 +41,7 @@
         </div>
         <!-- 评论列表 -->
         <div class="comment-module">
-          <div class="comment-title">评论列表 || 活捉 {{ comments.length }} 条</div>
+          <div class="comment-title">评论列表 || 活捉 {{ commentDatas.length }} 条</div>
           <h2 class="comment-title"></h2>
           <div class="comment-list">
             <div v-for="comment in visibleComments" :key="comment.id" class="comment-item">
@@ -53,7 +53,7 @@
               </div>
             </div>
           </div>
-          <button class="load-more-button" @click="loadMoreComments" v-if="commentCount < comments.length">查看更多</button>
+          <button class="load-more-button" @click="loadMoreComments" v-if="commentCount < commentDatas.length">查看更多</button>
           <p v-if="noMoreComments" class="no-more-comments">没有更多评论了</p>
         </div>
 
@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-    <backTop :defaultProps="55" :date="1000" color="blue"></backTop>
+    <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
   </div>
 </template>
 
@@ -85,7 +85,7 @@ import chart from '../../assets/JS/chart';
 import { Typeit } from '../../utils/plugMsg.js';
 import backTop from '../../components/nav/ToTap.vue';
 import axios from 'axios';
-import { sendComment, getComment, saveLikes, getLikes } from '@/api/api'
+import { sendComment, getComment, getMoreComments, saveLikes, getLikes } from '@/api/api'
 // 引入表情
 import { Picker } from 'emoji-mart-vue';
 import CustomButton from '@/components/button/ShinButton.vue';
@@ -100,13 +100,16 @@ export default {
       customName: '',
       sendname: '',   // 保存的名称
       likecounts: null,
-      comments: [],  // 评论数据
+      commentDatas: [],  // 评论数据
       barrageData: [],  // 弹幕数据
       visibleMessages: [], // 用于显示的消息数组
       currentIndex: 0, // 当前显示的消息索引
       interval: null, // 定时器
       commentCount: 5,  // 当前显示的评论数量
+      // visibleComments: [],
       noMoreComments: false,  // 是否没有更多评论了
+      // 回到顶部组件颜色
+      topColor: '#66ccff',
       // 表情包
       showEmojiPicker: false,
       // 饼图
@@ -264,7 +267,8 @@ export default {
   },
   computed: {
     visibleComments() {
-      return this.comments.slice(0, this.commentCount);
+      console.log('5555');
+      return this.commentDatas.slice(0, this.commentCount);
     }
   },
   mounted() {
@@ -326,36 +330,11 @@ export default {
       }
       // 定义卡通名称数组
       const cartoonNames = ['Tom', 'Jerry', 'Mickey', 'Donald', 'Goofy'];
-
       // 从卡通名称数组中随机选择一个名称
       const randomIndex = Math.floor(Math.random() * cartoonNames.length);
       const randomCartoonName = cartoonNames[randomIndex];
-
       // 将随机卡通名称赋给 this.commentUsername
       const commentUsername = randomCartoonName;
-      // 获取当前时间
-      const commentTime = new Date().toISOString();
-      // 发表评论
-      const token = sessionStorage.token;
-      // 创建了一个URLSearchParams对象params，用于存储要发送的参数数据。
-      // const params = new URLSearchParams();
-      // params.append('content', this.commentContent);
-      // if (this.nameOption === 'custom') {
-      //   params.append('username', this.customName);
-      // } else {
-      //   params.append('username', commentUsername);
-      // }
-      // params.append('created_time', commentTime);
-      // 发送评论请求
-      // axios({
-      //   method: 'post',
-      //   // url: 'http://47.115.231.184:5555/comment/comment',
-      //   url: 'http://127.0.0.1/comment/comment',
-      //   data: params,
-      //   headers: {
-      //     'Content-Type': 'application/x-www-form-urlencoded',
-      //   },
-      // })
       if (this.nameOption === 'custom') {
         this.sendname = this.customName
       } else {
@@ -400,9 +379,6 @@ export default {
     },
     // 获取评论列表
     getComments() {
-      // axios
-      //   // .get('http://47.115.231.184:5555/comment/comments')
-      //   .get('http://127.0.0.1/comment/comments')
       getComment()
         .then(response => {
           const comments = response.data.comments;
@@ -422,7 +398,7 @@ export default {
             };
           });
 
-          this.comments = transformedComments;
+          this.commentDatas = transformedComments;
           // 绘制IP地址的饼状图
           this.drawIPChart();
         })
@@ -430,12 +406,36 @@ export default {
           console.error(error);
         });
     },
+    // 第一种做法：在前端获取所有评论在进行分页
     loadMoreComments() {
       this.commentCount += 5;  // 每次点击"查看更多"按钮，增加5条评论的显示数量
-      if (this.commentCount >= this.comments.length) {
+      if (this.commentCount >= this.commentDatas.length) {
         this.noMoreComments = true;  // 如果评论全部显示完毕，则显示"没有更多评论了"的提示
       }
     },
+    // 第二种做法：在后端分页请求指定的评论数量
+    // loadMoreComments() {
+    //   const params = { offset: this.commentCount }
+    //   getMoreComments(params)
+    //     .then(response => {
+    //       const newComments = response.data.comments;
+    //       console.log(newComments, 'sssssssssssssss');
+    //       this.visibleComments = newComments
+    //       // 将新获取的评论添加到现有评论列表中
+    //       this.comments = [...this.comments, ...newComments];
+
+    //       // 增加评论数量
+    //       this.commentCount += newComments.length;
+
+    //       // 检查是否没有更多评论了
+    //       if (newComments.length === 0) {
+    //         this.noMoreComments = true;  // 如果评论不足五条或没有更多评论，则显示提示
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error("Error fetching comments:", error);
+    //     });
+    // },
 
     // 点赞区
     handleLikeClick() {
@@ -474,7 +474,7 @@ export default {
         this.ipChart.destroy();
       }
       // 获取所有 IP 地址
-      const ipAddresses = this.comments.map(comment => comment.city);
+      const ipAddresses = this.commentDatas.map(comment => comment.city);
       // 计算每个 IP 地址的数量
       const ipAddressCounts = ipAddresses.reduce((counts, ipAddress) => {
         counts[ipAddress] = (counts[ipAddress] || 0) + 1;
