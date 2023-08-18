@@ -1,5 +1,6 @@
 <template>
   <div class="body">
+    <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
     <div class="left-side">
       <div class="articles">
         <div v-for="article in articles" :key="article.id" class="article" @click="navigateToArticle(article.id)">
@@ -45,12 +46,14 @@
 </template>
 
 <script>
+import backTop from '../../components/nav/ToTap.vue'
 import moment from 'moment';
 import { getart, getCategoriesList, searchArticles } from '@/api/ArticleList.api'
 import test from '@/components/Svg/MySvgIcon.vue'
 export default {
   components: {
-    test
+    test,
+    backTop
   },
   data() {
     return {
@@ -59,6 +62,8 @@ export default {
       selectedCategory: '',
       categories: [], // 假设你从后端获取文章分类列表
       ImageUrl: 'http://47.115.231.184:5555',
+      // 回到顶部组件颜色
+      topColor: '#66ccff',
     };
   },
   created() {

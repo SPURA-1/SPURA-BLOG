@@ -9,29 +9,34 @@
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->
-      <el-row :gutter="20">
+      <el-row :gutter="50">
         <el-col :span="8">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input v-model="searchQuery" placeholder="请输入内容">
+            <el-button slot="append" icon="el-icon-search" @click="searchArt"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <!-- <el-button type="primary" @click="fetchArtList">搜索文章</el-button> -->
+          <el-button type="primary" @click="addArt">发表文章</el-button>
         </el-col>
       </el-row>
     </el-card>
     <!-- 用户列表区域 -->
     <el-table :data="ArtList" border stripe>
-      <!-- 在这里绑定表格的数据 userList -->
+      <!-- 在这里绑定表格的数据 ArtList -->
       <el-table-column type="index"></el-table-column>
       <!-- 添加索引列 -->
       <el-table-column prop="title" label="标题"> </el-table-column>
       <!-- prop是取得userList中每一个对象中的对应属性值 -->
-      <el-table-column prop="content" label="内容"> </el-table-column>
+      <el-table-column show-overflow-tooltip prop="content" label="内容"> </el-table-column>
       <el-table-column prop="image_path" label="图片"> </el-table-column>
       <el-table-column prop="publish_date" label="日期"> </el-table-column>
-      <el-table-column prop="category" label="分类"> </el-table-column>
-      <el-table-column prop="status" label="分的类"> </el-table-column>
+      <el-table-column prop="category" label="分类">
+        <template slot-scope="scope">
+          <div>
+            {{categoryNames[scope.row.category]}}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.status" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="updateStatus(scope.row)">
@@ -56,7 +61,7 @@
 </template>
 
 <script>
-import { getarticles, getCategoriesList, Updstatus } from '@/api/ArticleList.api';
+import { getarticles, getCategoriesList, Updstatus, searchArticles } from '@/api/ArticleList.api';
 
 export default {
   data() {
@@ -70,6 +75,7 @@ export default {
       ArtList: [],
       categories: [], // 假设你从后端获取文章分类列表
       total: 0,
+      searchQuery: '',
     };
   },
   created() {
@@ -110,7 +116,7 @@ export default {
             this.ArtList = res.data.articles;
             this.ArtList = this.ArtList.map(item => ({
               id: item.id,
-              category: this.categoryNames[item.category],
+              category: item.category,
               content: item.content,
               image_path: item.image_path,
               publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
@@ -162,6 +168,25 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    searchArt() {
+      const search = { searchQuery: this.searchQuery }
+      console.log(search);
+      searchArticles(search)
+        .then(res => {
+          if (res.status === 200) {
+            console.log(res.data);
+            this.ArtList = res.data.articles
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS报错');
+        })
+    },
+    addArt() {
+      this.$router.push('/TextEditor');
     },
   },
 };

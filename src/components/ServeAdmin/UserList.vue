@@ -217,11 +217,11 @@ export default {
             console.log(res.data);
             this.userList = res.data.users
           } else {
-
+            console.log('报错');
           }
         })
         .catch(err => {
-          console.log(err);
+          console.log(err, 'AXIOS报错');
         })
     },
     // 修改用户状态

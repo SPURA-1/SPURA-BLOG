@@ -1,9 +1,9 @@
 <template>
-  <el-container class="main-container">
+  <div class="main-container">
     <!-- 头部区域 -->
     <el-header class="el-header">
       <!-- 左侧的 logo -->
-      <img style="margin-left:30px;" src="../../assets/Main/logo.png" alt="" />
+      <img class="Logo" style="margin-left:30px;" src="../../assets/Main/logo.png" alt="" />
       <!-- 右侧的菜单 -->
       <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
       <!-- select	菜单激活回调 -->
@@ -24,10 +24,10 @@
     </el-header>
 
     <!-- 页面主体 -->
-    <el-container class="foot-container">
+    <div class="foot-container">
       <!-- 侧边栏区域 -->
-      <el-scrollbar class="page-scroll">
-        <el-aside width="200px" class="el-aside">
+      <div class="page-scroll">
+        <el-aside width="auto" class="el-aside">
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
           <el-menu unique-opened :default-active="activePath" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
             <!-- 一级菜单 用户信息 -->
@@ -51,9 +51,9 @@
                 <el-menu-item index="/UpdateUser">更新</el-menu-item>
               </el-submenu>
 
-              <el-menu-item index="TextEditor">发布内容</el-menu-item>
+              <el-menu-item index="/TextEditor">发布内容</el-menu-item>
 
-              <el-menu-item index="AdminSet">上传头像</el-menu-item>
+              <el-menu-item index="/AdminSet">上传头像</el-menu-item>
 
               <!-- 更改成下拉框 -->
               <!-- 
@@ -76,11 +76,7 @@
               <!-- 二级菜单 -->
               <el-menu-item index="/UserList">账号</el-menu-item>
 
-              <el-submenu index="3-3">
-                <template slot="title">文章</template>
-                <el-menu-item index="TextEditor">文章发表</el-menu-item>
-                <el-menu-item index="ArtList">文章编辑</el-menu-item>
-              </el-submenu>
+              <el-menu-item index="/ArtList">文章</el-menu-item>
             </el-submenu>
 
             <!-- 文章管理 disabled 设置不可点击-->
@@ -114,17 +110,17 @@
             </el-submenu>
           </el-menu>
         </el-aside>
-      </el-scrollbar>
-      <el-container class="container">
+      </div>
+      <div class="mainBody">
         <!-- 页面主体区域 -->
-        <el-main class="el-main">
+        <div class="el-main">
           <router-view></router-view>
-        </el-main>
+        </div>
         <!-- 底部 footer 区域 -->
         <!-- <el-footer>© www.spura.com - spura后台</el-footer> -->
-      </el-container>
-    </el-container>
-  </el-container>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -189,7 +185,7 @@ export default {
 /* 隐藏横向滚动条 */
 .page-scroll {
   height: 100%;
-  min-width: 0;
+  min-width: 200px;
 }
 .page-scroll .el-scrollbar__wrap {
   overflow: hidden;
@@ -217,7 +213,9 @@ export default {
     margin-right: 5px;
   }
 }
-
+.foot-container {
+  display: flex;
+}
 // 侧边栏
 .el-aside {
   height: calc(100vh - 60px);
@@ -227,32 +225,56 @@ export default {
 
 // 主体
 .el-main {
+  width: 100%;
   height: calc(100vh - 60px);
-  // background-color: #89cff8;
+  margin: 0; /* 添加这行代码 */
 }
-.container {
+.mainBody {
+  width: 100%;
   height: calc(100vh - 60px);
 }
 .el-submenu {
   width: 200px;
 }
 /* 响应式布局的媒体查询 */
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 768px) {
   /* 仅在屏幕宽度大于等于 768px 时应用这些样式 */
 
   /* 头部 */
   .el-header {
     flex-direction: row; /* 恢复水平布局 */
-    padding: 0 10px; /* 恢复内边距 */
+    padding: 0 0 0 10px; /* 恢复内边距 */
     align-items: center; /* 水平对齐内容 */
+    justify-content: flex-end;
+    .Logo {
+      width: 80px;
+    }
+    .el-menu-top {
+      display: flex;
+    }
     .avatar {
       margin: 0 10px; /* 在头像和文本之间添加一些间距 */
     }
   }
-
+  .page-scroll {
+    width: 70px;
+    min-width: 50px;
+  }
   /* 侧边栏 */
   .el-aside {
-    width: 200px; /* 恢复侧边栏宽度 */
+    height: calc(100vh - 60px);
+    background-color: #545c64;
+    overflow: auto;
+  }
+
+  /* 添加新的样式以保持布局稳定 */
+  .div {
+    height: 100vh;
+    overflow: hidden; /* 避免内容溢出 */
+  }
+  .el-main {
+    flex: 1; /* 主体区域占据剩余空间 */
+    overflow: auto; /* 主体内容溢出时出现滚动条 */
   }
 }
 </style>

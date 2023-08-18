@@ -3,27 +3,23 @@
     <!-- 资源视图 -->
     <div class="top-wrap">
       <el-card class="box-card">
-        <p style="margin-bottom:20px;">资源视图</p>
+        <p style="margin-bottom:20px;">资源总览</p>
         <div class="top-box">
           <div class="box-wrap">
             <div>文章总数</div>
-            <div style="font-size:30px; color:#0066cc;">55</div>
+            <div style="font-size:30px; color:#0066cc;">{{ this.data.artLength }}</div>
           </div>
           <div class="box-wrap">
             <div>游戏总数</div>
-            <div style="font-size:30px; color:#009933;">{{ this.data.robot_online }}</div>
+            <div style="font-size:30px; color:#009933;">{{ this.data.gameLength }}</div>
           </div>
           <div class="box-wrap">
             <div>留言总数</div>
-            <div style="font-size:30px; color:#a1a1a1;">{{ this.data.robot_offline }}</div>
+            <div style="font-size:30px; color:#a1a1a1;">{{ this.data.commentLength }}</div>
           </div>
           <div class="box-wrap">
             <div>用户总数</div>
-            <div style="font-size:30px; color:#0066cc;">{{ this.data.proc_count }}</div>
-          </div>
-          <div class="box-wrap">
-            <div>任务调度数</div>
-            <div style="font-size:30px; color:#0066cc;">{{ this.data.task_count }}</div>
+            <div style="font-size:30px; color:#0066cc;">{{ this.data.userLength }}</div>
           </div>
         </div>
       </el-card>
@@ -92,23 +88,25 @@
           </div>
         </div>
       </div>
-      <!-- 右边容器 -->
-      <div class="right-box">
-        <!-- 头部个人信息 -->
-        <div class="right-top">
-          <h3>您好！欢迎登录</h3>
-          <div class="user-content">
-            <p>最近登陆时间：{{ this.data.last_time }}</p>
-            <p>最近登陆IP：{{ this.data.last_ip }}</p>
-            <p>登录次数：{{ this.data.login_count }}</p>
+      <el-card class="box-card">
+        <!-- 右边容器 -->
+        <div class="right-box">
+          <!-- 头部个人信息 -->
+          <div class="right-top">
+            <h3>您好！欢迎登录</h3>
+            <div class="user-content">
+              <p>最近登陆时间：{{ this.data.last_time }}</p>
+              <p>最近登陆IP：{{ this.data.last_ip }}</p>
+              <p>登录次数：{{ this.data.login_count }}</p>
+            </div>
+          </div>
+          <!-- 底部快捷操作 -->
+          <div class="shortcuts">
+            <p style="margin-bottom: 20px" class="f18">图表</p>
+            <!-- <EChart /> -->
           </div>
         </div>
-        <!-- 底部快捷操作 -->
-        <div class="shortcuts">
-          <p style="margin-bottom: 20px" class="f18">图表</p>
-          <!-- <EChart /> -->
-        </div>
-      </div>
+      </el-card>
     </div>
     <footer class="chart-box" style="width: 100%; overflow: auto">
 
@@ -120,6 +118,7 @@
 </template>
 
 <script>
+import { getAdminData } from '@/api/AdminHome.api'
 import EChart from '../ECharts/EChart.vue'
 import TimeOut from '../../assets/JS/TimeOut'
 export default {
@@ -132,18 +131,7 @@ export default {
       startTime: null,
       endTime: null,
       ListData: {},
-      data: {
-        last_ip: '',
-        last_time: '',
-        login_count: null,
-        online_time: null,
-        proc_count: null,
-        robot_all: null,
-        robot_offline: null,
-        robot_online: null,
-        robot_usage: '',
-        task_count: null
-      },
+      data: {},
       pageHistory: [],
       userInfo: {},
       ReportList: [], // 测试数组
@@ -174,7 +162,18 @@ export default {
   methods: {
     // 获取首页数据列表
     getPageListData() {
-
+      getAdminData()
+        .then(res => {
+          if (res.status === 200) {
+            this.data = res.data
+            console.log(res.data)
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS报错');
+        })
     },
     // 获取报告列表
     getReportListData() {

@@ -1,115 +1,125 @@
 <template>
-  <div class="backtop" v-show="visible" @click="backTop" v-bind:style="style">
+  <!-- 回到顶部按钮容器 -->
+  <div class="backtop" v-show="visible" @click="backTop" :style="style">
+    <!-- 画布用于绘制三角形 -->
     <canvas id="canvas" width="55" height="55" style="padding: 1.5rem;"></canvas>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      'visible': false,
-      'ret': 0,
-      'obj': null,
-      'speed': 0,
-      'times': 0,
-      'time': 0,
-      'style': {
-        'position': 'fixed',
-        'right': '30px',
-        'bottom': '20px',
-        'cursor': 'pointer'
+      visible: false, // 控制按钮的显示与隐藏
+      ret: 0,
+      obj: null,
+      speed: 0,
+      times: 0,
+      time: 0,
+      style: {
+        position: 'fixed',
+        right: '30px',
+        bottom: '20px',
+        cursor: 'pointer'
       },
-      'x': 0,
-      'y': 0,
-      'translateY': 0,
-      'angle': 0
-    }
+      x: 0,
+      y: 0,
+      translateY: 0,
+      angle: 0
+    };
   },
   props: {
     defaultProps: {
       type: Number,
-      default: 400
+      default: 400 // 滚动高度达到多少时显示按钮
     },
-    date: {
+    duration: {
       type: Number,
-      default: 500
+      default: 500 // 返回顶部的动画持续时间
     },
     color: {
       type: String,
-      default: '#6495ED'
+      default: '#6495ED' // 三角形的颜色
     }
   },
-  mounted () {
-    this.darw('#AAD7FF')
-    window.addEventListener('scroll',this.hanScroll)
+  mounted() {
+    this.draw('#AAD7FF'); // 初始化绘制
+    window.addEventListener('scroll', this.handleScroll); // 监听滚动事件
   },
   methods: {
-    canvas (ctx,color){
+    // 绘制三角形
+    canvas(ctx, color) {
       ctx.save();
-      ctx.translate(this.x,this.translateY)
-      ctx.lineWidth = 1
-      ctx.fillStyle = color
-      ctx.strokeStyle = color
-      ctx.beginPath()
-      ctx.moveTo(this.x-this.x,-(this.y-15))
-      ctx.lineTo(-this.x,this.y) //left
-      ctx.lineTo(this.x,this.y) //right
-      ctx.closePath()
-      ctx.fill()
-      ctx.stroke()
-      ctx.restore()
+      ctx.translate(this.x, this.translateY);
+      ctx.lineWidth = 1;
+      ctx.fillStyle = color;
+      ctx.strokeStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(this.x - this.x, -(this.y - 15));
+      ctx.lineTo(-this.x, this.y); // left
+      ctx.lineTo(this.x, this.y); // right
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
     },
-    darw() {
+    // 循环绘制三角形
+    draw() {
       let canvas = document.getElementById('canvas');
-      let ctx = canvas.getContext('2d')
-      let vx = 0
-      let vy = 0
-      this.x = canvas.width /2;
-      this.y = canvas.height /2;
-      window.requestAnimationFrame(()=>{
-        ctx.clearRect(0,0,canvas.width,canvas.height)
-        this.darw()
-        this.translateY = canvas.height / 2 + Math.sin(this.angle) * 9
-        this.angle += 0.1
-        this.canvas(ctx, this.color)
-      })
-      
+      let ctx = canvas.getContext('2d');
+      this.x = canvas.width / 2;
+      this.y = canvas.height / 2;
+      window.requestAnimationFrame(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.draw();
+        this.translateY = canvas.height / 2 + Math.sin(this.angle) * 9;
+        this.angle += 0.1;
+        this.canvas(ctx, this.color);
+      });
     },
-    hanScroll(){
-      const scrollTop = this.getScroll(window)
-      this.visible = scrollTop > this.defaultProps
+    // 监听滚动事件
+    handleScroll() {
+      const scrollTop = this.getScroll(window);
+      this.visible = scrollTop > this.defaultProps;
     },
-    getScroll(w){
-      this.ret = w.pageYOffset
-      const method = 'scrollTop'
-      if(typeof this.ret !== 'number'){
-        let d= w.document;
-        this.ret = d.documentElemelnt[method]
-        if(typeof this.ret !== 'number'){
-          this.ret = d.body[method]
+    // 获取滚动高度
+    getScroll(w) {
+      this.ret = w.pageYOffset;
+      const method = 'scrollTop';
+      if (typeof this.ret !== 'number') {
+        let d = w.document;
+        this.ret = d.documentElement[method];
+        if (typeof this.ret !== 'number') {
+          this.ret = d.body[method];
         }
       }
-      return this.ret
+      return this.ret;
     },
-    backTop(){
-      const initerval = 30
-      let num = this.date/initerval
-      this.time = 0
+    // 返回顶部的动画
+    backTop() {
+      const interval = 30;
+      let num = this.duration / interval;
+      this.time = 0;
       this.times = num;
-      this.speed = this.ret / num
-      this.obj = setInterval(this.setScroll,initerval)
+      this.speed = this.ret / num;
+      this.obj = setInterval(this.setScroll, interval);
     },
-    setScroll(){
-      if(this.time > this.times || this.ret<=0){
-        clearInterval(this.obj)
-        return
+    // 设置滚动高度
+    setScroll() {
+      if (this.time > this.times || this.ret <= 0) {
+        clearInterval(this.obj);
+        return;
       }
-      this.time++
-      this.ret -= this.speed
-      document.documentElement.scrollTop = document.body.scrollTop = this.ret
+      this.time++;
+      this.ret -= this.speed;
+      document.documentElement.scrollTop = document.body.scrollTop = this.ret;
     }
   }
-}
+};
 </script>
 
+<style scoped>
+.container {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); /* 给容器添加阴影 */
+}
+</style>

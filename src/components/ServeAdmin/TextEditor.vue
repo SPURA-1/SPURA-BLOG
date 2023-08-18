@@ -1,22 +1,23 @@
 <template>
   <div>
+    <div>
+      <div class="editor-body" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0px;">
+        <p class="preview-title">实时预览：</p>
+        <div v-html="parsedHtml" class="article-content"></div>
+      </div>
+    </div>
+
     <div style="border: 1px solid #ccc;">
       <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
-      <Editor style="height: 500px; overflow-y: hidden;" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
+      <Editor style="height: 500px;" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
     </div>
-    <div>
-      <div>
-        <button @click="getContent">获取内容</button>
-      </div>
-
-    </div>
-
   </div>
-
 </template>
 
 <script>
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import hljs from 'highlight.js'; // 导入 highlight.js 库
+import 'highlight.js/styles/monokai-sublime.css'; // 导入高亮样式
 export default {
   components: { Editor, Toolbar },
   data() {
@@ -26,62 +27,37 @@ export default {
       toolbarConfig: {},
       editorConfig: { placeholder: '请输入内容...' },
       mode: 'default', // or 'simple'
-      headers: [], // 存储标题信息
-      articleContent: '',
-      parsedArticleContent: '',
+      parsedHtml: '', // 存储解析后的 HTML
     }
   },
   created() {
-    this.generateAnchors();
+  },
+  mounted() {
+    // 初始解析渲染
+    this.parseAndHighlightCodeBlocks();
   },
   methods: {
-    // 在文章内容中查找标题，并生成锚点目录
-    generateAnchors() {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(this.articleContent, 'text/html');
-      console.log(doc, 'doc');
-      const headers = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      console.log(Array.from(headers), '之前');
-      this.headers = Array.from(headers).map((header, index) => ({
-        id: `header-${index}`,
-        text: header.textContent,
-        className: `header-${header.tagName.toLowerCase()}`
-      }));
-      console.log(this.headers);
-
-      const titleElements = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      titleElements.forEach((titleElement, index) => {
-        titleElement.id = `header-${index}`;
-      });
-
-      // 获取带有临时 ID 的解析后的文章内容
-      this.parsedArticleContent = doc.documentElement.innerHTML;
-      console.log(this.parsedArticleContent, 'kaijuqif');
-    },
-    // 点击目录中的锚点，滚动到相应的位置
-    scrollToAnchor(id) {
-      console.log(id);
-      const anchorElement = document.querySelector(`#${id}`);
-      console.log(anchorElement, 'anchorelement');
-      if (anchorElement) {
-        anchorElement.scrollIntoView({
-          behavior: 'smooth', // 添加滚动动画效果
-        });
-      }
-    },
     onCreated(editor) {
       // 一定要用 Object.seal() ，否则会报错
       this.editor = Object.seal(editor);
     },
-    getContent() {
-      //   this.updateHeaders(); // 初始化标题信息
-      // 获取编辑器内容
-      const content = this.html;
-      console.log(content, 'ssss');
-      this.parsedArticleContent = content;
+    // 解析并高亮代码块内的代码
+    parseAndHighlightCodeBlocks() {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(this.html, 'text/html');
+      const codeBlocks = doc.querySelectorAll('pre code');
+      console.log(codeBlocks, 'sssssssssssssssssssssssssss');
+      codeBlocks.forEach(codeBlock => {
+        hljs.highlightElement(codeBlock); // 使用 highlightElement
+      });
+      this.parsedHtml = doc.documentElement.innerHTML;
     },
   },
-  mounted() {
+  watch: {
+    // 监听 html 数据变化，实时更新解析后的 HTML 并进行代码高亮
+    html() {
+      this.parseAndHighlightCodeBlocks();
+    },
   },
   beforeDestroy() {
     const editor = this.editor
@@ -93,6 +69,34 @@ export default {
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
 <style scoped>
+/* 高亮代码块样式 */
+/* 文章内容样式 */
+.article-content {
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+/* 代码块样式 */
+.article-content code {
+  background-color: #686868;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+/* 添加预览标题样式 */
+.preview-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.editor-body {
+  height: 420px;
+  overflow: auto;
+  max-height: 800px; /* 设置最大高度 */
+}
+
 #header-container {
   list-style-type: none;
   padding-left: 20px;
