@@ -7,7 +7,7 @@
       <div class="left">
         <!-- 使用 v-html 指令渲染富文本内容 -->
         <div class="ArticleShowPage">
-          <div v-html="parsedArticleContent"></div>
+          <div v-html="parsedArticleContent" class="article-content"></div>
         </div>
       </div>
       <!-- 右侧内容 -->
@@ -15,10 +15,8 @@
         <!-- 使用 this.$route.params.id 获取传递的文章 ID -->
         <div class="scroll-container">
           <ul id="header-container">
-            <!-- <li v-for="header in headers" :key="header.id" :class="`header-${header.type}`">{{ header.text }}</li> -->
-            <!-- <li v-for="header in headers" :key="header.id" @click="scrollToHeader(header.id)" :class="`header-${header.type}`">{{ header.text }}</li> -->
             <li v-for="header in headers" :key="header.id">
-              <a @click="scrollToAnchor(header.id)" :class="header.className">{{ header.text }}</a>
+              <a @click="scrollToAnchor(header.id)" :class="['anchor-link', header.className, { 'active': activeAnchor === header.id }]">{{ header.text }}</a>
             </li>
           </ul>
         </div>
@@ -28,7 +26,10 @@
 </template>
 
 <script>
-import { getarticlesId } from '@/api/ArticleList.api'
+import { getarticlesId } from '@/api/ArticleList.api';
+import hljs from 'highlight.js'; // 导入 highlight.js 库
+import 'highlight.js/styles/monokai-sublime.css'; // 导入高亮样式
+import Clipboard from 'clipboard'; // 一键复制
 export default {
   data() {
     return {
@@ -38,6 +39,9 @@ export default {
       searchData: this.$route.params.id,
       articleContent: '',
       parsedArticleContent: '',
+      activeAnchor: null,
+      headers: '',
+      codeBlocks: [], // 用于存储所有的代码块内容
     }
   },
   created() {
@@ -48,6 +52,8 @@ export default {
   mounted() {
     // 开启监听事件
     window.addEventListener("scroll", this.watchScroll);
+    // this.addCopyButtonsToCodeBlocks();
+
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.watchScroll)
@@ -66,20 +72,58 @@ export default {
         this.hidden = false
       }
       this.lastScrollTop = scrollTop
+      // 循环遍历所有锚点元素，确定活动的锚点
+      for (const header of this.headers) {
+        const targetElement = document.querySelector(`#${header.id}`);
+        if (targetElement) {
+          const targetRect = targetElement.getBoundingClientRect();
+          if (targetRect.top <= window.innerHeight * 0.5 && targetRect.bottom >= window.innerHeight * 0.5) {
+            this.activeAnchor = header.id;
+            break;
+          }
+        }
+      }
     },
     // 在文章内容中查找标题，并生成锚点目录
     generateAnchors() {
       const parser = new DOMParser();
       const doc = parser.parseFromString(this.articleContent, 'text/html');
-      console.log(doc, 'doc');
+      // 解析并高亮代码块内的代码
+      const codeBlocks = doc.querySelectorAll('pre code');
+      console.log(codeBlocks, '这是请求');
+      // codeBlocks.forEach(codeBlock => {
+      //   hljs.highlightElement(codeBlock); // 使用 highlightElement
+      //   this.codeBlocks.push({ content: codeBlock.textContent.trim() });
+      // });
+      codeBlocks.forEach(codeBlock => {
+        console.log(codeBlock.textContent, 'ssssss');
+        hljs.highlightElement(codeBlock); // 使用 highlightElement
+        // this.codeBlocks.push({ content: codeBlock.textContent.trim() });
+        // console.log(this.codeBlocks, 'sss');
+        const copyButton = document.createElement('button');
+        copyButton.textContent = '复制';
+        codeBlock.parentNode.insertBefore(copyButton, codeBlock);
+
+        const clipboard = new Clipboard(copyButton, {
+          target: () => codeBlock.textContent,
+        });
+
+        clipboard.on('success', (e) => {
+          e.clearSelection();
+          // 这里可以添加一些提示，如“代码已复制”之类的信息
+        });
+
+        clipboard.on('error', (e) => {
+          // 这里可以处理复制失败的情况
+        });
+      });
+      // 解析标题,添加ID 附上样式
       const headers = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      console.log(Array.from(headers), '之前');
       this.headers = Array.from(headers).map((header, index) => ({
         id: `header-${index}`,
         text: header.textContent,
         className: `header-${header.tagName.toLowerCase()}`
       }));
-      console.log(this.headers);
 
       const titleElements = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
       titleElements.forEach((titleElement, index) => {
@@ -88,7 +132,6 @@ export default {
 
       // 获取带有临时 ID 的解析后的文章内容
       this.parsedArticleContent = doc.documentElement.innerHTML;
-      console.log(this.parsedArticleContent, 'kaijuqif');
     },
     // 点击目录中的锚点，滚动到相应的位置
     scrollToAnchor(id) {
@@ -109,7 +152,6 @@ export default {
       getarticlesId(artId)
         .then(res => {
           if (res.status === 200) {
-            console.log(res.data, 'sss');
             this.articleContent = res.data.article.content
             this.generateAnchors();
           } else {
@@ -120,10 +162,32 @@ export default {
           console.log(err, 'AXIOS报错');
         })
     },
-    test() {
-      console.log(this.searchData);
-    },
 
+    // 添加复制按钮到代码块
+    // addCopyButtonsToCodeBlocks() {
+    //   const codeBlocks = document.querySelectorAll('pre code');
+
+    //   console.log(codeBlocks, '+++');
+    //   codeBlocks.forEach(codeBlock => {
+    //     const copyButton = document.createElement('button');
+    //     copyButton.textContent = '复制';
+    //     codeBlock.parentNode.insertBefore(copyButton, codeBlock);
+
+    //     const clipboard = new Clipboard(copyButton, {
+    //       target: () => codeBlock,
+    //     });
+
+    //     clipboard.on('success', (e) => {
+    //       e.clearSelection();
+    //       console.log('成功');
+    //       // 这里可以添加一些提示，如“代码已复制”之类的信息
+    //     });
+
+    //     clipboard.on('error', (e) => {
+    //       // 这里可以处理复制失败的情况
+    //     });
+    //   });
+    // },
   }
 }
 </script>
@@ -179,6 +243,28 @@ export default {
 }
 
 // 锚点
+.container {
+  padding-top: 50px; //遮盖元素的高度，即导航栏高度
+  margin-top: -50px;
+}
+.anchor-link.active {
+  color: #007bff; /* 将颜色更改为您希望的活动链接颜色 */
+}
+/* 高亮代码块样式 */
+/* 文章内容样式 */
+.article-content {
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+/* 代码块样式 */
+.article-content code {
+  background-color: #686868;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}
 #header-container {
   list-style-type: none;
   padding-left: 20px;

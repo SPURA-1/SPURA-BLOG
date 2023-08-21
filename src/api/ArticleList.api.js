@@ -35,7 +35,7 @@ export function getarticlesId(params) {
 
 /**
  * @description 修改文章内容
- * @url  /article/articles/updateArt
+ * @url  /article/updateArt
  * */
 export function updateArticlesId(params) {
     return service.post('/article/updateArt', params);
@@ -75,7 +75,7 @@ export function GetImages(params) {
 
 /**
  * @description 文件上传
- * @url  /article/articles/Updstatus
+ * @url  /article/upload
  * */
 export function FileUpdate(file) {
     // return service.post('/article/upload', params);
@@ -86,4 +86,12 @@ export function FileUpdate(file) {
             'Content-Type': 'multipart/form-data',
         },
     });
+}
+
+/**
+ * @description 后台发表文章
+ * @url  /article/articles
+ * */
+export function PublishArt(params) {
+    return service.post('/article/articles', params);
 }

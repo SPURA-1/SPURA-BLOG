@@ -31,7 +31,7 @@
           <div class="filter-content">
             <select class="category-select" v-model="selectedCategory">
               <option value="">全部分类</option>
-              <option v-for="category in categories" :key="category.id" :label="category.name">{{ category.id }}</option>
+              <option v-for="category in categories" :key="category.id" :value="category.id" :label="category.name">{{ category.name }}</option>
             </select>
             <button class="filter-button" @click="filterByCategory">筛选</button>
           </div>
@@ -60,7 +60,7 @@ export default {
       articles: [],
       searchQuery: '',
       selectedCategory: '',
-      categories: [], // 假设你从后端获取文章分类列表
+      categories: [], // 从后端获取文章分类列表
       ImageUrl: 'http://47.115.231.184:5555',
       // 回到顶部组件颜色
       topColor: '#66ccff',
@@ -135,6 +135,7 @@ export default {
 
     // 根据分类筛选文章
     filterByCategory() {
+      console.log(this.selectedCategory, 'ssssss');
       const searchCategory = { category: parseInt(this.selectedCategory) }
       getart(searchCategory)
         .then(res => {
