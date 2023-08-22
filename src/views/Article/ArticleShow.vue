@@ -28,7 +28,7 @@
 <script>
 import { getarticlesId } from '@/api/ArticleList.api';
 import hljs from 'highlight.js'; // 导入 highlight.js 库
-import 'highlight.js/styles/monokai-sublime.css'; // 导入高亮样式
+import 'highlight.js/styles/github.css'; // 导入高亮样式
 import Clipboard from 'clipboard'; // 一键复制
 export default {
   data() {
@@ -152,9 +152,12 @@ export default {
 
         // 设置代码块的相对定位，以便容纳复制按钮
         codeBlock.style.position = 'relative';
+        codeBlock.style.border = '#dddddd 1px solid';
+        codeBlock.style.margin = '5px';
+        codeBlock.style.borderRadius = '5px';
         // 复制按钮样式
         copyButton.style.position = 'absolute';
-        copyButton.style.right = '280px';
+        copyButton.style.right = '290px';
         copyButton.style.backgroundColor = '#dddddd';
         copyButton.style.color = '#fff';
         copyButton.style.border = 'none';
