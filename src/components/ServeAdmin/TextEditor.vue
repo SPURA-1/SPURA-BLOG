@@ -39,7 +39,7 @@
 import { PublishArt, getCategoriesList } from '@/api/ArticleList.api'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import hljs from 'highlight.js'; // 导入 highlight.js 库
-import 'highlight.js/styles/monokai-sublime.css'; // 导入高亮样式
+import 'highlight.js/styles/github.css'; // 导入高亮样式
 export default {
   components: { Editor, Toolbar },
   data() {
@@ -90,7 +90,6 @@ export default {
           if (res.status === 200) {
             this.categories = res.data.categories;
             this.filterByCategory();
-            console.log(this.categories, '1');
           } else {
             console.log('报错');
           }
@@ -116,13 +115,11 @@ export default {
           category: this.AddArtform.category,       // 分类，封面根据分类决定
         }
         PublishArt(startData)
-          .then(response => {
-            if (response.data.status === 200) {
-              this.addArt = false;
-              this.$message({
-                type: 'success',
-                message: '发表成功!'
-              });
+          .then(res => {
+            if (res.status === 200) {
+              // this.addArt = false;
+              this.$message.success('发表成功!');
+              this.$router.push({ path: '/ArtList' });
             } else {
               console.log('报错');
             }

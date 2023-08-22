@@ -14,6 +14,8 @@
       <div class="right" :class="{ 'fixed': fixed, 'hidden': hidden }">
         <!-- 使用 this.$route.params.id 获取传递的文章 ID -->
         <div class="scroll-container">
+          <div class="container_title">目录</div>
+          <br>
           <ul id="header-container">
             <li v-for="header in headers" :key="header.id">
               <a @click="scrollToAnchor(header.id)" :class="['anchor-link', header.className, { 'active': activeAnchor === header.id }]">{{ header.text }}</a>
@@ -98,7 +100,7 @@ export default {
       });
 
       // 解析标题,添加ID 附上样式
-      const headers = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      const headers = doc.querySelectorAll('h1,h2, h3, h4, h5, h6');
       this.headers = Array.from(headers).map((header, index) => ({
         id: `header-${index}`,
         text: header.textContent,
@@ -115,6 +117,7 @@ export default {
     },
     // 点击目录中的锚点，滚动到相应的位置
     scrollToAnchor(id) {
+      console.log(id, '锚点');
       const anchorElement = document.querySelector(`#${id}`);
       if (anchorElement) {
         anchorElement.scrollIntoView({
@@ -231,9 +234,6 @@ export default {
   top: 200px;
   right: 120px;
   z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   transition: 0.3s all ease;
   -webkit-transition: 0.3s all ease;
   -moz-transition: 0.3s all linear;
@@ -244,7 +244,12 @@ export default {
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
 }
-
+// 目录
+.container_title {
+  padding: 10px;
+  font-size: 18px;
+  border-bottom: 1px solid #ccc;
+}
 // 锚点
 .container {
   padding-top: 50px; //遮盖元素的高度，即导航栏高度
@@ -256,6 +261,7 @@ export default {
 /* 高亮代码块样式 */
 /* 文章内容样式 */
 .article-content {
+  padding: 10px;
   font-size: 14px;
   line-height: 1.6;
   overflow-wrap: break-word;

@@ -5,7 +5,7 @@
       <div class="articles">
         <div v-for="article in articles" :key="article.id" class="article" @click="navigateToArticle(article.id)">
           <div class="image-container">
-            <img style="width:100%;height:100%" :src="ImageUrl+article.image_path" alt="文章图片" v-if="article.image_path" />
+            <img class="image_cover" :src="ImageUrl+article.image_path" alt="文章图片" v-if="article.image_path" />
           </div>
           <div class="article-details">
             <h2>{{ article.title }}</h2>
@@ -90,7 +90,6 @@ export default {
           if (res.status === 200) {
             this.categories = res.data.categories;
             this.filterByCategory();
-            console.log(this.categories, '1');
           } else {
             console.log('报错');
           }
@@ -122,8 +121,6 @@ export default {
               title: item.title,
               Introduction: item.Introduction
             }));
-
-            console.log(this.articles, 'ss');
           } else {
             console.log('报错');
           }
@@ -150,8 +147,6 @@ export default {
               title: item.title,
               Introduction: item.Introduction
             }));
-
-            console.log(this.articles, 'ss');
           } else {
             console.log('报错');
           }
@@ -219,9 +214,10 @@ export default {
   padding: 20px;
 }
 
-.image-container img {
-  max-width: 100%;
-  max-height: 100%;
+.image_cover {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
 }
 
 .article-details {
