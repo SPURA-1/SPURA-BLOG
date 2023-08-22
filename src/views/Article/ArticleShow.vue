@@ -160,7 +160,7 @@ export default {
         codeBlock.style.borderRadius = '5px';
         // 复制按钮样式
         copyButton.style.position = 'absolute';
-        copyButton.style.right = '290px';
+        copyButton.style.right = '600px';
         copyButton.style.backgroundColor = '#dddddd';
         copyButton.style.color = '#fff';
         copyButton.style.border = 'none';
@@ -293,6 +293,7 @@ export default {
   color: #007bff; /* 示例颜色，可以根据需求修改 */
 }
 
+// 锚点目录
 .header-h1 {
   font-size: 20px;
   font-weight: bold;
@@ -353,6 +354,6 @@ export default {
     );
   background-color: #fff;
   background-size: 50px 50px;
-  padding-bottom: 60px;
+  padding-bottom: 20px;
 }
 </style>

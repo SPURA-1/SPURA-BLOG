@@ -91,19 +91,13 @@
       <el-card class="box-card">
         <!-- 右边容器 -->
         <div class="right-box">
-          <!-- 头部个人信息 -->
-          <div class="right-top">
-            <h3>您好！欢迎登录</h3>
-            <div class="user-content">
-              <p>最近登陆时间：{{ this.data.last_time }}</p>
-              <p>最近登陆IP：{{ this.data.last_ip }}</p>
-              <p>登录次数：{{ this.data.login_count }}</p>
-            </div>
-          </div>
           <!-- 底部快捷操作 -->
           <div class="shortcuts">
             <p style="margin-bottom: 20px" class="f18">图表</p>
             <!-- <EChart /> -->
+            <div class="content">
+              <div ref="charts" id="map"></div>
+            </div>
           </div>
         </div>
       </el-card>
@@ -119,12 +113,14 @@
 
 <script>
 import { getAdminData } from '@/api/AdminHome.api'
-import EChart from '../ECharts/EChart.vue'
+// import EChart from '../ECharts/EChart.vue'
+import * as echarts from "echarts";
 import TimeOut from '../../assets/JS/TimeOut'
+import china from "@/assets/JS/china.json"
 export default {
-  components: {
-    EChart
-  },
+  // components: {
+  //   EChart
+  // },
   data() {
     return {
       // 记录在线时长
@@ -145,6 +141,9 @@ export default {
     this.getPageListData(); // 获取资源视图信息
     this.getReportListData(); // 获取测试任务数据
     this.getTaskListData(); // 获取最近任务结果视图
+    this.$nextTick(() => {
+      this.initCharts();
+    })
   },
   computed: {
     percentage() {
@@ -155,6 +154,72 @@ export default {
     }
   },
   mounted() {
+    let _this = this // 在Chart内部访问this
+    this.echarts.registerMap("SC", SC);
+    let Chart = this.echarts.init(document.getElementById("map"));
+    // 颜色或文字的配置
+    let option = {
+      geo: {
+        type: "map",
+        aspectScale: 1, // 横向拉伸
+        // roam: true, // 地图操作 开启缩放或者平移，可以设置成 'scale' 或者 'move'。
+        map: "SC",
+        label: {
+          show: true,
+          normal: {
+            show: true, // 默认地图文字字号和字体颜色
+            fontSize: 10,
+            color: "#ffffff",
+          },
+          emphasis: {
+            show: true,
+            fontSize: 10, // 选中地图文字字号和字体颜色
+            color: "#CFCFCF",
+          },
+        },
+        itemStyle: {
+          normal: {
+            areaColor: "#040c3c", //地图本身的颜色
+            borderColor: "#00feda", //省份边框颜色
+            borderWidth: 1, // 省份边框宽度
+            opacity: 1, //图形透明度
+          },
+          emphasis: {
+            areaColor: "#040c3c", // 高亮时候地图显示的颜色
+            borderWidth: 0, // 高亮时的边框宽度
+          },
+        },
+        textFixed: {
+          Alaska: [20, -20],
+        }
+      },
+      series: [
+        {
+          type: "effectScatter",
+          coordinateSystem: "geo",
+          symbolSize: 12,
+          label: {
+            normal: {
+              show: false,
+            },
+            emphasis: {
+              show: false,
+            },
+          },
+          itemStyle: {
+            normal: {
+              shadowBlur: 10,
+              color: "#00ECC8",
+            },
+            emphasis: {
+              borderColor: "#fff",
+              borderWidth: 1,
+            },
+          },
+        },
+      ],
+    };
+    Chart.setOption(option);
   },
   beforeDestroy() {
 
@@ -182,6 +247,88 @@ export default {
     // 获取任务列表
     getTaskListData() {
 
+    },
+    initCharts() {
+      const charts = echarts.init(this.$refs["charts"]);
+      const option = {
+        // 背景颜色
+        backgroundColor: "#404a59",
+        // 提示浮窗样式
+        tooltip: {
+          show: true,
+          trigger: "item",
+          alwaysShowContent: false,
+          backgroundColor: "#0C121C",
+          borderColor: "rgba(0, 0, 0, 0.16);",
+          hideDelay: 100,
+          triggerOn: "mousemove",
+          enterable: true,
+          textStyle: {
+            color: "#DADADA",
+            fontSize: "12",
+            width: 20,
+            height: 30,
+            overflow: "break",
+          },
+          showDelay: 100
+        },
+        // 地图配置
+        geo: {
+          map: "china",
+          label: {
+            // 通常状态下的样式
+            normal: {
+              show: true,
+              textStyle: {
+                color: "#fff",
+              },
+            },
+            // 鼠标放上去的样式
+            emphasis: {
+              textStyle: {
+                color: "#fff",
+              },
+            },
+          },
+          // 地图区域的样式设置
+          itemStyle: {
+            normal: {
+              borderColor: "rgba(147, 235, 248, 1)",
+              borderWidth: 1,
+              areaColor: {
+                type: "radial",
+                x: 0.5,
+                y: 0.5,
+                r: 0.8,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "rgba(147, 235, 248, 0)", // 0% 处的颜色
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(147, 235, 248, .2)", // 100% 处的颜色
+                  },
+                ],
+                globalCoord: false, // 缺省为 false
+              },
+              shadowColor: "rgba(128, 217, 248, 1)",
+              shadowOffsetX: -2,
+              shadowOffsetY: 2,
+              shadowBlur: 10,
+            },
+            // 鼠标放上去高亮的样式
+            emphasis: {
+              areaColor: "#389BB7",
+              borderWidth: 0,
+            },
+          },
+        },
+      };
+      // 地图注册，第一个参数的名字必须和option.geo.map一致
+      echarts.registerMap("china", china)
+
+      charts.setOption(option);
     },
   },
 };
@@ -329,15 +476,9 @@ export default {
         padding: 20px;
         background-color: #fff;
         height: calc(100% - 166px);
-        .btn-wrap {
-          // width: 60%;
-          width: 150px;
-          display: flex;
-          justify-content: space-evenly;
-          flex-direction: column-reverse;
-          .el-button {
-            width: 150px;
-          }
+        #map {
+          width: 100vw;
+          height: 100vh;
         }
       }
     }
