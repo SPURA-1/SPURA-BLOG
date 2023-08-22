@@ -78,7 +78,6 @@ export default {
       const parser = new DOMParser();
       const doc = parser.parseFromString(this.html, 'text/html');
       const codeBlocks = doc.querySelectorAll('pre code');
-      console.log(codeBlocks, 'sssssssssssssssssssssssssss');
       codeBlocks.forEach(codeBlock => {
         hljs.highlightElement(codeBlock); // 使用 highlightElement
       });
@@ -116,7 +115,6 @@ export default {
           content: this.html,        // 文章内容
           category: this.AddArtform.category,       // 分类，封面根据分类决定
         }
-        console.log(startData, '888');
         PublishArt(startData)
           .then(response => {
             if (response.data.status === 200) {

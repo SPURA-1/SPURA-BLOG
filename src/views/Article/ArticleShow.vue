@@ -52,8 +52,11 @@ export default {
   mounted() {
     // 开启监听事件
     window.addEventListener("scroll", this.watchScroll);
-    // this.addCopyButtonsToCodeBlocks();
 
+  },
+  updated() {
+    this.removeExistingCopyButtons();   // 先删除按钮防止出现多个复制按钮
+    this.addCopyButtonsToCodeBlocks(); // 在数据更新后调用添加复制按钮的方法
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.watchScroll)
@@ -90,33 +93,11 @@ export default {
       const doc = parser.parseFromString(this.articleContent, 'text/html');
       // 解析并高亮代码块内的代码
       const codeBlocks = doc.querySelectorAll('pre code');
-      console.log(codeBlocks, '这是请求');
-      // codeBlocks.forEach(codeBlock => {
-      //   hljs.highlightElement(codeBlock); // 使用 highlightElement
-      //   this.codeBlocks.push({ content: codeBlock.textContent.trim() });
-      // });
       codeBlocks.forEach(codeBlock => {
-        console.log(codeBlock.textContent, 'ssssss');
         hljs.highlightElement(codeBlock); // 使用 highlightElement
-        // this.codeBlocks.push({ content: codeBlock.textContent.trim() });
-        // console.log(this.codeBlocks, 'sss');
-        const copyButton = document.createElement('button');
-        copyButton.textContent = '复制';
-        codeBlock.parentNode.insertBefore(copyButton, codeBlock);
-
-        const clipboard = new Clipboard(copyButton, {
-          target: () => codeBlock.textContent,
-        });
-
-        clipboard.on('success', (e) => {
-          e.clearSelection();
-          // 这里可以添加一些提示，如“代码已复制”之类的信息
-        });
-
-        clipboard.on('error', (e) => {
-          // 这里可以处理复制失败的情况
-        });
+        this.codeBlocks.push({ content: codeBlock.textContent.trim() });
       });
+
       // 解析标题,添加ID 附上样式
       const headers = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
       this.headers = Array.from(headers).map((header, index) => ({
@@ -132,6 +113,7 @@ export default {
 
       // 获取带有临时 ID 的解析后的文章内容
       this.parsedArticleContent = doc.documentElement.innerHTML;
+      this.addCopyButtonsToCodeBlocks();
     },
     // 点击目录中的锚点，滚动到相应的位置
     scrollToAnchor(id) {
@@ -162,32 +144,57 @@ export default {
           console.log(err, 'AXIOS报错');
         })
     },
-
+    removeExistingCopyButtons() {
+      const existingCopyButtons = document.querySelectorAll('button');
+      existingCopyButtons.forEach(button => {
+        button.remove();
+      });
+    },
     // 添加复制按钮到代码块
-    // addCopyButtonsToCodeBlocks() {
-    //   const codeBlocks = document.querySelectorAll('pre code');
+    addCopyButtonsToCodeBlocks() {
+      const codeBlocks = document.querySelectorAll('pre code');
+      codeBlocks.forEach(codeBlock => {
+        const copyButton = document.createElement('button');
+        copyButton.textContent = '复制';
+        // copyButton.classList.add('copy-button'); // 添加类名用于样式控制
 
-    //   console.log(codeBlocks, '+++');
-    //   codeBlocks.forEach(codeBlock => {
-    //     const copyButton = document.createElement('button');
-    //     copyButton.textContent = '复制';
-    //     codeBlock.parentNode.insertBefore(copyButton, codeBlock);
+        // 设置代码块的相对定位，以便容纳复制按钮
+        codeBlock.style.position = 'relative';
+        // 复制按钮样式
+        copyButton.style.position = 'absolute';
+        // copyButton.style.top = '0';
+        copyButton.style.right = '280';
+        copyButton.style.backgroundColor = '#007bff';
+        copyButton.style.color = '#fff';
+        copyButton.style.border = 'none';
+        copyButton.style.borderRadius = '4px';
+        copyButton.style.cursor = 'pointer';
+        copyButton.style.margin = '5px';
+        copyButton.style.zIndex = '99';
+        codeBlock.parentNode.insertBefore(copyButton, codeBlock);
 
-    //     const clipboard = new Clipboard(copyButton, {
-    //       target: () => codeBlock,
-    //     });
+        const clipboard = new Clipboard(copyButton, {
+          target: () => codeBlock,
+        });
 
-    //     clipboard.on('success', (e) => {
-    //       e.clearSelection();
-    //       console.log('成功');
-    //       // 这里可以添加一些提示，如“代码已复制”之类的信息
-    //     });
+        clipboard.on('success', (e) => {
+          e.clearSelection();
+          this.$message({
+            type: 'success',
+            message: '复制成功!'
+          });
+          // 这里可以添加一些提示，如“代码已复制”之类的信息
+        });
 
-    //     clipboard.on('error', (e) => {
-    //       // 这里可以处理复制失败的情况
-    //     });
-    //   });
-    // },
+        clipboard.on('error', (e) => {
+          // 这里可以处理复制失败的情况
+          this.$message({
+            type: 'warning',
+            message: '复制失败!'
+          });
+        });
+      });
+    },
   }
 }
 </script>
