@@ -52,11 +52,10 @@ export default {
   mounted() {
     // 开启监听事件
     window.addEventListener("scroll", this.watchScroll);
-
-  },
-  updated() {
-    this.removeExistingCopyButtons();   // 先删除按钮防止出现多个复制按钮
-    this.addCopyButtonsToCodeBlocks(); // 在数据更新后调用添加复制按钮的方法
+    // 在组件挂载后调用添加复制按钮的方法
+    setTimeout(() => {
+      this.addCopyButtonsToCodeBlocks();
+    }, 500);
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.watchScroll)
@@ -113,7 +112,6 @@ export default {
 
       // 获取带有临时 ID 的解析后的文章内容
       this.parsedArticleContent = doc.documentElement.innerHTML;
-      this.addCopyButtonsToCodeBlocks();
     },
     // 点击目录中的锚点，滚动到相应的位置
     scrollToAnchor(id) {
@@ -144,32 +142,27 @@ export default {
           console.log(err, 'AXIOS报错');
         })
     },
-    removeExistingCopyButtons() {
-      const existingCopyButtons = document.querySelectorAll('button');
-      existingCopyButtons.forEach(button => {
-        button.remove();
-      });
-    },
     // 添加复制按钮到代码块
     addCopyButtonsToCodeBlocks() {
       const codeBlocks = document.querySelectorAll('pre code');
       codeBlocks.forEach(codeBlock => {
         const copyButton = document.createElement('button');
-        copyButton.textContent = '复制';
+        copyButton.textContent = '复制代码';
         // copyButton.classList.add('copy-button'); // 添加类名用于样式控制
 
         // 设置代码块的相对定位，以便容纳复制按钮
         codeBlock.style.position = 'relative';
         // 复制按钮样式
         copyButton.style.position = 'absolute';
-        // copyButton.style.top = '0';
-        copyButton.style.right = '280';
-        copyButton.style.backgroundColor = '#007bff';
+        copyButton.style.right = '280px';
+        copyButton.style.backgroundColor = '#dddddd';
         copyButton.style.color = '#fff';
         copyButton.style.border = 'none';
         copyButton.style.borderRadius = '4px';
         copyButton.style.cursor = 'pointer';
         copyButton.style.margin = '5px';
+        copyButton.style.padding = '8px 12px'; // 增加按钮的内边距以增大大小
+        copyButton.style.fontSize = '14px'; // 调整字体大小
         copyButton.style.zIndex = '99';
         codeBlock.parentNode.insertBefore(copyButton, codeBlock);
 
