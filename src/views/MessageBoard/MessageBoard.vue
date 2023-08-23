@@ -85,7 +85,7 @@ import chart from '../../assets/JS/chart';
 import { Typeit } from '../../utils/plugMsg.js';
 import backTop from '../../components/nav/ToTap.vue';
 import axios from 'axios';
-import { sendComment, getComment, getMoreComments, saveLikes, getLikes } from '@/api/api'
+import { sendComment, getComment, getMoreComments, saveLikes, getLikes } from '@/api/MessageBoard.api'
 // 引入表情
 import { Picker } from 'emoji-mart-vue';
 import CustomButton from '@/components/button/ShinButton.vue';
@@ -860,3 +860,4 @@ canvas {
   padding: 20px;
 }
 </style>
+@/api/MessageBoard.api
