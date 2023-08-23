@@ -98,11 +98,11 @@ export default {
           console.log(err, 'axios报错');
         })
     },
+    // 页面跳转
     navigateToArticle(articleId) {
       // 在这里添加页面跳转逻辑，使用 router.push() 或类似方法进行导航
       // 例如：this.$router.push(`/article/${articleId}`);
       this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
-      console.log(articleId);
     },
     // 搜索文章
     searchArticles() {

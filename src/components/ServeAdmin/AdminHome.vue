@@ -30,18 +30,27 @@
       <div class="left-box">
         <el-card>
           <div class="left-container">
-            <p>文章将要发表</p>
-            测试任务
-
+            <p style="color:#02abe9;margin-bottom:5px;">最近发布</p>
+            <div v-for="newArt in ArtList" :key="newArt.id">
+              <h4 class="artTitle" @click="navigateToArticle(newArt.id)">{{ newArt.title }}</h4>
+              <p style="text-indent: 2em;">{{ truncateContent(newArt.Introduction) }}</p>
+              <div>
+                <p style="display:flex;justify-content: flex-end;">{{ newArt.category }}</p>
+                <p style="display:flex;justify-content: flex-end;">{{ newArt.publish_date }}</p>
+              </div>
+            </div>
           </div>
         </el-card>
         <!-- 最近任务结果视图 接口为报告数据-->
         <el-card>
           <div class="left-container">
-
-            <p>内容</p>
             <div class="all-test-box">
-
+              <div v-for="quote in famousQuote" :key="quote.id">
+                <h4>{{ quote.aphorism }}</h4>
+                <div>
+                  <p style="display:flex;justify-content: flex-end;flex-direction: column;">{{ quote.author }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </el-card>
@@ -62,16 +71,22 @@
 <script>
 import { getAdminData } from '@/api/AdminHome.api'
 import { getComment } from '@/api/MessageBoard.api'
+import { getAphorisms } from '@/api/aphorisms.api'
+import { getNewArticles, getCategoriesList } from '@/api/ArticleList.api';
 import * as echarts from "echarts";
 import TimeOut from '../../assets/JS/TimeOut'
 import china from "@/assets/JS/china.json"
+import moment from 'moment';
 export default {
   // components: {
   // },
   data() {
     return {
-      data: {},
+      famousQuote: [],  // 名人名言
+      data: {},         // 数据总览
       mapData: [],
+      ArtList: [],
+      categories: [], // 假设你从后端获取文章分类列表
       // 将地址转为中文
       cityMapping: {
         Beijing: '北京',
@@ -367,17 +382,19 @@ export default {
     };
   },
   created() {
+    this.fetchCategoryList(); // 获取分类
     this.getMapListData(); // 获取评论地区信息
     this.getPageListData(); // 获取资源视图信息
     this.getReportListData(); // 获取测试任务数据
     this.getTaskListData(); // 获取最近任务结果视图
   },
   computed: {
-    percentage() {
-      return (this.data.task_count / this.data.proc_count) * 100;
-    },
-    formattedPercentage() {
-      return this.percentage.toFixed(0);
+    categoryNames() {
+      const categoryMap = {}; // 使用一个对象来存储分类 id 到名称的映射
+      this.categories.forEach(category => {
+        categoryMap[category.id] = category.name;
+      });
+      return categoryMap;
     }
   },
   beforeDestroy() {
@@ -443,13 +460,72 @@ export default {
       const cityCoordinates = this.cityIPMessage;
       return cityCoordinates[cityName] || [0, 0]; // 默认为 [0, 0]
     },
-    // 获取报告列表
+    // 获取分类列表
+    fetchCategoryList() {
+      getCategoriesList()
+        .then(res => {
+          if (res.status === 200) {
+            this.categories = res.data.categories;
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'axios报错');
+        })
+    },
+    // 获取最近发布的三篇文章
     getReportListData() {
-
+      getNewArticles()
+        .then(res => {
+          if (res.status === 200) {
+            this.ArtList = res.data.articles;
+            this.ArtList = this.ArtList.map(item => ({
+              id: item.id,
+              category: this.categoryNames[item.category],
+              content: item.content,
+              image_path: item.image_path,
+              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
+              title: item.title,
+              Introduction: item.Introduction
+            }));
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS报错');
+        })
+    },
+    // 页面跳转
+    navigateToArticle(articleId) {
+      // 在这里添加页面跳转逻辑，使用 router.push() 或类似方法进行导航
+      // 例如：this.$router.push(`/article/${articleId}`);
+      this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
+    },
+    // 限制最大字数
+    truncateContent(content) {
+      const maxLength = 40; // 限制内容显示的最大长度
+      if (content.length <= maxLength) {
+        return content;
+      } else {
+        return content.slice(0, maxLength) + '...';
+      }
     },
     // 获取任务列表
     getTaskListData() {
-
+      getAphorisms()
+        .then(res => {
+          if (res.status === 200) {
+            this.famousQuote = res.data.aphorism
+            console.log(res.data.aphorism);
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS报错');
+        })
     },
     initCharts() {
       // 初始化 echarts 实例，将图表绑定到 this.$refs["charts"] 元素上
@@ -655,8 +731,14 @@ export default {
         width: 100%;
         height: 220px;
         background-color: #fff;
+        .artTitle {
+          cursor: pointer;
+        }
+        .artTitle:hover {
+          color: deepskyblue;
+        }
         .all-test-box {
-          height: calc(100% - 40px);
+          height: calc(100% - 20px);
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;

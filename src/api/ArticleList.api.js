@@ -25,6 +25,15 @@ export function getarticles(params) {
     return service.get('/article/articles', params);
 }
 
+
+/**
+ * @description 获取最近发布的前三篇文章
+ * @url  /article/newArticles
+ * */
+export function getNewArticles(params) {
+    return service.get('/article/newArticles', params);
+}
+
 /**
  * @description 获取单篇文章
  * @url  /article/articlesID

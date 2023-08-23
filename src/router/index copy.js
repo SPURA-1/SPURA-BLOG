@@ -19,7 +19,6 @@ const routes = [
     path: '/Loading',
     component: LoadingComponent,
   },
-  // 登陆界面
   {
     name: 'Login',
     path: '/login',
@@ -80,7 +79,6 @@ const routes = [
 
     ]
   },
-  // Blog主页
   {
     // Blog主页
     path: '/SpuraBlog',
