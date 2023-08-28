@@ -407,7 +407,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.data = res.data
-            console.log(res.data)
           } else {
             console.log('报错');
           }
@@ -442,7 +441,6 @@ export default {
             }));
             // 使用转换后的数据配置地图图表
             this.initCharts();
-            console.log(this.mapData, 'ces')
           } else {
             console.log('报错');
           }
@@ -518,7 +516,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.famousQuote = res.data.aphorism
-            console.log(res.data.aphorism);
           } else {
             console.log('报错');
           }

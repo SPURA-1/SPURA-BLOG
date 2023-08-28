@@ -2,6 +2,7 @@
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>更新密码</span>
+      <p>User Role: {{ userRole }}</p>
     </div>
     <!-- 表单 -->
     <el-form :model="userForm" :rules="userFormRules" ref="userFormRef" label-width="100px">
@@ -15,7 +16,7 @@
         <el-input v-model="userForm.rePwd"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="UpdateUser">提交修改</el-button>
+        <el-button type="primary" v-if="canChangePassword" @click="UpdateUser">提交修改</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -23,6 +24,8 @@
 
 <script>
 import axios from "axios";
+// import { alert } from 'blockly/core/dialog';
+import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   name: "UserInfo",
   data() {
@@ -35,40 +38,56 @@ export default {
     // 基于浅拷贝，把 Vuex 中的用户信息对象复制一份，交给 userForm
     // this.userForm = { ...this.$store.state.user.userInfo };
   },
+  computed: {
+    ...mapGetters(['userRole']),
+    canChangePassword() {
+      const canChange = this.userRole === 'admin' || this.userRole === 'user';
+      console.log('Can change password:', canChange);
+      return canChange;
+    }
+  },
   methods: {
     // 登录的 AXIOS
     UpdateUser() {
-      // 获取键盘输入的账号密码
-      // const Uid = this.userForm.username
-      const newPwd = this.userForm.newPwd;
-      const oldPwd = this.userForm.oldPwd;
-      const params = new URLSearchParams();
-      // params.append('id', Uid);
-      params.append("newPwd", newPwd);
-      params.append("oldPwd", oldPwd);
-      const token = sessionStorage.token;
-      // params.append('token', token);
-      axios({
-        method: "post",
-        url: "http://47.115.231.184:5555/my/updatepwd",
-        data: params,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: token,
-        },
-      })
-        .then((res) => {
-          console.log(res.data);
-          console.log(res);
-          if (res.data.status === 201) {
-            this.$message.success("更新成功！");
-          } else {
-            this.$message.error("更新失败！");
-          }
+      if (this.canChangePassword) {
+        // 执行修改密码操作
+
+        // 获取键盘输入的账号密码
+        // const Uid = this.userForm.username
+        const newPwd = this.userForm.newPwd;
+        const oldPwd = this.userForm.oldPwd;
+        const params = new URLSearchParams();
+        // params.append('id', Uid);
+        params.append("newPwd", newPwd);
+        params.append("oldPwd", oldPwd);
+        const token = sessionStorage.token;
+        // params.append('token', token);
+        axios({
+          method: "post",
+          url: "http://47.115.231.184:5555/my/updatepwd",
+          data: params,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: token,
+          },
         })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((res) => {
+            console.log(res.data);
+            console.log(res);
+            if (res.data.status === 201) {
+              this.$message.success("更新成功！");
+            } else {
+              this.$message.error("更新失败！");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        // 没有权限执行修改密码操作
+        alert('没有权限执行修改密码操作')
+      }
+
     },
   },
 };

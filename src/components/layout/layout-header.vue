@@ -11,7 +11,7 @@
       </div>
       <div class="site-menus" :class="{ 'mobileShow': mobileShow }" @click.stop="mobileShow = !mobileShow">
         <div class="menu-item">
-          <router-link to="/Admin-Main">首页</router-link>
+          <router-link to="/">首页</router-link>
         </div>
         <div class="menu-item">
           <router-link to="/ArticleList">文章</router-link>
@@ -26,7 +26,7 @@
           <router-link to="/MessageBoard">留言板</router-link>
         </div>
         <div class="menu-item">
-          <router-link to="/about">关于</router-link>
+          <router-link to="/Admin-Main">后台</router-link>
         </div>
       </div>
     </div>

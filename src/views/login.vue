@@ -253,7 +253,7 @@ export default {
             sessionStorage.setItem('token', res.data.token);
             this.$message.success('登录成功！')
             // 把 token 记录到 vuex 中
-            this.$store.commit('updateToken', res.token)
+            // this.$store.commit('updateToken', res.token)
             // 登录成功后的跳转
             this.$router.push({ path: '/Admin-Main' });
           } else {

@@ -19,7 +19,7 @@ const service = axios.create({
 // 请求拦截器
 // 请求拦截器
 service.interceptors.request.use(config => {
-  console.log(config, 'config');
+  // console.log(config, 'config');
   if (config.FORMDATA) {
     config.headers["Content-Type"] = "multipart/form-data";
   } else if (config.FORM) {
@@ -28,7 +28,7 @@ service.interceptors.request.use(config => {
   // 为请求头对象，添加 Token 验证的 Authorization 字段
   const token = sessionStorage.getItem('token')
   if (token) {
-    console.log(token, 'youtoken');
+    // console.log(token, 'youtoken');
     config.headers.Authorization = token
   }
   return config;
