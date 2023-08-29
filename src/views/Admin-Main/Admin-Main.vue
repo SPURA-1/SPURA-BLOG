@@ -12,7 +12,7 @@
         <el-submenu index="1">
           <template slot="title">
             <!-- 头像 -->
-            <img src="../../assets/Main/avatar.jpg" alt="" class="avatar" />
+            <img :src="ImageUrl + userData.userImage" alt="" class="avatar" />
             <span>个人中心</span>
           </template>
           <el-menu-item class="MenuTop" index="/UpdateUserData"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
@@ -53,7 +53,7 @@
 
               <el-menu-item index="/TextEditor">发布内容</el-menu-item>
 
-              <el-menu-item index="/AdminSet">上传头像</el-menu-item>
+              <el-menu-item index="/AdminSet">文章封面</el-menu-item>
 
               <!-- 更改成下拉框 -->
               <!-- 
@@ -125,13 +125,18 @@
 
 <script>
 import { userLogin } from "@/utils/api";
+import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
     return {
+      ImageUrl: 'http://47.115.231.184:5555',
       isCollapse: true,
       activePath: '',
       canChangePassword: null,
     };
+  },
+  computed: {
+    ...mapGetters(['userData']),
   },
   methods: {
     // 侧边栏展开

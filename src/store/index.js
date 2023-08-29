@@ -1,20 +1,35 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     isAuthenticated: false,
-    userRole: null
+    userRole: null,
+    userImage: null,
+    userNickname: null,
   },
   getters: {
-    userRole: state => state.userRole
+    userRole: state => state.userRole,
+    userData: state => {
+      return {
+        userImage: state.userImage,
+        userNickname: state.userNickname
+      };
+    }
   },
   mutations: {
     login(state, role) {
       state.isAuthenticated = true;
       state.userRole = role;
+    },
+    loginMsg(state, data) {
+      console.log(data, '999999');
+      state.isAuthenticated = true;
+      state.userImage = data.userImg;
+      state.userNickname = data.userNickname;
     },
     logout(state) {
       state.isAuthenticated = false;
@@ -30,5 +45,10 @@ export default new Vuex.Store({
   },
   modules: {
 
-  }
+  },
+  plugins: [
+    createPersistedState({
+      paths: ['userRole', 'userImage', 'userNickname'] // 保存指定的状态到本地存储
+    })
+  ],
 })

@@ -3,7 +3,16 @@
     <!-- 资源视图 -->
     <div class="top-wrap">
       <el-card class="box-card">
-        <p style="margin-bottom:20px;">资源总览</p>
+        <div style="display:flex;justify-content: space-between">
+          <p style="margin-bottom:20px;">资源总览</p>
+          <div style="display:flex;flex-direction: column;">
+            <p>账号：{{userData.userNickname}}</p>
+            <div style="display:flex;">
+              <p>权限：</p>
+              <p :style="{ color: userRoleName === '管理员' ? '#00cc00' : '' }">{{userRoleName }}</p>
+            </div>
+          </div>
+        </div>
         <div class="top-box">
           <div class="box-wrap">
             <div>文章总数</div>
@@ -78,6 +87,7 @@ import * as echarts from "echarts";
 import TimeOut from '../../assets/JS/TimeOut'
 import china from "@/assets/JS/china.json"
 import moment from 'moment';
+import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   // components: {
   // },
@@ -379,7 +389,7 @@ export default {
         淮南: [117.0183, 32.5875],
         合肥: [117.2272, 31.8206],
         茂名: [110.9312, 21.6682],
-      }
+      },
     };
   },
   created() {
@@ -390,6 +400,20 @@ export default {
     this.getTaskListData(); // 获取随机三句名人名言
   },
   computed: {
+    ...mapGetters(['userData', 'userRole']),
+    userRoleName() {
+      const options = [
+        { value: 1, label: '管理员' },
+        { value: 2, label: '用户' }
+      ];
+
+      const userRole = this.userRole;
+      console.log(userRole, 'ss');
+      // 查找对应的中文权限名称
+      const role = options.find(option => option.value === userRole)?.label;
+
+      return role;
+    },
     categoryNames() {
       const categoryMap = {}; // 使用一个对象来存储分类 id 到名称的映射
       this.categories.forEach(category => {

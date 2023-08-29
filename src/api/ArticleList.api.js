@@ -75,7 +75,7 @@ export function Updstatus(params) {
 }
 
 /**
- * @description 获取所有图片
+ * @description 获取所有文章封面
  * @url  /article/getImages
  * */
 export function GetImages(params) {

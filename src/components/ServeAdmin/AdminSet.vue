@@ -114,11 +114,20 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
+    // 编辑按钮
     editImage(index) {
-      console.log(index);
+      if (this.canChangePassword) {
+        console.log(index);
+      } else {
+        this.$message.error("当前账号没有权限！");
+      }
     },
     deleteImage(index) {
-      console.log(index);
+      if (this.canChangePassword) {
+        console.log(index);
+      } else {
+        this.$message.error("当前账号没有权限！");
+      }
     },
   }
 };
