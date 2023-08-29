@@ -41,6 +41,45 @@ export function userUpdstatus(params) {
 }
 
 /**
+ * @description 获取所有用户头像
+ * @url  /my/getImages
+ * */
+export function GetImages(params) {
+    return service.get('/my/getImages', params, {
+        headers: {
+            "Authorization": sessionStorage.token,
+        },
+    });
+}
+
+/**
+ * @description 头像上传
+ * @url  /my/upload
+ * */
+export function FileUpdate(file) {
+    const formData = new FormData();
+    formData.append('image', file); // 'image' 应该对应后端接收文件的字段名
+    return service.post('/my/upload', formData, {
+        headers: {
+            "Authorization": sessionStorage.token,
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
+
+/**
+ * @description 后台修改用户头像
+ * @url  /my/update/avatar
+ * */
+export function userUpdAvatar(params) {
+    return service.post('/my/update/avatar', params, {
+        headers: {
+            "Authorization": sessionStorage.token,
+        },
+    });
+}
+
+/**
  * @description 后台模糊搜索
  * @url  /my/userinfoSearch
  * */

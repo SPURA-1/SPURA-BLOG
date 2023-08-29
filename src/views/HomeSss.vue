@@ -43,7 +43,7 @@ export default {
       componentList: [
         { name: "KonList", title: "追番地址", id: "5" },
         { name: "imgs", title: "最强剧作", id: "4" },
-        { name: "timeline", title: "日程", id: "2" },
+        { name: "timeline", title: "时间线", id: "2" },
         { name: "carousel", title: "风景", id: "1" },
         { name: "calendar", title: "日历", id: "3" }
       ],

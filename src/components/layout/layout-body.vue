@@ -3,12 +3,17 @@
   <div style="">
     <!-- 头部背景图片 -->
     <div class="headImgBox">
+      <!-- 我们使用<video>元素来添加视频背景。autoplay属性使视频自动播放，
+        muted属性使视频静音，loop属性使视频循环播放。<source>元素用于指定视频文件的路径和类型。 -->
+      <video autoplay muted loop id="background-video">
+        <source src="../../assets/Images/headBg.mp4" type="video/mp4">
+      </video>
       <div class="scene">
         <div style="margin-top: 150px;"><span id="luke"></span></div>
       </div>
       <div class="h-information">
         <a href="">
-          <img src="../../assets/Images/headBg.jpg">
+          <img src="../../assets/Images/preview.jpg">
         </a>
         <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
         <img ref="loginBackgroundImg" src="" alt="Login Background" style="display: none;">
@@ -94,7 +99,7 @@ export default {
 /*头部背景图*/
 
 .headImgBox {
-  background-image: url(../../assets/Images/headBg.jpg);
+  /* background-image: url(../../assets/Images/headBg.mp4); */
   height: 100vh;
   position: relative;
   width: 100%;
@@ -103,6 +108,23 @@ export default {
   background-repeat: no-repeat;
   /* margin-top: 80px; */
   margin-bottom: 90px;
+}
+
+.headVideoBox {
+  position: relative;
+  overflow: hidden;
+}
+/* 
+    样式中，我们使用position: relative和overflow: hidden来确保视频不会溢出容器。
+    #background-video的样式使其占满容器，通过z-index: -1将其放在其他内容下方。
+ */
+#background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: -1;
 }
 
 .h-information {
@@ -114,7 +136,7 @@ export default {
   padding: 40px 0;
   font-size: 16px;
   opacity: 0.98;
-  background: rgba(230, 244, 249, 0.8);
+  background: rgba(230, 244, 249, 0.6);
   border-radius: 5px;
   z-index: 1;
   animation: b 1s ease-out;

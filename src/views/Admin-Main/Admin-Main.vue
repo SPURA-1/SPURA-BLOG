@@ -16,7 +16,7 @@
             <span>个人中心</span>
           </template>
           <el-menu-item class="MenuTop" index="/UpdateUserData"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
-          <el-menu-item class="MenuTop" index="/AdminSet"><i class="el-icon-camera"></i>更换头像</el-menu-item>
+          <el-menu-item class="MenuTop" index="/Userimage"><i class="el-icon-camera"></i>更换头像</el-menu-item>
           <el-menu-item class="MenuTop" index="/UpdateUser"><i class="el-icon-key"></i>更换密码</el-menu-item>
         </el-submenu>
         <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>

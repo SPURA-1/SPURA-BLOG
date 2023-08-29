@@ -77,6 +77,11 @@ const routes = [
         name: 'GameManage',
         component: () => import('../components/ServeAdmin/GameManage.vue')
       },
+      {
+        path: '/UserImage',
+        name: 'UserImage',
+        component: () => import('../components/ServeAdmin/UserImage.vue')
+      },
 
     ]
   },
