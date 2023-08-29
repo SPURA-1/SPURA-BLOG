@@ -1,4 +1,5 @@
 <template>
+  <!-- 日期 -->
   <el-calendar v-model="value"></el-calendar>
 </template>
 

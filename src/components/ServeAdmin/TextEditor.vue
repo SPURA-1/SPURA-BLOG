@@ -89,7 +89,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.categories = res.data.categories;
-            this.filterByCategory();
           } else {
             console.log('报错');
           }

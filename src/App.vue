@@ -9,6 +9,7 @@
 
 <script>
 // import Loading from './components/Loading/Loading.vue';
+import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   // components: {
   //   Loading,
@@ -21,6 +22,13 @@ export default {
   },
   mounted() {
     // this.loadData(); // 在页面加载完成后调用加载数据方法
+  },
+  computed: {
+    ...mapGetters(['userRole']),
+    canChangePassword() {
+      const canChange = this.userRole === 1;
+      return canChange;
+    }
   },
   methods: {
     // loadData() {

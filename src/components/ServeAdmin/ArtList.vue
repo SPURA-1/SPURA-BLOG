@@ -62,7 +62,7 @@
 
 <script>
 import { getarticles, getCategoriesList, Updstatus, searchArticles } from '@/api/ArticleList.api';
-
+import moment from 'moment';
 export default {
   data() {
     return {

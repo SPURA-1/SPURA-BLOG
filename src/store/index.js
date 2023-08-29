@@ -12,16 +12,19 @@ export default new Vuex.Store({
     userRole: state => state.userRole
   },
   mutations: {
-    login(state, { role }) {
+    login(state, role) {
       state.isAuthenticated = true;
       state.userRole = role;
-      console.log('User role set to:', role); // 在登录时打印角色信息
     },
     logout(state) {
       state.isAuthenticated = false;
       state.userRole = null;
       console.log('User logged out'); // 在登出时打印信息
-    }
+    },
+    updateToken(state, newToken) {
+      // 在这里更新 state 中的 token 信息
+      state.token = newToken; // 更新 state 中的 token 信息
+    },
   },
   actions: {
   },

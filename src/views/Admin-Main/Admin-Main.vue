@@ -45,7 +45,7 @@
               </template>
 
               <!-- 二级菜单 -->
-              <el-submenu index="2">
+              <el-submenu v-if="canChangePassword" index="2">
                 <template slot="title">账号</template>
                 <el-menu-item index="/UpdateUserData">基本资料</el-menu-item>
                 <el-menu-item index="/UpdateUser">更新</el-menu-item>
@@ -130,6 +130,7 @@ export default {
     return {
       isCollapse: true,
       activePath: '',
+      canChangePassword: null,
     };
   },
   methods: {

@@ -42,6 +42,11 @@
       <!-- 添加索引列 -->
       <el-table-column prop="username" label="用户ID"> </el-table-column>
       <el-table-column prop="nickname" label="昵称"> </el-table-column>
+      <el-table-column prop="user_role" label="权限">
+        <template slot-scope="scope">
+          <span :style="{ color: scope.row.user_role === '管理员' ? '#00cc00' : '' }">{{ scope.row.user_role }}</span>
+        </template>
+      </el-table-column>
       <!-- prop是取得userList中每一个对象中的对应属性值 -->
       <el-table-column prop="email" label="邮箱"> </el-table-column>
       <el-table-column prop="user_pic" label="头像">
@@ -66,7 +71,7 @@
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="DelButton(scope.row.id)"></el-button>
           <!-- 分配角色按钮 -->
           <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-            <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+            <el-button type="warning" icon="el-icon-setting" @click="assignRole" size="mini"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -105,6 +110,7 @@
 <script>
 import { getUserMsg, addUserMsg, userUpdstatus, UserReg, userinfoSearch } from '@/api/UserInfo.api'
 import axios from 'axios';
+import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
     return {
@@ -128,7 +134,22 @@ export default {
       userForm: {},
       userFormRules: {},
       EditButtonPage: false,
+      // 权限名称
+      options: [{
+        value: 1,
+        label: '管理员'
+      }, {
+        value: 2,
+        label: '用户'
+      }],
     };
+  },
+  computed: {
+    ...mapGetters(['userRole']),
+    canChangePassword() {
+      const canChange = this.userRole === 1;
+      return canChange;
+    }
   },
   created() {
     // 组件一旦创建，就执行这个函数，获取用户列表页面
@@ -160,7 +181,8 @@ export default {
               email: item.email,
               user_pic: item.user_pic,
               nickname: item.nickname,
-              mg_state: item.mg_state
+              mg_state: item.mg_state,
+              user_role: this.options.find(option => option.value === item.user_role)?.label
             }));
             this.total = res.data.total;
             console.log(this.userList)
@@ -226,30 +248,38 @@ export default {
     },
     // 修改用户状态
     upUserStarts(row) {
-      const tableData = {
-        status: row.mg_state,
-        userId: row.id,
+      if (this.canChangePassword) {
+        const tableData = {
+          status: row.mg_state,
+          userId: row.id,
+        }
+        userUpdstatus(tableData)
+          .then(res => {
+            if (res.status === 200) {
+              this.$message.success("状态更新成功");
+            } else {
+              this.$message.error("状态更新失败");
+            }
+          })
+          .catch(err => {
+            console.log(err, 'AXIOS报错');
+          })
+      } else {
+        // 没有权限执行角色删除操作
+        this.$message.error("当前账号没有权限！");
       }
-      console.log(tableData, 's');
-      userUpdstatus(tableData)
-        .then(res => {
-          if (res.status === 200) {
-            console.log(res.data);
-            this.$message.success("状态更新成功");
-          } else {
-            this.$message.error("状态更新失败");
-          }
-        })
-        .catch(err => {
-          console.log(err, 'AXIOS报错');
-        })
     },
     // 添加用户信息
     EditButton(id) {
-      console.log(id);
-      this.EditButtonPage = true
+      if (this.canChangePassword) {
+        console.log(id);
+        this.EditButtonPage = true
+      } else {
+        // 没有权限执行角色删除操作
+        this.$message.error("当前账号没有权限！");
+      }
     },
-    // 登录的 AXIOS
+    // 更新的 AXIOS
     UpdateUser() {
       // 获取键盘输入的用户昵称 用户邮箱
       const username = this.userForm.username;
@@ -294,9 +324,23 @@ export default {
     resetUpdateUser() {
       this.userForm = {}
     },
-    // 删除用户
+    // 删除角色
     DelButton(id) {
-      console.log(id);
+      if (this.canChangePassword) {
+        console.log(id);
+      } else {
+        // 没有权限执行角色删除操作
+        this.$message.error("当前账号没有权限！");
+      }
+    },
+    // 权限分配
+    assignRole(id) {
+      if (this.canChangePassword) {
+        console.log(id);
+      } else {
+        // 没有权限执行权限分配操作
+        this.$message.error("当前账号没有权限！");
+      }
     },
     // 监听每页显示的条数
     handleSizeChange(newSize) {

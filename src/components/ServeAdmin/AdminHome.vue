@@ -44,6 +44,7 @@
         <!-- 最近任务结果视图 接口为报告数据-->
         <el-card>
           <div class="left-container">
+            <p style="color:#02abe9;margin-bottom:10px;">名人名言</p>
             <div class="all-test-box">
               <div v-for="quote in famousQuote" :key="quote.id">
                 <h4>{{ quote.aphorism }}</h4>
@@ -384,9 +385,9 @@ export default {
   created() {
     this.fetchCategoryList(); // 获取分类
     this.getMapListData(); // 获取评论地区信息
-    this.getPageListData(); // 获取资源视图信息
-    this.getReportListData(); // 获取测试任务数据
-    this.getTaskListData(); // 获取最近任务结果视图
+    this.getPageListData(); // 获取首页数据列表
+    this.getReportListData(); // 获取最近发布的三篇文章
+    this.getTaskListData(); // 获取随机三句名人名言
   },
   computed: {
     categoryNames() {
@@ -510,7 +511,7 @@ export default {
         return content.slice(0, maxLength) + '...';
       }
     },
-    // 获取任务列表
+    // 获取随机三句名人名言
     getTaskListData() {
       getAphorisms()
         .then(res => {

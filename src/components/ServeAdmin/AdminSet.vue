@@ -7,7 +7,7 @@
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="file_path" label="图片">
           <template slot-scope="scope">
-            <img :src="imageUrl+scope.row.file_path" class="uploaded-image" />
+            <img style="width: 100px; height: 100px" :src="imageUrl+scope.row.file_path" class="uploaded-image" />
           </template>
         </el-table-column>
         <el-table-column prop="comment" label="备注">

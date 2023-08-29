@@ -117,7 +117,6 @@ export default {
     },
     // 点击目录中的锚点，滚动到相应的位置
     scrollToAnchor(id) {
-      console.log(id, '锚点');
       const anchorElement = document.querySelector(`#${id}`);
       if (anchorElement) {
         anchorElement.scrollIntoView({
@@ -131,7 +130,6 @@ export default {
       const artId = {
         articleId: this.searchData
       }
-      console.log(artId);
       getarticlesId(artId)
         .then(res => {
           if (res.status === 200) {

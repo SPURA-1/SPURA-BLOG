@@ -2,7 +2,6 @@
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>更新密码</span>
-      <p>User Role: {{ userRole }}</p>
     </div>
     <!-- 表单 -->
     <el-form :model="userForm" :rules="userFormRules" ref="userFormRef" label-width="100px">
@@ -16,7 +15,9 @@
         <el-input v-model="userForm.rePwd"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" v-if="canChangePassword" @click="UpdateUser">提交修改</el-button>
+        <!-- 权限设置，可选择按钮隐藏或者跳出提示没有权限 -->
+        <!-- <el-button type="primary" v-if="canChangePassword" @click="UpdateUser">提交修改</el-button> -->
+        <el-button type="primary" @click="UpdateUser">提交修改</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -41,8 +42,7 @@ export default {
   computed: {
     ...mapGetters(['userRole']),
     canChangePassword() {
-      const canChange = this.userRole === 'admin' || this.userRole === 'user';
-      console.log('Can change password:', canChange);
+      const canChange = this.userRole === 1;
       return canChange;
     }
   },
@@ -85,7 +85,8 @@ export default {
           });
       } else {
         // 没有权限执行修改密码操作
-        alert('没有权限执行修改密码操作')
+        // alert('没有权限执行修改密码操作')
+        this.$message.error("当前账号没有权限！");
       }
 
     },

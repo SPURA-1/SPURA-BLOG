@@ -106,7 +106,6 @@ export default {
     },
     // 搜索文章
     searchArticles() {
-      console.log(this.searchQuery);
       const searchArtQuery = { searchQuery: this.searchQuery }
       searchArticles(searchArtQuery)
         .then(res => {
@@ -132,7 +131,6 @@ export default {
 
     // 根据分类筛选文章
     filterByCategory() {
-      console.log(this.selectedCategory, 'ssssss');
       const searchCategory = { category: parseInt(this.selectedCategory) }
       getart(searchCategory)
         .then(res => {
