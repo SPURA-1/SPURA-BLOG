@@ -408,7 +408,6 @@ export default {
       ];
 
       const userRole = this.userRole;
-      console.log(userRole, 'ss');
       // 查找对应的中文权限名称
       const role = options.find(option => option.value === userRole)?.label;
 

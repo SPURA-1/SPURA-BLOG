@@ -153,12 +153,9 @@ export default {
         status: row.status,
         articleId: row.id,
       }
-      console.log(tableData, 'sss///');
       Updstatus(tableData)
         .then(res => {
-          console.log(res, '---------------');
           if (res.status === 200) {
-            console.log(res.data);
             // this.getArtList(); // 更新列表数据
             this.$message.success("状态更新成功");
           } else {
@@ -171,11 +168,9 @@ export default {
     },
     searchArt() {
       const search = { searchQuery: this.searchQuery }
-      console.log(search);
       searchArticles(search)
         .then(res => {
           if (res.status === 200) {
-            console.log(res.data);
             this.ArtList = res.data.articles
           } else {
             console.log('报错');

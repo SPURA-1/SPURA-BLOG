@@ -132,20 +132,21 @@ export default {
       ImageUrl: 'http://47.115.231.184:5555',
       isCollapse: true,
       activePath: '',
-      canChangePassword: null,
     };
   },
   computed: {
-    ...mapGetters(['userData']),
+    ...mapGetters(['userData', 'userRole']),
+    canChangePassword() {
+      const canChange = this.userRole === 1;
+      return canChange;
+    }
   },
   methods: {
     // 侧边栏展开
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
     },
     // 侧边栏关闭
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
     },
     // 退出提示用户
     logoutHandler() {

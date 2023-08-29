@@ -78,6 +78,7 @@
 
 <script>
 import { getGamesList, getGameImages, FileUpdate } from '@/api/GameList.api'
+import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
     return {
@@ -86,6 +87,13 @@ export default {
       GameList: [],
       uploadedImages: [], // 用于存储已上传的图片 URL
     };
+  },
+  computed: {
+    ...mapGetters(['userData', 'userRole']),
+    canChangePassword() {
+      const canChange = this.userRole === 1;
+      return canChange;
+    }
   },
   created() {
     this.AllImage();
@@ -121,7 +129,6 @@ export default {
       getGamesList()
         .then(res => {
           if (res.status === 200) {
-            console.log(res.data);
             this.GameList = res.data.games
           } else {
             console.log('报错');
@@ -136,7 +143,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.uploadedImages = res.data.images
-            console.log(this.uploadedImages);
           } else {
             console.log('报错');
           }
@@ -158,10 +164,18 @@ export default {
       console.log(file);
     },
     editImage(index) {
-      console.log(index);
+      if (this.canChangePassword) {
+        console.log(index);
+      } else {
+        this.$message.error("当前账号没有权限！");
+      }
     },
     deleteImage(index) {
-      console.log(index);
+      if (this.canChangePassword) {
+        console.log(index);
+      } else {
+        this.$message.error("当前账号没有权限！");
+      }
     },
   }
 };

@@ -185,8 +185,6 @@ export default {
               user_role: this.options.find(option => option.value === item.user_role)?.label
             }));
             this.total = res.data.total;
-            console.log(this.userList)
-            console.log(this.total)
           } else {
             return this.$message.error("获取用户失败");
 
@@ -236,7 +234,6 @@ export default {
       userinfoSearch(search)
         .then(res => {
           if (res.status === 200) {
-            console.log(res.data);
             this.userList = res.data.users
           } else {
             console.log('报错');
@@ -272,7 +269,6 @@ export default {
     // 添加用户信息
     EditButton(id) {
       if (this.canChangePassword) {
-        console.log(id);
         this.EditButtonPage = true
       } else {
         // 没有权限执行角色删除操作
@@ -307,8 +303,6 @@ export default {
       }
       addUserMsg(addMsg)
         .then((res) => {
-          console.log(res.data);
-          console.log(res);
           // 后台node更新都设置的是201状态码
           if (res.data.status === 201) {
             this.$message.success("更新成功！");

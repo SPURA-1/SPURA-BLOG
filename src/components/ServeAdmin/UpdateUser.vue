@@ -72,8 +72,6 @@ export default {
           },
         })
           .then((res) => {
-            console.log(res.data);
-            console.log(res);
             if (res.data.status === 201) {
               this.$message.success("更新成功！");
             } else {

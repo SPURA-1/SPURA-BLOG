@@ -57,8 +57,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data);
-          console.log(res);
           // 后台node更新都设置的是201状态码
           if (res.data.status === 201) {
             this.$message.success("更新成功！");
