@@ -66,7 +66,6 @@ export default {
 
     // 获取预加载登录界面背景图片的元素
     const loginBackgroundImg = this.$refs.loginBackgroundImg;
-    console.log(loginBackgroundImg, '开始');
 
     // 设置图片的src属性，触发预加载
     loginBackgroundImg.src = '../../assets/background.jpg';

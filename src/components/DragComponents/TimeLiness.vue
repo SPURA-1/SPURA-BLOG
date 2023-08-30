@@ -44,7 +44,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             const ArtList = res.data.articles;
-            console.log(ArtList);
             this.activities = ArtList.map(item => ({
               id: item.id,
               content: item.title,

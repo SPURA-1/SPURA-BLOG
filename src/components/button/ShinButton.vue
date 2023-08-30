@@ -6,7 +6,7 @@
         <svg x="0px" y="0px" viewBox="0 0 234.6 61.3" preserveAspectRatio="none" xmlSpace="preserve">
           <filter id="glow">
             <feGaussianBlur className="blur" result="coloredBlur" stdDeviation="2"></feGaussianBlur>
-            <feTurbulence type="fractalNoise" baseFrequency="0.075" numOctaves="0.3" result="turbulence"></feTurbulence>
+            <feTurbulence type="fractalNoise" baseFrequency="0.075" numOctaves="1" result="turbulence"></feTurbulence>
             <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="30" xChannelSelector="R" yChannelSelector="G" result="displace"></feDisplacementMap>
             <feMerge>
               <feMergeNode in="coloredBlur"></feMergeNode>

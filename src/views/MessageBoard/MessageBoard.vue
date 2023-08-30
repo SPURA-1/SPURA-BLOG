@@ -267,7 +267,6 @@ export default {
   },
   computed: {
     visibleComments() {
-      console.log('5555');
       return this.commentDatas.slice(0, this.commentCount);
     }
   },
@@ -306,7 +305,6 @@ export default {
       this.showEmojiPicker = !this.showEmojiPicker; // 切换 showEmojiPicker 的值
     },
     handleEmojiClick(emoji) {
-      console.log(emoji);
       // 处理选中的表情
       this.commentContent += emoji.native; // 将选中的表情添加到输入框中
       this.showEmojiPicker = false
@@ -344,11 +342,9 @@ export default {
         'content': this.commentContent,
         'username': this.sendname
       }
-      console.log(listData, '发送的数据');
 
       sendComment(listData)
         .then(res => {
-          console.log(res.status, 'ressss');
           if (res.status === 200) {
             this.$message.success('评论成功');
             // 添加评论到弹幕消息数组，并设置isNew为true
@@ -374,7 +370,7 @@ export default {
         })
         .catch((error) => {
           this.$message.error('评论失败，请稍后再试', error);
-          console.log(error, 's');
+          console.log(error, 'AXIOS报错');
         });
     },
     // 获取评论列表
@@ -388,7 +384,6 @@ export default {
             isNew: false,
             top: Math.floor(Math.random() * 180) + 10
           }));
-          console.log(this.barrageData, '222');
           // 遍历评论数据，将城市名称转换为中文
           const transformedComments = comments.map((comment) => {
             const chineseCity = this.cityMapping[comment.city];
@@ -448,7 +443,6 @@ export default {
       saveLikes()
         .then(response => {
           // 请求成功处理
-          console.log('点赞数保存成功');
           this.getLikeCounts();
         })
         .catch(error => {

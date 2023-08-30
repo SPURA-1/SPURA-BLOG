@@ -9,20 +9,19 @@
       </div>
       <div class="footer-item">
         <div style="font-size:17px;font-weight: bold;">后台</div>
-        <div><router-link class="out-link"  to="/Admin-Main">☞后台管理</router-link></div>
+        <div><router-link class="out-link" to="/Admin-Main">☞后台管理</router-link></div>
       </div>
     </div>
     <div>
       <p id="htmer_time" style="color: #fd7286;font-size: large;font-weight: bolder;"></p>
     </div>
-    <div class="copyright">{{ ` Copyright ©${new Date().getFullYear()} by` }}<a target="_blank" class="out-link"
-       href="https://github.com/SPURA-1">@SPURA</a>
+    <div class="copyright">{{ ` Copyright ©${new Date().getFullYear()} by` }}<a target="_blank" class="out-link" href="https://github.com/SPURA-1">@SPURA</a>
       . All rights reserved. |
     </div>
     <div class="copyright" style="margin-top: 10px">
       <iframe name="weather_inc" src="http://i.tianqi.com/?c=code&id=1" width="420" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
     </div>
-    
+
   </div>
 </template>
 
@@ -45,16 +44,17 @@ export default {
 
 #layout-footer {
   padding: 2%;
-  border-top: 1px solid #F7F7F7;
+  border-top: 1px solid #f7f7f7;
   font-size: 13px;
   color: #9c9c9c;
-
 
   a.out-link:hover {
     color: #ff6d6d;
     text-decoration: none;
   }
-  a{text-decoration: none;}
+  a {
+    text-decoration: none;
+  }
 
   .footer-main {
     max-width: 800px;
@@ -110,5 +110,4 @@ export default {
     }
   }
 }
-
 </style>
