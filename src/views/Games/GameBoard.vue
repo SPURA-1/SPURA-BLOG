@@ -12,7 +12,8 @@
         <div class="description_container">
           <div class="game_description">
             <h3>{{ selectedGame.name }}</h3>
-            <p>{{ selectedGame.description }}</p>
+            <!-- <p>{{ selectedGame.description }}</p> -->
+            <div v-html="selectedGame.description"></div>
           </div>
         </div>
       </div>
@@ -29,7 +30,9 @@
         <!-- 放置游戏比如马里奥的内容 -->
         <!-- 在主页面中显示你的游戏组件 -->
         <!-- <KillPlanetGame /> -->
-        <component :is="selectedGame.componentName" />
+        <div class="gamebody">
+          <component :is="selectedGame.componentName" />
+        </div>
         <button @click="closeGamePopup" class="close-button">X</button>
       </div>
     </transition>
@@ -291,7 +294,14 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 80%;
   max-height: 80%;
-  overflow: auto;
+  /* overflow: auto; */
+}
+
+.gamebody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 /* 关闭按钮样式 */
