@@ -15,8 +15,8 @@
         <el-table-column prop="file_path" label="地址"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <!-- 编辑按钮 -->
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="editImage(scope.row.id)"></el-button>
+            <!-- 选择按钮 -->
+            <el-button type="primary" icon="el-icon-check" size="mini" @click="editImage(scope.row.file_path)"></el-button>
             <!-- 删除按钮 -->
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteImage(scope.row.id)"></el-button>
           </template>
@@ -42,6 +42,7 @@
 
 <script>
 import { GetImages, userUpdAvatar, FileUpdate } from '@/api/UserInfo.api'
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
@@ -49,6 +50,9 @@ export default {
       imageUrl: 'http://47.115.231.184:5555',
       uploadedImages: [], // 用于存储已上传的图片 URL
     };
+  },
+  computed: {
+    ...mapGetters(['userData']), // 此处应包含 'userNickname' 的映射
   },
   created() {
     this.AllImage();
@@ -67,7 +71,8 @@ export default {
         FileUpdate(file.raw) // 使用 file.raw 作为上传的文件数据
           .then(res => {
             if (res.status === 200) {
-              this.uploadedImages.push(res.data.filePath);
+              // this.uploadedImages.push(res.data.filePath);
+              this.AllImage()
               this.$message.success('文件上传成功');
             }
           })
@@ -107,12 +112,23 @@ export default {
     },
     // 编辑按钮
     editImage(index) {
-      console.log(index);
-      // if (this.canChangePassword) {
-      //   console.log(index);
-      // } else {
-      //   this.$message.error("当前账号没有权限！");
-      // }
+      const Userimage = { Userimage: index }
+      userUpdAvatar(Userimage)
+        .then(res => {
+          if (res.status === 200) {
+            // 更新 Vuex 中的用户头像信息
+            this.$store.commit('loginMsg', {
+              userImg: Userimage.Userimage, // 更新头像信息
+              userNickname: this.userData.userNickname // 保持昵称信息
+            });
+            this.$message.success("头像更换完成");
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS报错');
+        })
     },
     deleteImage(index) {
       console.log(index);
