@@ -1,5 +1,5 @@
 <template>
-  <div>MarioTEST</div>
+  <div>暂未开放</div>
 </template>
 
 <script>
