@@ -36,7 +36,7 @@
             <el-form-item>
               <!-- @click="loginHeadler()" -->
               <!-- @click="$router.push('/login')" -->
-              <el-button type="primary" @click="loginHeadler()" size="small" round>登录</el-button>
+              <el-button type="primary" @click="loginHeadler" size="small" round>登录</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -47,8 +47,8 @@
         <el-form :model="registerForm" status-icon :rules="Rules" ref="registerForm" label-width="100px" class="demo-ruleForm2" size="small" @keyup.enter.native="wecomeNewUser">
           <!-- 注册 -->
           <div class="left-form" v-show="!login_show">
-            <el-form-item label="昵 称" prop="name">
-              <el-input ref="inputName" type="text" v-model="registerForm.name" autocomplete="off" placeholder="请输入昵称" clearable></el-input>
+            <el-form-item label="账 号" prop="name">
+              <el-input ref="inputName" type="text" v-model="registerForm.name" autocomplete="off" placeholder="请输入账号" clearable></el-input>
             </el-form-item>
             <el-form-item label="密 码" prop="password">
               <el-input ref="registerPass" type="password" v-model="registerForm.password" autocomplete="off" placeholder="请输入密码" show-password></el-input>
@@ -57,7 +57,7 @@
               <el-input type="password" v-model="registerForm.checkPass" autocomplete="off" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" round @click="wecomeNewUser()">注册</el-button>
+              <el-button type="primary" size="small" round @click="wecomeNewUser">注册</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -67,24 +67,11 @@
 </template>
 
 <script>
-import axios from "axios";
-import { userLogin } from "@/utils/api";
+import { UserLogin, UserReg } from '@/api/LoginMa.api'
+// import axios from "axios";
 export default {
   name: "LoginAndRegisterView",
   data() {
-    // 自定义校验规则
-    // 参数: rule : 基础校验规则
-    // value: 绑定该自定义验证规则的属性值
-    // callback: 该自定义验证的回调，必须调用
-    const samePwd = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.regform.password) {
-        callback(new Error("两次密码不一致!"));
-      } else {
-        callback();
-      }
-    };
     // 确认密码校验器(以后加强)
     // const comfirmPassword = (rule, value, callback) => {};
     // 密码强度校验器(以后加强)
@@ -128,7 +115,7 @@ export default {
             trigger: "blur",
           },
         ],
-        repassword: [
+        checkPass: [
           { required: true, message: "请输入确认密码", trigger: "blur" },
           {
             pattern: /^\S{6,15}$/,
@@ -136,13 +123,26 @@ export default {
             trigger: "blur",
           },
           // 自定义校验规则---validator,校验规则函数在data中定义
-          { validator: samePwd, trigger: "blur" },
+          { validator: this.samePwd, trigger: "blur" },
         ],
       },
     };
   },
   computed: {},
   methods: {
+    // 自定义校验规则
+    // 参数: rule : 基础校验规则
+    // value: 绑定该自定义验证规则的属性值
+    // callback: 该自定义验证的回调，必须调用
+    samePwd(rule, value, callback) {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.registerForm.password) {
+        callback(new Error('两次密码不一致!'));
+      } else {
+        callback();
+      }
+    },
     // 跳转至注册按钮
     toRegister() {
       if (this.movable) {
@@ -239,12 +239,13 @@ export default {
       const params = new URLSearchParams();
       params.append('username', Uid);
       params.append('password', Pid);
-      axios({
-        method: "post",
-        url: "http://47.115.231.184:5555/api/login",
-        data: params,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      })
+      // axios({
+      //   method: "post",
+      //   url: "http://47.115.231.184:5555/api/login",
+      //   data: params,
+      //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      // })
+      UserLogin(params)
         .then((res) => {
           // console.log(res.data);
           // console.log(res)
@@ -266,6 +267,36 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    // 注册
+    wecomeNewUser() {
+      // 手动触发表单验证
+      this.$refs.registerForm.validate(valid => {
+        if (valid) {
+          const addUserform = {
+            username: this.registerForm.name,
+            password: this.registerForm.password
+          }
+          UserReg(addUserform)
+            .then(res => {
+              if (res.status === 200) {
+                this.$message.success('新用户创建成功!')
+                // 注册完成后 动画移动到登录
+                this.toLogin(), this.play()
+              } else {
+                console.log('报错');
+                this.$message.error('新用户创建失败!')
+              }
+            })
+            .catch(err => {
+              console.log(err, 'AXIOS报错');
+              this.$message.error('新用户创建失败!')
+            })
+        } else {
+          // 表单验证未通过，显示错误提示
+          this.$message.error('请检查表单项的输入！');
+        }
+      });
     },
   },
   mounted() {

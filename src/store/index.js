@@ -30,6 +30,7 @@ export default new Vuex.Store({
       state.isAuthenticated = true;
       state.userImage = data.userImg;
       state.userNickname = data.userNickname;
+      state.useName = data.useName;
     },
     logout(state) {
       state.isAuthenticated = false;

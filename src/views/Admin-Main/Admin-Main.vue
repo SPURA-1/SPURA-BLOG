@@ -124,7 +124,6 @@
 </template>
 
 <script>
-import { userLogin } from "@/utils/api";
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
