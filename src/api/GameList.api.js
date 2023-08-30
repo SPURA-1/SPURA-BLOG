@@ -31,3 +31,19 @@ export function FileUpdate(file) {
         },
     });
 }
+
+/**
+ * @description 获取俄罗斯方块数据
+ * @url  /game/TetrisGame
+ * */
+export function getTetrisGame(params) {
+    return service.get('/game/TetrisGame', params);
+}
+
+/**
+ * @description 保存俄罗斯方块数据
+ * @url  /game/TetrisGame
+ * */
+export function updTetrisGame(params) {
+    return service.post('/game/TetrisGame', params);
+}

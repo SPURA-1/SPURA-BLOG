@@ -257,7 +257,6 @@ export default {
             this.$store.commit('updateToken', res.data.token)
             this.$store.commit('login', res.data.role)
             this.$store.commit('loginMsg', res.data.data)
-            console.log(res.data);
             // 登录成功后的跳转
             this.$router.push({ path: '/Admin-Main' });
           } else {

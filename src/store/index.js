@@ -10,13 +10,15 @@ export default new Vuex.Store({
     userRole: null,
     userImage: null,
     userNickname: null,
+    useName: null,
   },
   getters: {
     userRole: state => state.userRole,
     userData: state => {
       return {
         userImage: state.userImage,
-        userNickname: state.userNickname
+        userNickname: state.userNickname,
+        useName: state.useName,
       };
     }
   },
@@ -26,7 +28,6 @@ export default new Vuex.Store({
       state.userRole = role;
     },
     loginMsg(state, data) {
-      console.log(data, '999999');
       state.isAuthenticated = true;
       state.userImage = data.userImg;
       state.userNickname = data.userNickname;

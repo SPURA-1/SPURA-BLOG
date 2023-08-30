@@ -15,7 +15,7 @@ export default {
       import('../../views/SpuraBlog.vue').then(() => {
         this.$router.replace('/SpuraBlog');
       });
-    }, 500);
+    }, 1000);
 
   },
 }

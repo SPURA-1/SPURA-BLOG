@@ -6,7 +6,7 @@
         <div style="display:flex;justify-content: space-between">
           <p style="margin-bottom:20px;">资源总览</p>
           <div style="display:flex;flex-direction: column;">
-            <p>账号：{{userData.userNickname || userData.useName}}</p>
+            <p>账号：{{userData.userNickname !== '' ?userData.userNickname :  userData.useName}}</p>
             <div style="display:flex;">
               <p>权限：</p>
               <p :style="{ color: userRoleName === '管理员' ? '#00cc00' : '' }">{{userRoleName }}</p>

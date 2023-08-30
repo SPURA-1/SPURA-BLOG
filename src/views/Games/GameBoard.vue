@@ -29,6 +29,7 @@
         <!-- 放置游戏比如马里奥的内容 -->
         <!-- 在主页面中显示你的游戏组件 -->
         <!-- <KillPlanetGame /> -->
+        <component :is="selectedGame.componentName" />
         <button @click="closeGamePopup" class="close-button">X</button>
       </div>
     </transition>
@@ -39,11 +40,19 @@
 
 <script>
 // import KillPlanetGame from "@/views/Games/KillPlanetGame.vue";
-import { getGamesList, GetImages, FileUpdate } from '@/api/GameList.api'
+import { getGamesList, FileUpdate, getTetrisGame } from '@/api/GameList.api'
+import MarioGame from "@/views/Games/MarioGame.vue"; // 导入游戏组件
+import TetrisGame from "@/views/Games/TetrisGame.vue"; // 导入游戏组件
+
 export default {
   // components: {
   //   KillPlanetGame,
   // },
+  components: {
+    MarioGame,
+    TetrisGame,
+    // 其他组件
+  },
   data() {
     return {
       ImageUrl: 'http://47.115.231.184:5555',
@@ -113,9 +122,7 @@ export default {
       this.selectedGame = game;
       this.showGamePopup = true;
       this.stopScroll();
-      console.log(game)
       // document.body.style.overflow = 'hidden'; // 禁止页面滚动,两个办法都可以
-      console.log(this.selectedGame, 'showgame');
     },
 
     // 关闭游戏弹出界面

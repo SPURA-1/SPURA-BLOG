@@ -22,11 +22,11 @@
     </el-card>
     <!-- 添加用户 -->
     <el-dialog :visible.sync="addUser" title="添加" width="350px">
-      <el-form :model="addUserform" label-position="left">
-        <el-form-item label="用户ID">
+      <el-form :model="addUserform" :rules="Rules" ref="addUserform" label-position="left">
+        <el-form-item label="用户ID" prop="username">
           <el-input v-model="addUserform.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="password">
           <el-input v-model="addUserform.password" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -142,6 +142,24 @@ export default {
         value: 2,
         label: '用户'
       }],
+      Rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            pattern: /^[a-zA-Z0-9]{1,10}$/,
+            message: ("用户名必须是1-10的字母数字"),
+            trigger: "blur",
+          },
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            pattern: /^\S{6,15}$/,
+            message: "密码必须是6-15的非空字符",
+            trigger: "blur",
+          },
+        ]
+      },
     };
   },
   computed: {
@@ -200,33 +218,33 @@ export default {
     },
     // 添加用户
     addNewUser() {
-      UserReg(this.addUserform)
-        .then(res => {
-          if (res.status === 200) {
-            this.addUser = false;
-            this.addUserform = {
-              username: '',
-              password: ''
-            }
-            this.$message({
-              type: 'success',
-              message: '新用户创建成功!'
-            });
-          } else {
-            console.log('AXIOS报错');
-            this.$message({
-              type: 'error',
-              message: '新用户创建失败!'
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err, '报错');
-          this.$message({
-            type: 'error',
-            message: '新用户创建失败!'
-          });
-        })
+      // 手动触发表单验证
+      this.$refs.addUserform.validate(valid => {
+        if (valid) {
+          UserReg(this.addUserform)
+            .then(res => {
+              if (res.status === 200) {
+                this.addUser = false;
+                this.addUserform = {
+                  username: '',
+                  password: ''
+                }
+                this.$message.success('新用户创建成功!');
+                this.getUserList();
+              } else {
+                console.log('AXIOS报错');
+                this.$message.error('新用户创建失败!');
+              }
+            })
+            .catch(err => {
+              console.log(err, '报错');
+              this.$message.error('新用户创建失败!');
+            })
+        } else {
+          // 表单验证未通过，显示错误提示
+          this.$message.error('请检查表单项的输入！');
+        }
+      });
     },
     // 搜索用户
     searchUserList() {
@@ -306,6 +324,7 @@ export default {
           // 后台node更新都设置的是201状态码
           if (res.data.status === 201) {
             this.$message.success("更新成功！");
+            this.getUserList();
           } else {
             this.$message.error("更新失败！");
           }
