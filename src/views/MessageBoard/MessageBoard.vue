@@ -37,7 +37,7 @@
             </div>
           </div>
           <!-- <button class="submit-button" @click="submitComment">提交评论</button> -->
-          <CustomButton buttonText="提交评论" @button-click="submitComment" />
+          <CustomButton buttonText="提交评论" @button-click="handleThrottledStatusChange" />
         </div>
         <!-- 评论列表 -->
         <div class="comment-module">
@@ -259,6 +259,9 @@ export default {
         Hefei: '合肥',
         Maoming: '茂名',
       },
+      // 节流
+      lastUpdateTimestamp: 0, //上次点击时间
+      throttleInterval: 2000, // 节流时间间隔，单位：毫秒
     };
   },
   created() {
@@ -317,6 +320,15 @@ export default {
       // 检查点击的位置是否在表情包栏以外
       if (emojiButton && emojiPanel && !emojiButton.contains(event.target) && !emojiPanel.contains(event.target)) {
         this.showEmojiPicker = false; // 关闭表情包
+      }
+    },
+    // 节流
+    handleThrottledStatusChange() {
+      const currentTime = Date.now(); // 获取当前时间戳
+      // 检查当前时间与上次更新时间的间隔是否超过节流时间间隔
+      if (currentTime - this.lastUpdateTimestamp >= this.throttleInterval) {
+        this.submitComment(); // 执行实际的状态更新逻辑
+        this.lastUpdateTimestamp = currentTime; // 更新上次更新时间戳
       }
     },
     // 评论区

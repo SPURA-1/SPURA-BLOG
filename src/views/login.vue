@@ -44,7 +44,7 @@
 
       <!-- elementUI 表单组件 -->
       <transition name="el-fade-in">
-        <el-form :model="registerForm" status-icon :rules="Rules" ref="registerForm" label-width="100px" class="demo-ruleForm2" size="small" @keyup.enter.native="wecomeNewUser">
+        <el-form :model="registerForm" status-icon :rules="Rules" ref="registerForm" label-width="100px" class="demo-ruleForm2" size="small" @keyup.enter.native="handleThrottledStatusChange">
           <!-- 注册 -->
           <div class="left-form" v-show="!login_show">
             <el-form-item label="账 号" prop="name">
@@ -57,7 +57,7 @@
               <el-input type="password" v-model="registerForm.checkPass" autocomplete="off" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" round @click="wecomeNewUser">注册</el-button>
+              <el-button type="primary" size="small" round @click="handleThrottledStatusChange">注册</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -126,6 +126,9 @@ export default {
           { validator: this.samePwd, trigger: "blur" },
         ],
       },
+      // 节流
+      lastUpdateTimestamp: 0, //上次点击时间
+      throttleInterval: 2000, // 节流时间间隔，单位：毫秒
     };
   },
   computed: {},
@@ -266,6 +269,15 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    // 节流
+    handleThrottledStatusChange() {
+      const currentTime = Date.now(); // 获取当前时间戳
+      // 检查当前时间与上次更新时间的间隔是否超过节流时间间隔
+      if (currentTime - this.lastUpdateTimestamp >= this.throttleInterval) {
+        this.wecomeNewUser(); // 执行实际的状态更新逻辑
+        this.lastUpdateTimestamp = currentTime; // 更新上次更新时间戳
+      }
     },
     // 注册
     wecomeNewUser() {

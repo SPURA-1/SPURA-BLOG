@@ -59,10 +59,12 @@ export default {
         category: '',       // 分类，封面根据分类决定
       },
       categories: [], // 从后端获取文章分类列表
+      publishDebounced: null, // 用于存储防抖后的发布文章函数
     }
   },
   created() {
     this.fetchCategoryList();
+    this.createPublishDebounced();
   },
   mounted() {
     // 初始解析渲染
@@ -100,6 +102,23 @@ export default {
     openArtDialog() {
       this.addArt = true;
     },
+    createPublishDebounced() {
+      this.publishDebounced = this.debounce(this.publishArticle, 1000); // 创建防抖函数
+    },
+    debounce(func, wait) {
+      let timeoutId;
+      return function () {
+        const context = this;
+        const args = arguments;
+
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(() => {
+          func.apply(context, args);
+        }, wait);
+      };
+    },
+    // 文章发表
     publishArticle() {
       this.$confirm('文章将要发表, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -113,6 +132,7 @@ export default {
           content: this.html,        // 文章内容
           category: this.AddArtform.category,       // 分类，封面根据分类决定
         }
+        // 文章发表接口
         PublishArt(startData)
           .then(res => {
             if (res.status === 200) {
@@ -127,10 +147,7 @@ export default {
             console.log(error, 'AXIOS报错');
           });
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        });
+        this.$message.info('已取消!');
       });
     }
   },

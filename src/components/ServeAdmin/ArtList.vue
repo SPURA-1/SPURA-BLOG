@@ -27,7 +27,7 @@
       <!-- 添加索引列 -->
       <el-table-column prop="title" label="标题"> </el-table-column>
       <!-- prop是取得userList中每一个对象中的对应属性值 -->
-      <el-table-column show-overflow-tooltip prop="content" label="内容"> </el-table-column>
+      <el-table-column show-overflow-tooltip prop="Introduction" label="简介"> </el-table-column>
       <el-table-column prop="image_path" label="图片"> </el-table-column>
       <el-table-column prop="publish_date" label="日期"> </el-table-column>
       <el-table-column prop="category" label="分类">
@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.status" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="updateStatus(scope.row)">
+          <el-switch v-model="scope.row.status" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="handleThrottledStatusChange(scope.row)">
           </el-switch>
         </template>
       </el-table-column>
@@ -76,6 +76,8 @@ export default {
       categories: [], // 假设你从后端获取文章分类列表
       total: 0,
       searchQuery: '',
+      lastUpdateTimestamp: 0, //上次点击时间
+      throttleInterval: 2000, // 节流时间间隔，单位：毫秒
     };
   },
   created() {
@@ -117,7 +119,7 @@ export default {
             this.ArtList = this.ArtList.map(item => ({
               id: item.id,
               category: item.category,
-              content: item.content,
+              Introduction: item.Introduction,
               image_path: item.image_path,
               publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
               title: item.title,
@@ -166,6 +168,16 @@ export default {
           console.log(error);
         });
     },
+    // 节流
+    handleThrottledStatusChange(row) {
+      const currentTime = Date.now(); // 获取当前时间戳
+      // 检查当前时间与上次更新时间的间隔是否超过节流时间间隔
+      if (currentTime - this.lastUpdateTimestamp >= this.throttleInterval) {
+        this.updateStatus(row); // 执行实际的状态更新逻辑
+        this.lastUpdateTimestamp = currentTime; // 更新上次更新时间戳
+      }
+    },
+    // 搜索文章
     searchArt() {
       const search = { searchQuery: this.searchQuery }
       searchArticles(search)
