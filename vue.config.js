@@ -1,4 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 module.exports = {
   //公共路径
   publicPath: './',
@@ -21,5 +22,18 @@ module.exports = {
         // }
       }
     }
-  }
+  },
+
+  configureWebpack: {
+    plugins: [
+      // 添加 CompressionPlugin 插件实例
+      new CompressionWebpackPlugin({
+        filename: '[path][base].gz', // 生成的压缩文件名格式
+        algorithm: 'gzip', // 使用 gzip 算法进行压缩
+        test: /\.(js|css|html)$/, // 压缩文件的匹配规则
+        threshold: 200, // 仅压缩超过指定大小的文件
+        minRatio: 0.8, // 仅压缩压缩比超过指定比例的文件
+      }),
+    ],
+  },
 }
