@@ -61,7 +61,7 @@
       <div class="right-column">
         <div class="profile-box">
           <div class="comment-title">个人信息展示框</div>
-          个人信息展示框内容
+          <div class="userMsg">个人信息展示框内容</div>
         </div>
         <div class="likebox">
           <div class="comment-title">点赞框</div>
@@ -859,11 +859,42 @@ canvas {
     transform: scale(1);
   }
 }
+.userMsg:hover {
+  animation: wobble 2s infinite;
+}
+/* 摆动的动画 */
+@keyframes wobble {
+  0% {
+    transform: translateY(0%);
+  }
 
+  15% {
+    transform: translateY(-25%);
+  }
+
+  30% {
+    transform: translateY(20%);
+  }
+
+  45% {
+    transform: translateY(-15%);
+  }
+
+  60% {
+    transform: translateY(10%);
+  }
+
+  75% {
+    transform: translateY(-5%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
 .popular-locations-box {
   background-color: #f2f2f2;
   border-radius: 10px;
   padding: 20px;
 }
 </style>
-@/api/MessageBoard.api
