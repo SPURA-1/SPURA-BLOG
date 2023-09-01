@@ -1,5 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 module.exports = {
   //公共路径
   publicPath: './',
@@ -34,6 +36,7 @@ module.exports = {
         threshold: 200, // 仅压缩超过指定大小的文件
         minRatio: 0.8, // 仅压缩压缩比超过指定比例的文件
       }),
+      new BundleAnalyzerPlugin(),
     ],
   },
 }

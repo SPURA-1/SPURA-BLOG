@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import ElementUI from 'element-ui'
+import { Message } from 'element-ui';
 import SpuraBlog from '../views/SpuraBlog.vue';
 // 定义加载页面组件
 const LoadingComponent = () => import('../components/Loading/Loading.vue');
 
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 Vue.use(VueRouter)
 const routes = [
   // Blog主页
@@ -160,7 +160,7 @@ router.beforeEach((to, from, next) => {
     } else {
       //    如果token不存在
       //    前往登录
-      ElementUI.Message({
+      Message({
         message: '请先登录',
         type: 'warning'
       });

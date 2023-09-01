@@ -46,8 +46,7 @@
               <!-- 二级菜单 -->
               <el-submenu v-if="canChangePassword" index="2">
                 <template slot="title">账号</template>
-                <el-menu-item index="/UpdateUserData">基本资料</el-menu-item>
-                <el-menu-item index="/UpdateUser">更新</el-menu-item>
+                <el-menu-item index="/UpdateUser">更换密码</el-menu-item>
               </el-submenu>
 
               <el-menu-item index="/TextEditor">发布内容</el-menu-item>
