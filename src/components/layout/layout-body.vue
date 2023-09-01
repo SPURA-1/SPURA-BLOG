@@ -9,14 +9,27 @@
         <source src="../../assets/Images/headBg.mp4" type="video/mp4">
       </video>
       <div class="scene">
-        <div style="margin-top: 150px;"><span id="luke"></span></div>
+        <!-- <div style="margin-top: 150px;"><span id="luke"></span></div> -->
+        <p>
+          <span class="span1">H</span>
+          <span class="span1">E</span>
+          <span class="span1">L</span>
+          <span class="span1">L</span>
+          <span class="span1">O</span>
+          <span class="span1">W</span>
+          <span class="span1">O</span>
+          <span class="span1">R</span>
+          <span class="span1">L</span>
+          <span class="span1">D</span>
+        </p>
       </div>
       <div class="h-information">
         <a href="">
           <img src="../../assets/Images/preview.jpg">
         </a>
         <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
-        <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">
+        <!-- <img src="../../assets/background.jpg" alt="Login Background" style="display: none;"> -->
+        <img ref="loginBackgroundImg" src="" alt="Login Background" style="display: none;">
         <h2 class="h-description">
           <a>
             {{ "ようこそSPURAのブログへ！" }}
@@ -35,7 +48,7 @@
 <script>
 import backTop from '../nav/ToTap.vue'
 import Home from '../../views/HomeSss.vue'
-import { Typeit } from '../../utils/plug.js'
+// import { Typeit } from '../../utils/plug.js'
 export default {
   name: "layout-body",
   data() {
@@ -59,10 +72,14 @@ export default {
     你可以在回调函数之前先将 this 存储在另一个变量中，
     然后在回调函数中使用该变量
     */
-    var timer = setTimeout(function () {
-      Typeit(that.test, "#luke"); //打字机效果
-      clearTimeout(timer);
-    }, 500);
+    // var timer = setTimeout(function () {
+    //   Typeit(that.test, "#luke"); //打字机效果
+    //   clearTimeout(timer);
+    // }, 500);
+    // 获取预加载登录界面背景图片的元素
+    const loginBackgroundImg = this.$refs.loginBackgroundImg;
+    // 设置图片的src属性，触发预加载
+    loginBackgroundImg.src = '../../assets/background.jpg';
   },
   methods: {},
 }
@@ -87,6 +104,110 @@ export default {
 @media (max-width: 800px) {
   #layout-body {
     padding-top: 60px;
+  }
+}
+
+/* 首页文字缓慢显示 */
+p {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(100%);
+  width: 100%;
+  text-align: center;
+  color: #ddd;
+  font-size: 80px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+p span {
+  opacity: 0;
+  display: inline-block;
+}
+
+p span:nth-child(1) {
+  animation-delay: 1s;
+}
+
+p span:nth-child(2) {
+  animation-delay: 2s;
+}
+
+p span:nth-child(3) {
+  animation-delay: 2.5s;
+}
+
+p span:nth-child(4) {
+  animation-delay: 3s;
+}
+
+p span:nth-child(5) {
+  animation-delay: 3.5s;
+}
+
+p span:nth-child(6) {
+  animation-delay: 3.75s;
+  margin-left: 50px;
+}
+
+p span:nth-child(7) {
+  animation-delay: 4s;
+}
+
+p span:nth-child(8) {
+  animation-delay: 4.5s;
+}
+
+p span:nth-child(9) {
+  animation-delay: 5s;
+}
+
+p span:nth-child(10) {
+  animation-delay: 5.5s;
+}
+
+p .span1,
+p .span2 {
+  opacity: 0;
+  transform: rotateY(90deg);
+  filter: blur(10px);
+}
+
+p .span1 {
+  animation: textAnimation1 1s linear forwards;
+}
+
+p .span2 {
+  animation: textAnimation2 1s linear forwards;
+}
+
+@keyframes textAnimation1 {
+  0% {
+    opacity: 0;
+    transform: rotateY(90deg);
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes textAnimation2 {
+  0% {
+    opacity: 0;
+    transform: rotateY(90deg);
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg);
+    filter: blur(0);
   }
 }
 
@@ -121,6 +242,7 @@ export default {
   z-index: -1;
 }
 
+/* 头像 */
 .h-information {
   text-align: center;
   width: 70%;

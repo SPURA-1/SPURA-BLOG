@@ -3,7 +3,7 @@
     <div class="container">
       <div class="content">
         <video muted autoplay preload="true" x5-video-player-fullscreen="true" x5-playsinline="true" playsinline webkit-playsinline="true" ref="videoRef">
-          <source src="/smoke.mp4" />
+          <source src="@/assets/Images/headBg.mp4" />
         </video>
         <p ref="pRef">
           <span class="span1">H</span>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { Form } from 'element-ui';
 export default {
   data() {
     return {
@@ -66,25 +67,25 @@ export default {
   background-color: #000;
   position: relative;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(
-      to right,
-      #f00,
-      #f00,
-      #0f0,
-      #0ff,
-      #ff0,
-      #0ff
-    );
-    mix-blend-mode: color;
-    pointer-events: none;
-  }
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   background-image: linear-gradient(
+  //     to right,
+  //     #f00,
+  //     #f00,
+  //     #0f0,
+  //     #0ff,
+  //     #ff0,
+  //     #0ff
+  //   );
+  //   mix-blend-mode: color;
+  //   pointer-events: none;
+  // }
 
   video {
     width: 100%;
