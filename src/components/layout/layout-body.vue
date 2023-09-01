@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
   <div style="">
     <!-- 头部背景图片 -->
@@ -9,7 +8,6 @@
         <source src="../../assets/Images/headBg.mp4" type="video/mp4">
       </video>
       <div class="scene">
-        <!-- <div style="margin-top: 150px;"><span id="luke"></span></div> -->
         <p>
           <span class="span1">H</span>
           <span class="span1">E</span>
@@ -38,7 +36,6 @@
       </div>
     </div>
     <div id="layout-body">
-      <!-- <router-view></router-view> -->
       <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
       <Home></Home>
     </div>
@@ -48,7 +45,6 @@
 <script>
 import backTop from '../nav/ToTap.vue'
 import Home from '../../views/HomeSss.vue'
-// import { Typeit } from '../../utils/plug.js'
 export default {
   name: "layout-body",
   data() {

@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ElementUI from 'element-ui'
-// import SpuraBlog from '../views/SpuraBlog.vue';
+import SpuraBlog from '../views/SpuraBlog.vue';
 // 定义加载页面组件
 const LoadingComponent = () => import('../components/Loading/Loading.vue');
 
 Vue.use(ElementUI);
 Vue.use(VueRouter)
-
 const routes = [
   // Blog主页
   {
@@ -40,11 +39,6 @@ const routes = [
         path: '/AdminHome',
         name: 'AdminHome',
         component: () => import('../components/ServeAdmin/AdminHome.vue')
-      },
-      {
-        path: '/UpdateUserData',
-        name: 'UpdateUserData',
-        component: () => import('../components/ServeAdmin/UpdateUserData.vue')
       },
       {
         path: '/UpdateUser',
@@ -89,7 +83,8 @@ const routes = [
     // Blog主页
     path: '/SpuraBlog',
     redirect: '/Main',
-    component: () => import('../views/SpuraBlog.vue'),
+    // component: () => import('../views/SpuraBlog.vue'),
+    component: SpuraBlog,
     children: [
       {
         path: '/Main',

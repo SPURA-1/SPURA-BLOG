@@ -15,7 +15,6 @@
             <img :src="ImageUrl + userData.userImage" alt="" class="avatar" />
             <span>个人中心</span>
           </template>
-          <el-menu-item class="MenuTop" index="/UpdateUserData"><i class="el-icon-s-operation"></i>基本资料</el-menu-item>
           <el-menu-item class="MenuTop" index="/Userimage"><i class="el-icon-camera"></i>更换头像</el-menu-item>
           <el-menu-item class="MenuTop" index="/UpdateUser"><i class="el-icon-key"></i>更换密码</el-menu-item>
         </el-submenu>
@@ -54,14 +53,6 @@
               <el-menu-item index="/TextEditor">发布内容</el-menu-item>
 
               <el-menu-item index="/AdminSet">文章封面</el-menu-item>
-
-              <!-- 更改成下拉框 -->
-              <!-- 
-              <el-submenu index="1-4">
-              <template slot="title">上传头像</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-              </el-submenu> 
-              -->
             </el-submenu>
 
             <!-- 权限管理 -->

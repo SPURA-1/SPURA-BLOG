@@ -109,7 +109,6 @@
 
 <script>
 import { getUserMsg, addUserMsg, userUpdstatus, UserReg, userinfoSearch } from '@/api/UserInfo.api'
-import axios from 'axios';
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
@@ -176,19 +175,6 @@ export default {
   methods: {
     // 获取用户列表
     getUserList() {
-      // 这里把要传进去的参数事先在数据区域写好，然后再用axios调用即可
-
-      // const token = sessionStorage.token;
-      // const params = new URLSearchParams();
-      // axios({
-      //   method: "get",
-      //   url: "http://47.115.231.184:5555/my/userinfo",
-      //   data: params,
-      //   headers: {
-      //     "Content-Type": "application/x-www-form-urlencoded",
-      //     "Authorization": token,
-      //   },
-      // })
       getUserMsg()
         .then((res) => {
           if (res.data.status === 200) {
@@ -304,15 +290,6 @@ export default {
       params.append("nickname", nickname);
       params.append("email", email);
       const token = sessionStorage.token;
-      // axios({
-      //   method: "post",
-      //   url: "http://47.115.231.184:5555/my/userinfo",
-      //   data: params,
-      //   headers: {
-      //     "Content-Type": "application/x-www-form-urlencoded",
-      //     Authorization: token,
-      //   },
-      // })
       // id由后端token里解析出来,SQL语句暂只支持修改目前登录的账户ID，需做更改
       const addMsg = {
         username: this.userForm.username,

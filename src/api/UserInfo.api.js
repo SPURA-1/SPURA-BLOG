@@ -29,6 +29,20 @@ export function addUserMsg(params) {
 }
 
 /**
+ * @description 修改用户密码
+ * @url  /my/updatepwd
+ * */
+export function updUserPwd(params) {
+    const formData = new URLSearchParams(params);
+    return service.post('/my/updatepwd', formData, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            "Authorization": sessionStorage.token,
+        },
+    });
+}
+
+/**
  * @description 后台修改用户状态
  * @url  /my/userUpdstatus
  * */

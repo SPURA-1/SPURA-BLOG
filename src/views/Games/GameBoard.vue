@@ -29,7 +29,6 @@
         <h3>{{ selectedGame.name }}</h3>
         <!-- 放置游戏比如马里奥的内容 -->
         <!-- 在主页面中显示你的游戏组件 -->
-        <!-- <KillPlanetGame /> -->
         <div class="gamebody">
           <component :is="selectedGame.componentName" />
         </div>
@@ -42,15 +41,11 @@
 </template>
 
 <script>
-// import KillPlanetGame from "@/views/Games/KillPlanetGame.vue";
 import { getGamesList, FileUpdate, getTetrisGame } from '@/api/GameList.api'
 import MarioGame from "@/views/Games/MarioGame.vue"; // 导入游戏组件
 import TetrisGame from "@/views/Games/TetrisGame.vue"; // 导入游戏组件
 
 export default {
-  // components: {
-  //   KillPlanetGame,
-  // },
   components: {
     MarioGame,
     TetrisGame,

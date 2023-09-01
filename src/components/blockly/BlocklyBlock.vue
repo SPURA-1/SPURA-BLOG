@@ -985,8 +985,6 @@ export default {
 
 
     getLuaCode() {
-      // let code = Blockly.JavaScript.workspaceToCode(this.workspace);
-      // console.log(code)
       this.latestCode = luaGenerator.workspaceToCode(this.workspace);
       // document.getElementById('screen-bottom').value = this.latestCode;
       const xmlData = Blockly.Xml.workspaceToDom(this.workspace);
@@ -995,15 +993,6 @@ export default {
       const params = {
         xmlData: xmlString
       }
-      // axios({
-      //   method: "post",
-      //   url: "http://47.115.231.184:5555/blockly/generateCode",
-      //   // data: params,
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   data: params,
-      // })
       getBlocklyCode(params)
         .then(res => {
           if (res.status === 200) {

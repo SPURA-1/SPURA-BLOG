@@ -24,8 +24,7 @@
 </template>
 
 <script>
-import axios from "axios";
-// import { alert } from 'blockly/core/dialog';
+import { updUserPwd } from '@/api/UserInfo.api';
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   name: "UserInfo",
@@ -60,17 +59,7 @@ export default {
         // params.append('id', Uid);
         params.append("newPwd", newPwd);
         params.append("oldPwd", oldPwd);
-        const token = sessionStorage.token;
-        // params.append('token', token);
-        axios({
-          method: "post",
-          url: "http://47.115.231.184:5555/my/updatepwd",
-          data: params,
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: token,
-          },
-        })
+        updUserPwd(params)
           .then((res) => {
             if (res.data.status === 201) {
               this.$message.success("更新成功！");
@@ -83,7 +72,6 @@ export default {
           });
       } else {
         // 没有权限执行修改密码操作
-        // alert('没有权限执行修改密码操作')
         this.$message.error("当前账号没有权限！");
       }
 

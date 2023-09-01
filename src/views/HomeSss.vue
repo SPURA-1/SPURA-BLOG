@@ -21,7 +21,6 @@ import draggable from "vuedraggable";
 import {
   timeline,
   calendar,
-  welcome,
   carousel,
   imgs,
   KonList
@@ -32,7 +31,6 @@ export default {
     draggable,
     timeline,
     calendar,
-    welcome,
     carousel,
     imgs,
     KonList

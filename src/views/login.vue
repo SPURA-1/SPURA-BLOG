@@ -67,8 +67,7 @@
 </template>
 
 <script>
-import { UserLogin, UserReg } from '@/api/LoginMa.api'
-// import axios from "axios";
+import { UserLogin, UserReg } from '@/api/LoginMa.api';
 export default {
   name: "LoginAndRegisterView",
   data() {
@@ -242,12 +241,6 @@ export default {
       const params = new URLSearchParams();
       params.append('username', Uid);
       params.append('password', Pid);
-      // axios({
-      //   method: "post",
-      //   url: "http://47.115.231.184:5555/api/login",
-      //   data: params,
-      //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      // })
       UserLogin(params)
         .then((res) => {
           // console.log(res.data);

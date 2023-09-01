@@ -81,10 +81,10 @@
 </template>
 
 <script>
+// 留言板图表
 import chart from '../../assets/JS/chart';
 import { Typeit } from '../../utils/plugMsg.js';
 import backTop from '../../components/nav/ToTap.vue';
-import axios from 'axios';
 import { sendComment, getComment, getMoreComments, saveLikes, getLikes } from '@/api/MessageBoard.api'
 // 引入表情
 import { Picker } from 'emoji-mart-vue';
@@ -450,8 +450,6 @@ export default {
     },
     saveLikeCounts() {
       // 将counts发送到后台保存
-      // axios.post('http://47.115.231.184:5555/likes/like')
-      // axios.post('http://127.0.0.1/likes/like')
       saveLikes()
         .then(response => {
           // 请求成功处理
@@ -463,8 +461,6 @@ export default {
         });
     },
     getLikeCounts() {
-      // .get('http://47.115.231.184:5555/likes/likeCounts')
-      // axios.get('http://127.0.0.1/likes/likeCounts')
       getLikes()
         .then((response) => {
           this.likecounts = response.data.counts;
