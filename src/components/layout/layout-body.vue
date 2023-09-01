@@ -28,8 +28,8 @@
           <img src="../../assets/Images/preview.jpg">
         </a>
         <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
-        <!-- <img src="../../assets/background.jpg" alt="Login Background" style="display: none;"> -->
-        <img ref="loginBackgroundImg" src="" alt="Login Background" style="display: none;">
+        <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">
+        <!-- <img ref="loginBackgroundImg" src="" alt="Login Background" style="display: none;"> -->
         <h2 class="h-description">
           <a>
             {{ "ようこそSPURAのブログへ！" }}
@@ -77,9 +77,9 @@ export default {
     //   clearTimeout(timer);
     // }, 500);
     // 获取预加载登录界面背景图片的元素
-    const loginBackgroundImg = this.$refs.loginBackgroundImg;
-    // 设置图片的src属性，触发预加载
-    loginBackgroundImg.src = '../../assets/background.jpg';
+    // const loginBackgroundImg = this.$refs.loginBackgroundImg;
+    // // 设置图片的src属性，触发预加载
+    // loginBackgroundImg.src = '../../assets/background.jpg';
   },
   methods: {},
 }
