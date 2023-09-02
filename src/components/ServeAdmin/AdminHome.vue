@@ -67,7 +67,7 @@
       </div>
       <!-- 右边容器 -->
       <div class="right-box">
-        <div ref="charts" id="map"></div>
+        <div ref="echart" id="map"></div>
       </div>
 
     </div>
@@ -83,7 +83,14 @@ import { getAdminData } from '@/api/AdminHome.api'
 import { getComment } from '@/api/MessageBoard.api'
 import { getAphorisms } from '@/api/aphorisms.api'
 import { getNewArticles, getCategoriesList } from '@/api/ArticleList.api';
-import * as echarts from "echarts";
+// import * as echarts from "echarts";
+// 引入基本模板
+let Echarts = require("echarts/lib/echarts");
+// 按需引入需要的组件模块
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/geo");
+require("echarts/lib/chart/scatter");
+
 import TimeOut from '../../assets/JS/TimeOut'
 import china from "@/assets/JS/china.json"
 import moment from 'moment';
@@ -550,7 +557,7 @@ export default {
     },
     initCharts() {
       // 初始化 echarts 实例，将图表绑定到 this.$refs["charts"] 元素上
-      const charts = echarts.init(this.$refs["charts"]);
+      const charts = Echarts.init(this.$refs["echart"]);
       // 配置图表的 option（选项）
       const option = {
         // 背景颜色
@@ -659,10 +666,6 @@ export default {
             },
             // 数据格式，其中 name 和 value 是必要的
             data: this.mapData,
-            // data: [
-            //   { name: "西藏", value: [91.23, 29.5, 2333] }, // 经度、纬度、其他数据
-            //   { name: "黑龙江", value: [128.03, 47.01, 1007] },
-            // ],
             showEffectOn: "render", // 效果显示的触发方式
             rippleEffect: {
               brushType: "stroke", // 波纹绘制方式，可以设置为 'stroke' 或 'fill'
@@ -699,7 +702,7 @@ export default {
 
       };
       // 地图注册，第一个参数的名字必须和option.geo.map一致
-      echarts.registerMap("china", china)
+      Echarts.registerMap("china", china)
       // 将配置应用到图表实例
       charts.setOption(option);
     },
