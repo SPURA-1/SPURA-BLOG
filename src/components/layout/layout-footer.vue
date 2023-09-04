@@ -15,8 +15,9 @@
     <div>
       <p id="htmer_time" style="color: #fd7286;font-size: large;font-weight: bolder;"></p>
     </div>
-    <div class="copyright">{{ ` Copyright ©${new Date().getFullYear()} by` }}<a target="_blank" class="out-link" href="https://github.com/SPURA-1">@SPURA</a>
-      . All rights reserved. |
+    <div class="copyright">{{ ` Copyright ©${new Date().getFullYear()} by` }}
+      <a target="_blank" class="out-link" href="https://github.com/SPURA-1">@SPURA</a><br>
+      <a href="https://beian.miit.gov.cn/" target="_blank">沪ICP备2023022725号</a>
     </div>
     <div class="copyright" style="margin-top: 10px">
       <iframe name="weather_inc" src="http://i.tianqi.com/?c=code&id=1" width="420" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
