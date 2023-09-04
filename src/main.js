@@ -36,6 +36,7 @@ import {
   Aside,
   Timeline,
   TimelineItem,
+  MessageBox,
   Message,
   Image,
   calendar,
@@ -75,6 +76,8 @@ Vue.use(TimelineItem);
 Vue.use(Image);
 Vue.use(calendar);
 Vue.prototype.$message = Message;
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$confirm = MessageBox.confirm;
 
 
 Vue.config.productionTip = false
