@@ -84,40 +84,40 @@ export default {
             timeout: 5 * 1000, // 5 秒
 
             // 上传之前触发
-            // onBeforeUpload(file) {
-            //   console.log(file);    // JS 语法
-            //     // file 选中的文件，格式如 { key: file }
-            //     return file
+            onBeforeUpload(file) {
+              console.log(file, '上传之前触发');    // JS 语法
+              // file 选中的文件，格式如 { key: file }
+              return file
 
-            //     // 可以 return
-            //     // 1. return file 或者 new 一个 file ，接下来将上传
-            //     // 2. return false ，不上传这个 file
-            // },
+              // 可以 return
+              // 1. return file 或者 new 一个 file ，接下来将上传
+              // 2. return false ，不上传这个 file
+            },
 
-            // // 上传进度的回调函数
+            // 上传进度的回调函数
 
-            // onProgress(progress) {       // JS 语法
-            //     // progress 是 0-100 的数字
-            //     console.log('progress', progress)
-            // },
+            onProgress(progress) {       // JS 语法
+              // progress 是 0-100 的数字
+              console.log('progress', progress)
+            },
 
-            // // 单个文件上传成功之后
+            // 单个文件上传成功之后
 
-            // onSuccess(file, res) {          // JS 语法
-            //     console.log(`${file.name} 上传成功`, res)
-            // },
+            onSuccess(file, res) {          // JS 语法
+              console.log(`${file.name} 上传成功`, res)
+            },
 
-            // // 单个文件上传失败
+            // 单个文件上传失败
 
-            // onFailed(file, res) {           // JS 语法
-            //     console.log(`${file.name} 上传失败`, res)
-            // },
+            onFailed(file, res) {           // JS 语法
+              console.log(`${file.name} 上传失败`, res)
+            },
 
-            // // 上传错误，或者触发 timeout 超时
+            // 上传错误，或者触发 timeout 超时
 
-            // onError(file, err, res) {               // JS 语法
-            //     console.log(`${file.name} 上传出错`, err, res)
-            // },
+            onError(file, err, res) {               // JS 语法
+              console.log(`${file.name} 上传出错`, err, res)
+            },
           },
           // 配置上传视频（同上传图片）
           uploadVideo: {},
@@ -154,8 +154,13 @@ export default {
       FileUpdate(file) // 使用 file.raw 作为上传的文件数据
         .then(res => {
           if (res.status === 200) {
-            console.log(res);
             this.$message.success('文件上传成功');
+            // 上传成功后，将返回的图片地址保存到一个变量中
+            const Url = 'http://47.115.231.184:5555';
+            const fileUrl = res.data.filePath;
+            const imageUrl = Url + fileUrl;
+            // 在 insertImg 方法中插入图片
+            this.insertImg(imageUrl);
           }
         })
         .catch(error => {
@@ -164,19 +169,24 @@ export default {
         });
     },
     // 自定义插入图片
-    insertImg(file) {
-      console.log(file.url, 'file.url');
-      // 插入图片到富文本编辑器
-      this.editor.cmd.do('insertHTML', `<img src="${file.url}" alt="" />`);
+    insertImg(imageUrl) {
+      console.log('插入图片');
+      const imgHtml = `<img src="${imageUrl}" alt="插入的图片" />`;
+      console.log(imgHtml);
+      this.html += imgHtml;
+      // this.editor.cmd.do('insertHTML', imgHtml);
     },
     // 解析并高亮代码块内的代码
     parseAndHighlightCodeBlocks() {
       const parser = new DOMParser();
       const doc = parser.parseFromString(this.html, 'text/html');
       const codeBlocks = doc.querySelectorAll('pre code');
-      codeBlocks.forEach(codeBlock => {
-        hljs.highlightElement(codeBlock); // 使用 highlightElement
-      });
+
+      if (codeBlocks && codeBlocks.length > 0) {
+        codeBlocks.forEach(codeBlock => {
+          hljs.highlightElement(codeBlock); // 使用 highlightElement
+        });
+      }
       this.parsedHtml = doc.documentElement.innerHTML;
     },
     // 获取分类列表
@@ -196,19 +206,27 @@ export default {
     openArtDialog() {
       this.addArt = true;
     },
+    // 创建防抖函数
     createPublishDebounced() {
-      this.publishDebounced = this.debounce(this.publishArticle, 1000); // 创建防抖函数
+      // 使用防抖函数（debounce）来包装 publishArticle 函数，以便在一段时间内只触发一次
+      this.publishDebounced = this.debounce(this.publishArticle, 1000); // 创建防抖函数，防抖时间间隔为1000毫秒
     },
+    // 防抖函数，用于延迟执行一个函数
     debounce(func, wait) {
+      // 定义一个 timeoutId 变量，用于存储定时器的 ID
       let timeoutId;
+      // 返回一个新的函数，该函数将被用于包装需要防抖的函数（func）
       return function () {
+        // 在这里，this 指向包装函数的上下文，即调用 debounce 时的上下文
         const context = this;
-        const args = arguments;
+        const args = arguments; // 保存传递给包装函数的参数
 
+        // 清除之前的定时器，以防止函数被执行多次
         clearTimeout(timeoutId);
 
+        // 设置一个新的定时器，在一定时间后执行 func 函数，以实现防抖效果
         timeoutId = setTimeout(() => {
-          func.apply(context, args);
+          func.apply(context, args); // 用保存的参数调用原始函数
         }, wait);
       };
     },
