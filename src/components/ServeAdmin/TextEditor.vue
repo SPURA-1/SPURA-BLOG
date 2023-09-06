@@ -36,8 +36,7 @@
 </template>
 
 <script>
-import { PublishArt, getCategoriesList } from '@/api/ArticleList.api'
-import { FileUpdate } from '@/api/ArticleList.api'
+import { PublishArt, getCategoriesList, FileContentUpLoad, } from '@/api/ArticleList.api'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import hljs from 'highlight.js'; // 导入 highlight.js 库
 import 'highlight.js/styles/github.css'; // 导入高亮样式
@@ -151,13 +150,13 @@ export default {
     },
     //自定义上传图片
     uploadImg(file) {
-      FileUpdate(file) // 使用 file.raw 作为上传的文件数据
+      FileContentUpLoad(file) // 使用 file.raw 作为上传的文件数据
         .then(res => {
           if (res.status === 200) {
             this.$message.success('文件上传成功');
             // 上传成功后，将返回的图片地址保存到一个变量中
             const Url = 'http://47.115.231.184:5555';
-            const fileUrl = res.data.filePath;
+            const fileUrl = res.data.fileContentPath;
             const imageUrl = Url + fileUrl;
             // 在 insertImg 方法中插入图片
             this.insertImg(imageUrl);

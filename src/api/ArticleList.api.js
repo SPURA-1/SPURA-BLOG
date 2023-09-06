@@ -98,6 +98,20 @@ export function FileUpdate(file) {
 }
 
 /**
+ * @description 文章内图片上传
+ * @url  /article/contentupload
+ * */
+export function FileContentUpLoad(file) {
+    const formData = new FormData();
+    formData.append('image', file); // 'image' 应该对应后端接收文件的字段名
+    return service.post('/article/contentupload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
+
+/**
  * @description 后台发表文章
  * @url  /article/articles
  * */
