@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { Message } from 'element-ui';
-import SpuraBlog from '../views/SpuraBlog.vue';
-// 定义加载页面组件
-const LoadingComponent = () => import('../components/Loading/Loading.vue');
+// import SpuraBlog from '../views/SpuraBlog.vue';
 
 // Vue.use(ElementUI);
 Vue.use(VueRouter)
@@ -11,12 +9,7 @@ const routes = [
   // Blog主页
   {
     path: '/',
-    redirect: '/Loading',
-  },
-  //  加载页面
-  {
-    path: '/Loading',
-    component: LoadingComponent,
+    redirect: '/SpuraBlog',
   },
   // 登陆界面
   {
@@ -83,8 +76,8 @@ const routes = [
     // Blog主页
     path: '/SpuraBlog',
     redirect: '/Main',
-    // component: () => import('../views/SpuraBlog.vue'),
-    component: SpuraBlog,
+    component: () => import('../views/SpuraBlog.vue'),
+    // component: SpuraBlog,
     children: [
       {
         path: '/Main',

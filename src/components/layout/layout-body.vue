@@ -39,6 +39,12 @@
       <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
       <Home></Home>
     </div>
+    <div v-if="loading" class="loading">
+      <div class="spinner-container">
+        <div class="spinner"></div>
+      </div>
+      <p class="ppp">Loading...</p>
+    </div>
   </div>
 </template>
 
@@ -46,6 +52,7 @@
 import backTop from '../nav/ToTap.vue'
 import Home from '../../views/HomeSss.vue'
 export default {
+  components: { backTop, Home },
   name: "layout-body",
   data() {
     return {
@@ -54,14 +61,41 @@ export default {
       test: '',
       // 回到顶部组件颜色
       topColor: '#66ccff',
+      loading: true, // 初始状态下显示加载动画
     }
   },
-  components: { backTop, Home },
+  // beforeCreate() {
+  //   // 在 beforeCreate 钩子中可以执行一些初始化操作
+  //   // 此时 loading 为 true，加载动画显示
+  //   this.loading = true;
+  // },
+  beforeMount() {
+    this.loading = true; // 在 beforeMount 中显示加载动画
+  },
   mounted() {
+    setTimeout(() => {
+      this.loading = false; // 全部图片加载完成后关闭加载动画
+    }, 1000);
+    // const images = document.querySelectorAll('img'); // 获取所有图片元素
+
+    // // 创建一个计数器，用于追踪加载完成的图片数量
+    // let imageCount = 0;
+
+    // // 监听每张图片的加载事件
+    // images.forEach((image) => {
+    //   image.addEventListener('load', () => {
+    //     imageCount++;
+    //     // 检查是否所有图片都已加载完成
+    //     if (imageCount === images.length) {
+    //          this.loading = false;
+    //     }
+    //   });
+    // });
+    console.log(this.loading, 'mounted');
     //页面元素加载完成
     window.addEventListener('scroll', this.watchScroll)
     // 首页字体
-    var that = this;
+    // var that = this;
     /*
     在 mounted() 钩子函数中的回调函数中，this 不再指向 Vue 实例，
     所以 Typeit 函数无法找到。
@@ -367,5 +401,50 @@ p .span2 {
   50% {
     opacity: 0;
   }
+}
+
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  background-color: #4fcef8;
+}
+
+.spinner-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.spinner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #4f6cec;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ppp {
+  margin-top: 20px;
+  margin-left: 20px;
+  color: #fff;
+  font-size: 28px;
 }
 </style>

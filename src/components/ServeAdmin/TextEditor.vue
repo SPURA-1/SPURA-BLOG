@@ -208,7 +208,7 @@ export default {
     // 创建防抖函数
     createPublishDebounced() {
       // 使用防抖函数（debounce）来包装 publishArticle 函数，以便在一段时间内只触发一次
-      this.publishDebounced = this.debounce(this.publishArticle, 1000); // 创建防抖函数，防抖时间间隔为1000毫秒
+      this.publishDebounced = this.debounce(this.Article, 1000); // 创建防抖函数，防抖时间间隔为1000毫秒
     },
     // 防抖函数，用于延迟执行一个函数
     debounce(func, wait) {
@@ -237,29 +237,33 @@ export default {
         type: 'warning',
         center: true
       }).then(() => {
-        const startData = {
-          title: this.AddArtform.title,          // 标题
-          Introduction: this.AddArtform.Introduction,   // 简介
-          content: this.html,        // 文章内容
-          category: this.AddArtform.category,       // 分类，封面根据分类决定
-        }
-        // 文章发表接口
-        PublishArt(startData)
-          .then(res => {
-            if (res.status === 200) {
-              // this.addArt = false;
-              this.$message.success('发表成功!');
-              this.$router.push({ path: '/ArtList' });
-            } else {
-              console.log('报错');
-            }
-          })
-          .catch(error => {
-            console.log(error, 'AXIOS报错');
-          });
+        this.publishDebounced();
       }).catch(() => {
         this.$message.info('已取消!');
       });
+    },
+    Article() {
+      console.log('555');
+      const startData = {
+        title: this.AddArtform.title,          // 标题
+        Introduction: this.AddArtform.Introduction,   // 简介
+        content: this.html,        // 文章内容
+        category: this.AddArtform.category,       // 分类，封面根据分类决定
+      }
+      // 文章发表接口
+      PublishArt(startData)
+        .then(res => {
+          if (res.status === 200) {
+            // this.addArt = false;
+            this.$message.success('发表成功!');
+            this.$router.push({ path: '/ArtList' });
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(error => {
+          console.log(error, 'AXIOS报错');
+        });
     }
   },
   watch: {
