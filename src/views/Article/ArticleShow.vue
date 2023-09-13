@@ -264,6 +264,10 @@ export default {
   line-height: 1.6;
   overflow-wrap: break-word;
 }
+.article-content ::selection {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.3);
+}
 
 /* 代码块样式 */
 .article-content code {
@@ -272,6 +276,7 @@ export default {
   border-radius: 4px;
   font-size: 12px;
 }
+// 锚点
 #header-container {
   list-style-type: none;
   padding-left: 20px;
