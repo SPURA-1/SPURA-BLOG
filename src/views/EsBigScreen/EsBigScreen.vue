@@ -1,110 +1,102 @@
 <template>
-  <div class="div1">
-    <!-- 资源视图 -->
-    <div class="top-wrap">
-      <el-card class="box-card">
-        <div style="display:flex;justify-content: space-between">
-          <p style="margin-bottom:20px;">资源总览</p>
-          <div style="display:flex;flex-direction: column;">
-            <p>账号：{{userData.userNickname !== '' ?userData.userNickname :  userData.useName}}</p>
-            <div style="display:flex;">
-              <p>权限：</p>
-              <p :style="{ color: userRoleName === '管理员' ? '#00cc00' : '' }">{{userRoleName }}</p>
-            </div>
+  <div class="body" ref="fullscreenContainer">
+    <!-- 头部 -->
+    <header>
+      <h1>数据可视化-ECharts</h1>
+      <div class="show-time">{{ currentTime }}</div>
+    </header>
+
+    <!-- 页面主体 -->
+    <section class="mainbox">
+      <!-- 左侧盒子 -->
+      <div class="column">
+        <div class="panel bar">
+          <h2>柱形图</h2>
+          <!-- 图表放置盒子 -->
+
+          <!-- 伪元素绘制盒子下边角 -->
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel line">
+          <h2>折线图</h2>
+          <!-- 使用PlaybackDelayEchart组件来展示抓包数据 -->
+          <PlaybackDelayEchart></PlaybackDelayEchart>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel pie">
+          <h2>饼形图-年龄分布</h2>
+          <div class="chart"></div>
+          <div class="panel-footer"></div>
+        </div>
+      </div>
+      <!-- 中间盒子 -->
+      <div class="column">
+        <!-- 头部 no模块 -->
+        <div class="no">
+          <div class="no-bd">
+            <ul>
+              <li>留言数量</li>
+              <li>文章数量</li>
+            </ul>
+          </div>
+          <div class="no-hd">
+            <ul>
+              <li>{{ Alldata.commentLength }}</li>
+              <li>{{ Alldata.artLength }}</li>
+            </ul>
           </div>
         </div>
-        <div class="top-box">
-          <div class="box-wrap">
-            <div>文章总数</div>
-            <div style="font-size:30px; color:#0066cc;">{{ this.data.artLength }}</div>
-          </div>
-          <div class="box-wrap">
-            <div>游戏总数</div>
-            <div style="font-size:30px; color:#009933;">{{ this.data.gameLength }}</div>
-          </div>
-          <div class="box-wrap">
-            <div>留言总数</div>
-            <div style="font-size:30px; color:#a1a1a1;">{{ this.data.commentLength }}</div>
-          </div>
-          <div class="box-wrap">
-            <div>用户总数</div>
-            <div style="font-size:30px; color:#0066cc;">{{ this.data.userLength }}</div>
-          </div>
+        <!-- map模块 -->
+        <div class="map">
+          <div class="map1"></div>
+          <div class="map2"></div>
+          <div class="map3"></div>
+          <!-- <div class="chart"></div> -->
+          <div ref="echart" id="map" class="chart"></div>
         </div>
-      </el-card>
-    </div>
-    <!-- 下半部分容器 -->
-    <div class="bottom-wrap">
-      <!-- 左边容器 -->
-      <div class="left-box">
-        <el-card>
-          <div class="left-container">
-            <p style="color:#02abe9;margin-bottom:5px;">最近发布</p>
-            <div v-for="newArt in ArtList" :key="newArt.id">
-              <h4 class="artTitle" @click="navigateToArticle(newArt.id)">{{ newArt.title }}</h4>
-              <p style="text-indent: 2em;">{{ truncateContent(newArt.Introduction) }}</p>
-              <div>
-                <p style="display:flex;justify-content: flex-end;">{{ newArt.category }}</p>
-                <p style="display:flex;justify-content: flex-end;">{{ newArt.publish_date }}</p>
-              </div>
-            </div>
-          </div>
-        </el-card>
-        <!-- 最近任务结果视图 接口为报告数据-->
-        <el-card>
-          <div class="left-container">
-            <p style="color:#02abe9;margin-bottom:10px;">名人名言</p>
-            <div class="all-test-box">
-              <div v-for="quote in famousQuote" :key="quote.id">
-                <h4>{{ quote.aphorism }}</h4>
-                <div>
-                  <p style="display:flex;justify-content: flex-end;flex-direction: column;">{{ quote.author }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </el-card>
       </div>
-      <!-- 右边容器 -->
-      <div class="right-box">
-        <div ref="echart" id="map"></div>
+      <!-- 右侧盒子 -->
+      <div class="column">
+        <div class="panel bar2">
+          <h2>文章分类</h2>
+          <CapsuleBarChart></CapsuleBarChart>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel line2">
+          <h2>折线图-播放量</h2>
+          <div class="chart"></div>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="panel pie2">
+          <h2>饼形图-地区分布</h2>
+          <div class="chart"></div>
+          <div class="panel-footer"></div>
+        </div>
       </div>
-
-    </div>
-    <footer class="chart-box" style="width: 100%; overflow: auto">
-      <p id="htmer_time" style="color: #fd7286;font-size: large;font-weight: bolder;"></p>
-    </footer>
-
+    </section>
   </div>
 </template>
 
 <script>
-import { getAdminData } from '@/api/AdminHome.api'
-import { getComment } from '@/api/MessageBoard.api'
-import { getAphorisms } from '@/api/aphorisms.api'
-import { getNewArticles, getCategoriesList } from '@/api/ArticleList.api';
-// import * as echarts from "echarts";
+import { getAdminData } from '@/api/AdminHome.api';
+import { getComment } from '@/api/MessageBoard.api';
 // 引入基本模板
 let Echarts = require("echarts/lib/echarts");
 // 按需引入需要的组件模块
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/geo");
 require("echarts/lib/chart/scatter");
-
-import TimeOut from '../../assets/JS/TimeOut'
-import china from "@/assets/JS/china.json"
-import moment from 'moment';
-import { mapGetters } from 'vuex'; // 导入 mapGetters
+import china from "@/assets/JS/china.json";
+import PlaybackDelayEchart from '@/components/ECharts/PlaybackDelayEcharts.vue'; // 导入PacketDataChart组件
+import CapsuleBarChart from '@/components/ECharts/CapsuleBarChart.vue'; // 导入PacketDataChart组件
 export default {
-  // components: {
-  // },
+  components: { PlaybackDelayEchart, CapsuleBarChart },
   data() {
     return {
-      famousQuote: [],  // 名人名言
-      data: {},         // 数据总览
       mapData: [],
-      ArtList: [],
-      categories: [], // 假设你从后端获取文章分类列表
+      uniqueMapData: [],
+      currentTime: "", // Bind this to your current time data
+      Alldata: {},         // 数据总览
       // 将地址转为中文
       cityMapping: {
         Beijing: '北京',
@@ -399,37 +391,13 @@ export default {
       },
     };
   },
+  mounted() {
+    this.largeView();
+    this.startTime();
+  },
   created() {
-    this.fetchCategoryList(); // 获取分类
     this.getMapListData(); // 获取评论地区信息
     this.getPageListData(); // 获取首页数据列表
-    this.getReportListData(); // 获取最近发布的三篇文章
-    this.getTaskListData(); // 获取随机三句名人名言
-  },
-  computed: {
-    ...mapGetters(['userData', 'userRole']),
-    userRoleName() {
-      const options = [
-        { value: 1, label: '管理员' },
-        { value: 2, label: '用户' }
-      ];
-
-      const userRole = this.userRole;
-      // 查找对应的中文权限名称
-      const role = options.find(option => option.value === userRole)?.label;
-
-      return role;
-    },
-    categoryNames() {
-      const categoryMap = {}; // 使用一个对象来存储分类 id 到名称的映射
-      this.categories.forEach(category => {
-        categoryMap[category.id] = category.name;
-      });
-      return categoryMap;
-    }
-  },
-  beforeDestroy() {
-
   },
   methods: {
     // 获取首页数据列表
@@ -437,7 +405,7 @@ export default {
       getAdminData()
         .then(res => {
           if (res.status === 200) {
-            this.data = res.data
+            this.Alldata = res.data
           } else {
             console.log('报错');
           }
@@ -446,6 +414,60 @@ export default {
           console.log(err, 'AXIOS报错');
         })
     },
+    handleFullscreenChange() {
+      // 检查是否处于全屏状态
+      if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+        // 退出全屏后的处理
+        // 检查当前路由是否为 "/Main"，只有在不是 "/Main" 的情况下才执行导航
+        if (this.$route.path !== '/Main') {
+          // 跳转回原来的网页，替换当前路由
+          this.$router.replace({ name: 'Main' }); // 返回原来的网页，可根据需要修改跳转的路径
+        }
+
+      }
+    },
+    // 进入全屏
+    largeView() {
+      const container = this.$refs.fullscreenContainer;
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if (container.mozRequestFullScreen) {
+        container.mozRequestFullScreen();
+      } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
+      }
+      // 监听全屏状态的改变
+      document.addEventListener('fullscreenchange', this.handleFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', this.handleFullscreenChange);
+      document.addEventListener('mozfullscreenchange', this.handleFullscreenChange);
+      document.addEventListener('MSFullscreenChange', this.handleFullscreenChange);
+    },
+    // 移除事件监听
+    desLargeView() {
+      // 移除事件监听
+      document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', this.handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', this.handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', this.handleFullscreenChange);
+    },
+    startTime() {
+      const self = this;
+      setInterval(function () {
+        const dt = new Date();
+        const y = dt.getFullYear();
+        const mt = dt.getMonth() + 1;
+        const day = dt.getDate();
+        const h = dt.getHours();
+        const m = dt.getMinutes();
+        const s = dt.getSeconds();
+        const weekDay = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        const week = weekDay[dt.getDay()]
+        self.currentTime = `当前时间：${y}年${mt}月${day}日-${week}${h}时${m}分${s}秒`;
+      }, 1000);
+    },
+    // 获取评论数据，将城市名称转换为中文
     getMapListData() {
       getComment()
         .then(res => {
@@ -470,6 +492,19 @@ export default {
               name: item.city,
               value: this.getCityCoordinates(item.city).concat(cityCounts[item.city] || 0),
             }));
+            // 使用一个对象来跟踪已经出现过的城市名
+            const citySet = {};
+
+            // 使用 filter 方法去除重复项
+            this.uniqueMapData = this.mapData.filter(item => {
+              // 如果城市名已经在 citySet 中存在，说明是重复项，过滤掉
+              if (citySet[item.name]) {
+                return false;
+              }
+              // 否则，将城市名加入到 citySet 中，并保留该项
+              citySet[item.name] = true;
+              return true;
+            });
             // 使用转换后的数据配置地图图表
             this.initCharts();
           } else {
@@ -489,72 +524,7 @@ export default {
       const cityCoordinates = this.cityIPMessage;
       return cityCoordinates[cityName] || [0, 0]; // 默认为 [0, 0]
     },
-    // 获取分类列表
-    fetchCategoryList() {
-      getCategoriesList()
-        .then(res => {
-          if (res.status === 200) {
-            this.categories = res.data.categories;
-          } else {
-            console.log('报错');
-          }
-        })
-        .catch(err => {
-          console.log(err, 'axios报错');
-        })
-    },
-    // 获取最近发布的三篇文章
-    getReportListData() {
-      getNewArticles()
-        .then(res => {
-          if (res.status === 200) {
-            this.ArtList = res.data.articles;
-            this.ArtList = this.ArtList.map(item => ({
-              id: item.id,
-              category: this.categoryNames[item.category],
-              content: item.content,
-              image_path: item.image_path,
-              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
-              title: item.title,
-              Introduction: item.Introduction
-            }));
-          } else {
-            console.log('报错');
-          }
-        })
-        .catch(err => {
-          console.log(err, 'AXIOS报错');
-        })
-    },
-    // 页面跳转
-    navigateToArticle(articleId) {
-      // 在这里添加页面跳转逻辑，使用 router.push() 或类似方法进行导航
-      // 例如：this.$router.push(`/article/${articleId}`);
-      this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
-    },
-    // 限制最大字数
-    truncateContent(content) {
-      const maxLength = 40; // 限制内容显示的最大长度
-      if (content.length <= maxLength) {
-        return content;
-      } else {
-        return content.slice(0, maxLength) + '...';
-      }
-    },
-    // 获取随机三句名人名言
-    getTaskListData() {
-      getAphorisms()
-        .then(res => {
-          if (res.status === 200) {
-            this.famousQuote = res.data.aphorism
-          } else {
-            console.log('报错');
-          }
-        })
-        .catch(err => {
-          console.log(err, 'AXIOS报错');
-        })
-    },
+    // echart图表
     initCharts() {
       // 初始化 echarts 实例，将图表绑定到 this.$refs["charts"] 元素上
       const charts = Echarts.init(this.$refs["echart"]);
@@ -589,8 +559,8 @@ export default {
           zoom: 1, // 设置地图默认大小
           "left": 0,
           "right": 0,
-          "bottom": '-260px',
-          "top": 0,
+          "bottom": 0,
+          "top": 50,
           map: "china",            // 使用的地图名称，要与 echarts.registerMap 注册的地图名一致
           label: {
             // 通常状态下的样式
@@ -612,25 +582,9 @@ export default {
             normal: {
               borderColor: "rgba(147, 235, 248, 1)",   // 边框颜色
               borderWidth: 1,        // 边框宽度
-              borderColor: "transparent", // 边框颜色设置为透明
+              borderColor: "rgba(147, 235, 248, 0.3)", // 边框颜色设置为透明
               // borderWidth: 0, // 边框宽度设置为0
-              areaColor: {
-                type: "radial",         // 渐变类型
-                x: 0.5,
-                y: 0.5,
-                r: 0.8,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: "rgba(63, 191, 127, 1)", // 渐变起始颜色
-                  },
-                  {
-                    offset: 1,
-                    color: "rgba(63, 191, 127, .2)", // 渐变结束颜色
-                  },
-                ],
-                globalCoord: false, // 是否使用全局坐标
-              },
+              areaColor: "rgba(25,62,176,0.1)", // 设置地图区域的颜色为透明
               shadowColor: "rgba(128, 217, 248, 1)",     // 阴影颜色
               shadowOffsetX: -2,                         // 阴影 X 偏移
               shadowOffsetY: 2,                          // 阴影 Y 偏移
@@ -659,17 +613,13 @@ export default {
             },
             itemStyle: {
               normal: {
-                color: "rgba(255,0,0,0.7)", // 符号的颜色
+                color: "rgba(255,0,0,1)", // 符号的颜色
                 shadowBlur: 2, // 阴影模糊半径
                 shadowColor: "D8BC37", // 阴影颜色
               },
             },
             // 数据格式，其中 name 和 value 是必要的
-            data: this.mapData,
-            showEffectOn: "render", // 效果显示的触发方式
-            rippleEffect: {
-              brushType: "stroke", // 波纹绘制方式，可以设置为 'stroke' 或 'fill'
-            },
+            data: this.uniqueMapData,
             hoverAnimation: true, // 鼠标悬停时是否有动画效果
             zlevel: 1, // 图层叠加顺序
           },
@@ -706,79 +656,316 @@ export default {
       // 将配置应用到图表实例
       charts.setOption(option);
     },
-
   },
 };
 </script>
 
-
-
-<style lang="scss" scoped>
-// 滚动条隐藏
-::v-deep .all-test-box::-webkit-scrollbar {
-  display: none;
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.div1 {
-  height: 100%;
-  .top-wrap {
-    height: 160px;
-    .box-card {
-      height: 100%;
-      .top-box {
-        height: 100%;
-        width: 70%;
-        min-width: 600px;
-        display: flex;
-        justify-content: space-between;
-        .box-wrap {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-      }
-    }
-  }
-  .bottom-wrap {
-    height: calc(100% - 170px);
-    // min-width: 1200px;
-    padding-top: 10px;
+li {
+  list-style: none;
+}
+/* 字体的引入 */
+@font-face {
+  font-family: electronicFont;
+  src: url(../../assets/font/DS-DIGIT.TTF);
+}
+.body {
+  background: url(../../assets/Images/EchartImages/bg.jpg) no-repeat top center;
+  line-height: 1.15;
+}
+header {
+  position: relative;
+  height: 8.25rem;
+  background: url(../../assets/Images/EchartImages/head_bg.png) no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+}
+header h1 {
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.87);
+  text-align: center;
+  /* line-height: 1rem; */
+  margin-top: 1rem;
+}
+header .show-time {
+  position: absolute;
+  top: 3.75rem;
+  right: 0.375rem;
+  /* line-height: 0.9375rem; */
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.25rem;
+}
+@media screen and (max-width: 1024px) {
+  header {
+    position: relative;
+    height: 6.25rem;
+    background: url(../../assets/Images/EchartImages/head_bg.png) no-repeat;
+    background-size: 100% 100%;
     display: flex;
-    justify-content: space-between;
-    .left-box {
-      width: 40%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      .left-container {
-        width: 100%;
-        height: 220px;
-        background-color: #fff;
-        .artTitle {
-          cursor: pointer;
-        }
-        .artTitle:hover {
-          color: deepskyblue;
-        }
-        .all-test-box {
-          height: calc(100% - 20px);
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-between;
-          overflow: auto;
-          .test-box:hover {
-            background-color: rgba(0, 102, 255, 0.1);
-          }
-        }
-      }
-    }
-    .right-box {
-      #map {
-        width: 800px;
-        height: 100%;
-      }
-    }
+    flex-direction: column;
+  }
+  header .show-time {
+    position: absolute;
+    top: 3.75rem;
+    right: 0.375rem;
+    /* line-height: 0.9375rem; */
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.25rem;
+  }
+}
+.mainbox {
+  display: flex;
+  /* min-width: 1024px; */
+  /* max-height: 1920px; */
+  margin: 0 auto;
+  padding: 0.125rem 0.125rem 0;
+}
+.mainbox .column {
+  flex: 3;
+}
+.mainbox .column:nth-child(2) {
+  flex: 5;
+  margin: 0 0.125rem 0.1875rem;
+  overflow: hidden;
+}
+.mainbox .panel {
+  position: relative;
+  min-height: 19.5rem;
+  height: 3.875rem;
+  padding: 0 0.1875rem 0.5rem;
+  margin-bottom: 0.1875rem;
+  border: 1px solid rgba(25, 186, 139, 0.17);
+  background: url(../../assets/Images/EchartImages/line.png)
+    rgba(255, 255, 255, 0.03);
+}
+@media screen and (max-width: 1024px) {
+  .mainbox .panel {
+    position: relative;
+    min-height: 15rem;
+    height: 3.875rem;
+    padding: 0 0.1875rem 0.5rem;
+    margin-bottom: 0.1875rem;
+    border: 1px solid rgba(25, 186, 139, 0.17);
+    background: url(../../assets/Images/EchartImages/line.png)
+      rgba(255, 255, 255, 0.03);
+  }
+}
+.mainbox .panel::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid #02a6b5;
+  border-top: 2px solid #02a6b5;
+  content: "";
+}
+.mainbox .panel::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #02a6b5;
+  border-top: 2px solid #02a6b5;
+  content: "";
+}
+.mainbox .panel .panel-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.mainbox .panel .panel-footer::before {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid #02a6b5;
+  border-bottom: 2px solid #02a6b5;
+  content: "";
+}
+.mainbox .panel .panel-footer::after {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #02a6b5;
+  border-bottom: 2px solid #02a6b5;
+  content: "";
+}
+.mainbox .panel h2 {
+  height: 1.6rem;
+  color: #fff;
+  line-height: 1.6rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.mainbox .panel h2 a {
+  color: #a7a7a7;
+  text-decoration: none;
+  margin: 0 0.125rem;
+}
+.mainbox .panel h2 .a-active {
+  color: #fff;
+}
+.mainbox .panel .chart {
+  height: 3rem;
+}
+.no {
+  min-height: 4rem;
+  background-color: rgba(101, 132, 226, 0.1);
+  padding: 0.1875rem;
+}
+.no .no-hd {
+  position: relative;
+  border: 1px solid rgba(25, 186, 139, 0.17);
+}
+.no .no-hd::after {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-bottom: 2px solid #02a6b5;
+  border-right: 2px solid #02a6b5;
+  content: "";
+}
+.no .no-hd ul {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+}
+.no .no-hd ul li {
+  position: relative;
+  flex: 1;
+  line-height: 1rem;
+  font-size: 3rem;
+  color: #ffeb7b;
+  text-align: center;
+  font-family: electronicFont;
+}
+.no .no-hd ul li:first-child::after {
+  content: "";
+  position: absolute;
+  top: 25%;
+  right: 0;
+  height: 50%;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.no .no-bd {
+  position: relative;
+  border: 1px solid rgba(25, 186, 139, 0.17);
+}
+.no .no-bd::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-top: 2px solid #02a6b5;
+  border-left: 2px solid #02a6b5;
+  content: "";
+}
+.no .no-bd ul {
+  display: flex;
+  min-height: 2rem;
+  align-items: center;
+}
+.no .no-bd ul li {
+  flex: 1;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.225rem;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  padding-top: 0.125rem;
+}
+.map {
+  position: relative;
+  /* height: 10.125rem; */
+  height: 100%;
+}
+.map .map1 {
+  width: 11.475rem;
+  height: 11.475rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url(../../assets/Images/EchartImages/map.png);
+  background-size: 100% 100%;
+  opacity: 0.3;
+}
+.map .map2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 13.0375rem;
+  height: 13.0375rem;
+  background: url(../../assets/Images/EchartImages/lbx.png);
+  background-size: 100% 100%;
+  animation: rotate1 15s linear infinite;
+  opacity: 0.6;
+}
+.map .map3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12.075rem;
+  height: 12.075rem;
+  background: url(../../assets/Images/EchartImages/jt.png);
+  background-size: 100% 100%;
+  animation: rotate2 15s linear infinite;
+}
+.map .chart {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+/* #map {
+  width: 100%;
+  height: 100%;
+} */
+@keyframes rotate1 {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes rotate2 {
+  from {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+/* 约束屏幕尺寸 */
+@media screen and (max-width: 1024px) {
+  html {
+    font-size: 42px !important;
+  }
+}
+@media screen and (min-width: 1920px) {
+  html {
+    font-size: 80px !important;
   }
 }
 </style>

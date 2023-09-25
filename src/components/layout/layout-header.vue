@@ -17,6 +17,9 @@
           <router-link to="/ArticleList">文章</router-link>
         </div>
         <div class="menu-item">
+          <router-link to="/EsBigScreen">可视化大屏</router-link>
+        </div>
+        <div class="menu-item">
           <router-link to="/blockly">编程</router-link>
         </div>
         <div class="menu-item">

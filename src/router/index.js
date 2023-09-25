@@ -111,9 +111,17 @@ const routes = [
         name: 'GameBoard',
         component: () => import('../views/Games/GameBoard.vue')
       },
-    ]
+    ],
   },
-
+  {
+    path: '/EsBigScreen',
+    name: 'EsBigScreen',
+    meta: {
+      title: '全屏显示',
+      fullscreen: true, // 添加一个 fullscreen 属性，标识该页面需要全屏显示
+    },
+    component: () => import('../views/EsBigScreen/EsBigScreen.vue')
+  },
 
 ]
 

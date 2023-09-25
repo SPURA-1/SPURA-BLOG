@@ -91,7 +91,6 @@ export default {
     //     }
     //   });
     // });
-    console.log(this.loading, 'mounted');
     //页面元素加载完成
     window.addEventListener('scroll', this.watchScroll)
     // 首页字体

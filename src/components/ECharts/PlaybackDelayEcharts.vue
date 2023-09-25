@@ -1,10 +1,18 @@
 <template>
   <div>
-    <div ref="chartContainer" style="width: 100%; height: 160px;"></div>
+    <div ref="chartContainer" style="width: 100%; height: 17rem;"></div>
   </div>
 </template>
 
 <script>
+// 引入基本模板
+let Echarts = require("echarts/lib/echarts");
+// 按需引入需要的组件模块
+require("echarts/lib/chart/line"); // 导入折线图
+require("echarts/lib/component/tooltip"); // 导入提示框组件
+require("echarts/lib/component/grid"); // 导入网格组件
+require("echarts/lib/component/legend"); // 导入图例组件
+require("echarts/lib/component/markLine"); // 导入标线组件
 export default {
   data() {
     return {
@@ -14,7 +22,10 @@ export default {
     };
   },
   mounted() {
-    this.chart = this.$echarts.init(this.$refs.chartContainer);
+    this.chart = Echarts.init(this.$refs.chartContainer);
+    // 添加全屏事件监听器
+    document.addEventListener('fullscreenchange', this.handleFullScreenChange);
+    document.addEventListener('webkitfullscreenchange', this.handleFullScreenChange);
 
     const option = {
       grid: {
@@ -35,7 +46,7 @@ export default {
           params.forEach(param => {
             const seriesName = param.seriesName;
             const value = param.data;
-            content += `${seriesName}：${value}MS<br>`;
+            content += `${seriesName}：${value}<br>`;
           });
           return content;
         },
@@ -49,7 +60,7 @@ export default {
         boundaryGap: [0, '50%'],
         type: 'value',
         min: 0,
-        max: 750,
+        max: 600,
         splitLine: {
           show: true,
           lineStyle: {
@@ -58,7 +69,7 @@ export default {
         },
       },
       legend: {
-        data: ['视频数据', '音频数据'],
+        data: ['A数据', 'B数据'],
         icon: 'diamond',
         textStyle: {
           color: 'white', // 标注文本颜色
@@ -68,7 +79,7 @@ export default {
       },
       series: [
         {
-          name: '视频数据',
+          name: 'A数据',
           type: 'line',
           smooth: true,
           symbol: 'none',
@@ -95,14 +106,14 @@ export default {
             },
             data: [
               {
-                yAxis: 500,
-                name: '视频参考线',
+                yAxis: 300,
+                name: '参考线',
               },
             ],
           },
         },
         {
-          name: '音频数据',
+          name: 'B数据',
           type: 'line',
           smooth: true,
           symbol: 'none',
@@ -129,8 +140,8 @@ export default {
             },
             data: [
               {
-                yAxis: 500,
-                name: '视频参考线',
+                yAxis: 300,
+                name: '参考线',
               },
             ],
           },
@@ -141,15 +152,20 @@ export default {
     this.chart.setOption(option);
 
     // 模拟每秒更新一次数据
-    setInterval(() => {
+    const updateData = () => {
+      // 检查是否全屏，如果不是，则停止数据更新
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        clearInterval(intervalId);
+      }
+
       const newVideoData = {
         time: new Date().toLocaleTimeString(),
-        value: Math.floor(Math.random() * 750),
+        value: Math.floor(Math.random() * 600),
       };
 
       const newAudioData = {
         time: new Date().toLocaleTimeString(),
-        value: Math.floor(Math.random() * 750),
+        value: Math.floor(Math.random() * 600),
       };
 
       this.videoData.push(newVideoData);
@@ -169,16 +185,32 @@ export default {
         },
         series: [
           {
-            name: '视频数据',
+            name: 'A数据',
             data: this.videoData.map(data => data.value),
           },
           {
-            name: '音频数据',
+            name: 'B数据',
             data: this.audioData.map(data => data.value),
           },
         ],
       });
-    }, 1000);
+    };
+
+    const intervalId = setInterval(updateData, 1000);
+  },
+  methods: {
+    // 处理全屏状态变化
+    handleFullScreenChange() {
+      // 如果退出全屏，销毁图表
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        this.chart.dispose();
+      }
+    },
+  },
+  beforeDestroy() {
+    // 移除全屏事件监听器，以防止内存泄漏
+    document.removeEventListener('fullscreenchange', this.handleFullScreenChange);
+    document.removeEventListener('webkitfullscreenchange', this.handleFullScreenChange);
   },
 };
 </script>
