@@ -20,7 +20,7 @@ export default {
   },
   mounted() {
     //柱条的颜色，每个柱条颜色不同
-    const lineColor = ["#9999FF", "#0066FF", "#33FFFF", "#33FF00", "#FFFF00", "#FF9900", "#FF3300"];
+    const lineColor = ["#9999FF", "#0066FF", "#FF9900", "#FA1660"];
     this.chart = Echarts.init(this.$refs.capsuleBarChart);
     const option = {
       tooltip: {//item和line搭配，将实现鼠标放置柱条上即可显示提示框，无阴影或者线条
@@ -50,7 +50,7 @@ export default {
       yAxis: [
         {
           type: 'category',
-          data: ['数学', '语文', '英语', '化学', '地理', '生物', '历史'],
+          data: ['未分类', 'Vue', 'Javascript', 'CSS'],
           inverse: true,//数组翻转显示
           axisTick: {
             alignWithLabel: true,
@@ -58,11 +58,17 @@ export default {
           },
           axisLine: {
             show: false
+          },
+          axisLabel: {
+            textStyle: {
+              fontSize: 15,
+              color: "#fff"
+            }
           }
         },
         {
           type: 'category',
-          data: [1000, 1000, 1000, 1000, 1000, 1000, 1000],
+          data: ['', '', '', ''],
           inverse: true,//数组翻转显示
           axisTick: {
             alignWithLabel: true,
@@ -81,15 +87,19 @@ export default {
       ],
       series: [
         {
-          name: '及格人数',
+          //   name: '及格人数',
           type: 'bar',
           yAxisIndex: 0,
-          data: [10, 52, 20, 33, 39, 80, 50],
+          data: [1, 2, 2, 2],
           barWidth: '20%',//柱条的宽度
           label: {
             show: true,
+            textStyle: {
+              fontSize: 15,
+              color: "#fff",
+            },
             formatter: function (params) {//柱条上的文字
-              return params.data + "%";
+              return params.data;
             }
           },
           itemStyle: {
@@ -98,13 +108,14 @@ export default {
               return lineColor[params.dataIndex]
             }
           },
+          z: 10
         },
         {
           name: '',
           type: 'bar',
           yAxisIndex: 1,//使两个柱状图重合的效果
           barWidth: '30%',
-          data: [100, 100, 100, 100, 100, 100, 100],
+          data: [7, 7, 7, 7],
           label: {
             show: false
           },
@@ -114,6 +125,7 @@ export default {
             borderWidth: 2,
             borderRadius: 5,//圆角
           },
+          z: 1
         }
       ]
     }
