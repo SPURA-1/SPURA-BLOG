@@ -12,8 +12,7 @@
       <div class="column">
         <div class="panel bar">
           <h2>柱形图</h2>
-          <!-- 图表放置盒子 -->
-
+          <BarChart></BarChart>
           <!-- 伪元素绘制盒子下边角 -->
           <div class="panel-footer"></div>
         </div>
@@ -63,8 +62,8 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel line2">
-          <h2>折线图-播放量</h2>
-          <div class="chart"></div>
+          <h2>饼形图</h2>
+          <PieChart></PieChart>
           <div class="panel-footer"></div>
         </div>
         <div class="panel pie2">
@@ -89,8 +88,10 @@ require("echarts/lib/chart/scatter");
 import china from "@/assets/JS/china.json";
 import PlaybackDelayEchart from '@/components/ECharts/PlaybackDelayEcharts.vue'; // 导入PacketDataChart组件
 import CapsuleBarChart from '@/components/ECharts/CapsuleBarChart.vue'; // 导入PacketDataChart组件
+import PieChart from '@/components/ECharts/PieChart.vue'; // 导入PacketDataChart组件
+import BarChart from '@/components/ECharts/BarChart.vue'; // 导入PacketDataChart组件
 export default {
-  components: { PlaybackDelayEchart, CapsuleBarChart },
+  components: { PlaybackDelayEchart, CapsuleBarChart, PieChart, BarChart },
   data() {
     return {
       mapData: [],
@@ -534,25 +535,25 @@ export default {
         // backgroundColor: "#404a59",
         // 配置提示浮窗样式
         tooltip: {
-          show: true,                          // 是否显示提示浮窗
-          trigger: "item",                     // 触发方式，'item' 表示数据项触发
-          alwaysShowContent: false,           // 是否一直显示浮窗的内容
-          backgroundColor: "#0C121C",         // 浮窗的背景颜色
-          borderColor: "rgba(0, 0, 0, 0.16);", // 浮窗的边框颜色
-          hideDelay: 100,                    // 隐藏延迟
-          triggerOn: "mousemove",             // 触发方式，'mousemove' 表示鼠标移动时触发
-          enterable: true,                   // 是否允许鼠标进入浮窗
-          textStyle: {
-            color: "#DADADA",                   // 浮窗文本颜色
-            fontSize: "12",                     // 浮窗字体大小
-            width: 20,                          // 浮窗宽度
-            height: 30,                         // 浮窗高度
-            overflow: "break",                  // 文本溢出处理方式
-          },
-          showDelay: 100, // 显示延迟
-          formatter(params) {
-            return `地区：${params.name}</br>数值：${params.value[2]}`;
-          }
+          show: false,                          // 是否显示提示浮窗
+          //   trigger: "item",                     // 触发方式，'item' 表示数据项触发
+          //   alwaysShowContent: false,           // 是否一直显示浮窗的内容
+          //   backgroundColor: "#0C121C",         // 浮窗的背景颜色
+          //   borderColor: "rgba(0, 0, 0, 0.16);", // 浮窗的边框颜色
+          //   hideDelay: 100,                    // 隐藏延迟
+          //   triggerOn: "mousemove",             // 触发方式，'mousemove' 表示鼠标移动时触发
+          //   enterable: true,                   // 是否允许鼠标进入浮窗
+          //   textStyle: {
+          //     color: "#DADADA",                   // 浮窗文本颜色
+          //     fontSize: "12",                     // 浮窗字体大小
+          //     width: 20,                          // 浮窗宽度
+          //     height: 30,                         // 浮窗高度
+          //     overflow: "break",                  // 文本溢出处理方式
+          //   },
+          //   showDelay: 100, // 显示延迟
+          //   formatter(params) {
+          //     return `地区：${params.name}</br>数值：${params.value[2]}`;
+          //   }
         },
         // 地图配置
         geo: {
@@ -565,7 +566,7 @@ export default {
           label: {
             // 通常状态下的样式
             normal: {
-              show: true,         // 是否显示标签
+              show: false,         // 是否显示标签
               textStyle: {
                 color: "#fff",     // 标签文本颜色
               },
@@ -610,6 +611,39 @@ export default {
                 return value.data.value[2]; // 标签的格式化函数，这里显示第三个数据值
               },
               color: "#fff", // 标签颜色
+            },
+            emphasis: {
+              label: {
+                show: true, // 鼠标悬停时显示标签
+                position: 'top', // 设置标签的位置为顶部
+                trigger: "item",                     // 触发方式，'item' 表示数据项触发
+                alwaysShowContent: false,           // 是否一直显示浮窗的内容
+                backgroundColor: "#0C121C",         // 浮窗的背景颜色
+                borderColor: "rgba(0, 0, 0, 0.16);", // 浮窗的边框颜色
+                borderWidth: 1,
+                borderRadius: 5, // 添加外边框圆角
+                hideDelay: 100,                    // 隐藏延迟
+                triggerOn: "mousemove",             // 触发方式，'mousemove' 表示鼠标移动时触发
+                enterable: true,                   // 是否允许鼠标进入浮窗
+                textStyle: {
+                  color: "#DADADA",                   // 浮窗文本颜色
+                  fontSize: "14",                     // 浮窗字体大小
+                  width: 100,                          // 浮窗宽度
+                  height: 30,                         // 浮窗高度
+                  overflow: "break",                  // 文本溢出处理方式
+                  padding: [5, 10], // 上下内边距，使文本上下居中
+                },
+                showDelay: 100, // 显示延迟
+                // formatter(params) {
+                //   return `地区：${params.name}<br>数值：${params.value[2]}`;
+                // },
+                formatter(params) {
+                  let content = `地区：${params.name}\n`;
+                  const value = params.value[2]; // 获取数据项的名称
+                  content += `数值：${value}`;
+                  return content;
+                }
+              },
             },
             itemStyle: {
               normal: {

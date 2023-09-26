@@ -37,6 +37,10 @@ export default {
       },
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // 设置背景色为带透明度的黑色
+        textStyle: {
+          color: 'white', // 设置文字颜色为白色
+        },
         axisPointer: {
           type: "none"
         },
@@ -55,6 +59,11 @@ export default {
         type: 'category',
         boundaryGap: false,
         data: [],
+        axisLabel: {
+          textStyle: {
+            color: '#fff' // 设置 x 轴文字颜色为红色
+          }
+        }
       },
       yAxis: {
         boundaryGap: [0, '50%'],
@@ -67,6 +76,11 @@ export default {
             color: '#0066CC',
           },
         },
+        axisLabel: {
+          textStyle: {
+            color: '#fff' // 设置 x 轴文字颜色为红色
+          }
+        }
       },
       legend: {
         data: ['A数据', 'B数据'],
