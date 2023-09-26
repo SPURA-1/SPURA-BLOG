@@ -1,7 +1,7 @@
 <template>
   <div class="body" ref="fullscreenContainer">
     <!-- 头部 -->
-    <header>
+    <header class="es-screen-header">
       <h1>数据可视化-ECharts</h1>
       <div class="show-time">{{ currentTime }}</div>
     </header>
@@ -666,6 +666,17 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+.es-screen-header {
+  animation: fade 3s;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 li {
   list-style: none;
 }
@@ -743,6 +754,49 @@ header .show-time {
   border: 1px solid rgba(25, 186, 139, 0.17);
   background: url(../../assets/Images/EchartImages/line.png)
     rgba(255, 255, 255, 0.03);
+}
+/* 左侧盒子进场动画 */
+.bar {
+  animation: slide 0.8s;
+}
+.line {
+  animation: slide 1s;
+}
+.pie {
+  animation: slide 1.5s;
+}
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  80% {
+    transform: translateX(20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* 右侧盒子进场动画 */
+.bar2 {
+  animation: rightslide 0.8s;
+}
+.line2 {
+  animation: rightslide 1s;
+}
+.pie2 {
+  animation: rightslide 1.5s;
+}
+@keyframes rightslide {
+  0% {
+    transform: translateX(100%);
+  }
+  80% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 @media screen and (max-width: 1024px) {
   .mainbox .panel {
@@ -825,7 +879,19 @@ header .show-time {
   min-height: 4rem;
   background-color: rgba(101, 132, 226, 0.1);
   padding: 0.1875rem;
+  animation: slideAndFade 1.5s;
 }
+@keyframes slideAndFade {
+  0% {
+    transform: translateY(-218px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .no .no-hd {
   position: relative;
   border: 1px solid rgba(25, 186, 139, 0.17);
@@ -895,7 +961,20 @@ header .show-time {
   position: relative;
   /* height: 10.125rem; */
   height: 100%;
+  animation: slideMap 1.5s;
 }
+/* 地图进场动画，从下而上 */
+@keyframes slideMap {
+  0% {
+    transform: translateY(218px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .map .map1 {
   width: 11.475rem;
   height: 11.475rem;

@@ -59,6 +59,14 @@ export function getCategoriesList(params) {
 }
 
 /**
+ * @description 获取文章分类的各个数量
+ * @url  /article/categorycount
+ * */
+export function getCategorycount(params) {
+    return service.get('/article/categorycount', params);
+}
+
+/**
  * @description 后台添加分类列表
  * @url  /article/categories
  * */
