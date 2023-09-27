@@ -23,7 +23,7 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel pie">
-          <h2>饼形图-年龄分布</h2>
+          <h2>图表图列</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -47,9 +47,11 @@
         </div>
         <!-- map模块 -->
         <div class="map">
-          <div class="map1"></div>
-          <div class="map2"></div>
-          <div class="map3"></div>
+          <div class="map_animation">
+            <div class="map1"></div>
+            <div class="map2"></div>
+            <div class="map3"></div>
+          </div>
           <!-- <div class="chart"></div> -->
           <div ref="echart" id="map" class="chart"></div>
         </div>
@@ -67,7 +69,7 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel pie2">
-          <h2>饼形图-地区分布</h2>
+          <h2>图表图列</h2>
           <div class="chart"></div>
           <div class="panel-footer"></div>
         </div>
@@ -94,6 +96,7 @@ export default {
   components: { PlaybackDelayEchart, CapsuleBarChart, PieChart, BarChart },
   data() {
     return {
+      chart: null, // 存储图表实例
       mapData: [],
       uniqueMapData: [],
       currentTime: "", // Bind this to your current time data
@@ -393,11 +396,12 @@ export default {
     };
   },
   mounted() {
+    this.getMapListData(); // 获取评论地区信息
     this.largeView();
     this.startTime();
+    this.mapsize();
   },
   created() {
-    this.getMapListData(); // 获取评论地区信息
     this.getPageListData(); // 获取首页数据列表
   },
   methods: {
@@ -525,10 +529,32 @@ export default {
       const cityCoordinates = this.cityIPMessage;
       return cityCoordinates[cityName] || [0, 0]; // 默认为 [0, 0]
     },
+    //地图大小自适应
+    mapsize() {
+      // 监听窗口大小变化事件，实现地图的自适应
+      window.addEventListener('resize', this.handleResize);
+    },
+    // 触发 echarts 的 resize 事件
+    handleResize() {
+      if (this.chart) {
+        // 获取容器的宽度
+        const containerWidth = this.$refs.echart.clientWidth;
+        // 设置一个缩放比例
+        const scale = 1.094076655052265; // 可根据需要调整缩放比例
+        // 计算等比例的高度
+        const chartHeight = containerWidth * scale;
+        // 触发 echarts 的 resize 事件，设置地图的宽度和高度
+        this.chart.resize({
+          width: containerWidth,
+          height: chartHeight,
+        });
+      }
+    },
     // echart图表
     initCharts() {
       // 初始化 echarts 实例，将图表绑定到 this.$refs["charts"] 元素上
-      const charts = Echarts.init(this.$refs["echart"]);
+      this.chart = Echarts.init(this.$refs["echart"]);
+
       // 配置图表的 option（选项）
       const option = {
         // 背景颜色
@@ -558,11 +584,16 @@ export default {
         // 地图配置
         geo: {
           zoom: 1, // 设置地图默认大小
-          "left": 0,
-          "right": 0,
-          "bottom": 0,
-          "top": 50,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 10,
           map: "china",            // 使用的地图名称，要与 echarts.registerMap 注册的地图名一致
+          animationDurationUpdate: 0, // 实现缩放、拖动同步且不卡顿
+          roam: true,  // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要缩放或者平移，可以设置成 'scale' 或者 'move' 。设置成 true 为都开启。
+          scaleLimit: {  // 滚轮缩放的极限控制，通过 min， max 最小和最大的缩放值，默认的缩放为 1
+            min: 0.5,  // 最小缩放极限值
+          },
           label: {
             // 通常状态下的样式
             normal: {
@@ -585,8 +616,8 @@ export default {
               borderWidth: 1,        // 边框宽度
               borderColor: "rgba(147, 235, 248, 0.3)", // 边框颜色设置为透明
               // borderWidth: 0, // 边框宽度设置为0
-              areaColor: "rgba(25,62,176,0.1)", // 设置地图区域的颜色为透明
-              shadowColor: "rgba(128, 217, 248, 1)",     // 阴影颜色
+              areaColor: "rgba(25,62,176,0.7)", // 设置地图区域的颜色为透明
+              shadowColor: "rgba(128, 217, 248, 0.3)",     // 阴影颜色
               shadowOffsetX: -2,                         // 阴影 X 偏移
               shadowOffsetY: 2,                          // 阴影 Y 偏移
               shadowBlur: 10,                            // 阴影模糊半径
@@ -688,7 +719,7 @@ export default {
       // 地图注册，第一个参数的名字必须和option.geo.map一致
       Echarts.registerMap("china", china)
       // 将配置应用到图表实例
-      charts.setOption(option);
+      this.chart.setOption(option);
     },
   },
 };
@@ -725,7 +756,7 @@ li {
 }
 header {
   position: relative;
-  height: 8.25rem;
+  height: 6.25rem;
   background: url(../../assets/Images/EchartImages/head_bg.png) no-repeat;
   background-size: 100% 100%;
   display: flex;
@@ -740,7 +771,7 @@ header h1 {
 }
 header .show-time {
   position: absolute;
-  top: 3.75rem;
+  top: 2.25rem;
   right: 0.375rem;
   /* line-height: 0.9375rem; */
   color: rgba(255, 255, 255, 0.7);
@@ -836,6 +867,7 @@ header .show-time {
   .mainbox .panel {
     position: relative;
     min-height: 15rem;
+    width: 8rem;
     height: 3.875rem;
     padding: 0 0.1875rem 0.5rem;
     margin-bottom: 0.1875rem;
@@ -995,25 +1027,29 @@ header .show-time {
   position: relative;
   /* height: 10.125rem; */
   height: 100%;
-  animation: slideMap 1.5s;
+}
+.map .map_animation {
+  position: relative;
+  height: 100%;
+  animation: slideMap 1.5s linear;
 }
 /* 地图进场动画，从下而上 */
 @keyframes slideMap {
   0% {
-    transform: translateY(218px);
+    transform: translateY(100%);
     opacity: 0;
   }
   100% {
-    transform: translateX(0);
+    transform: translateY(0);
     opacity: 1;
   }
 }
 
 .map .map1 {
-  width: 11.475rem;
-  height: 11.475rem;
+  width: 28.475rem;
+  height: 28.475rem;
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: url(../../assets/Images/EchartImages/map.png);
@@ -1022,11 +1058,11 @@ header .show-time {
 }
 .map .map2 {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 13.0375rem;
-  height: 13.0375rem;
+  width: 34.0375rem;
+  height: 34.0375rem;
   background: url(../../assets/Images/EchartImages/lbx.png);
   background-size: 100% 100%;
   animation: rotate1 15s linear infinite;
@@ -1034,11 +1070,11 @@ header .show-time {
 }
 .map .map3 {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 12.075rem;
-  height: 12.075rem;
+  width: 30.475rem;
+  height: 30.475rem;
   background: url(../../assets/Images/EchartImages/jt.png);
   background-size: 100% 100%;
   animation: rotate2 15s linear infinite;
@@ -1049,6 +1085,23 @@ header .show-time {
   left: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  opacity: 0; /* 初始时设置透明度为0 */
+  animation: showMap 1.5s ease 1.5s forwards; /* 2秒延迟后播放动画 */
+}
+/* 地图进场动画 */
+@keyframes showMap {
+  0% {
+    opacity: 0;
+    /* 设置初始位置，可以根据需要调整 */
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    /* 最终位置，可以根据需要调整 */
+    transform: translateY(0);
+  }
 }
 /* #map {
   width: 100%;
