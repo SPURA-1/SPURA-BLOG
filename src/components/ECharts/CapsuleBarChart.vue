@@ -47,6 +47,7 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.CategoryCountdata = res.data.categories;
+            console.log(this.CategoryCountdata, 'CategoryCountdata');
             this.createChart(); // 在获取数据后创建图表
           } else {
             console.log('报错');
@@ -65,6 +66,8 @@ export default {
       const categoryCounts = this.CategoryCountdata.map(item => item.categoryCount);
       // 创建一个包含空字符串的数组，长度与分类数量相同
       const emptyData = new Array(categoryCounts.length).fill('');
+      // 根据 CategoryCountdata 数组的长度生成相应数量的 this.Alldata.artLength
+      const BarDataCounts = new Array(this.CategoryCountdata.length).fill(this.Alldata.artLength);
       const option = {
         // tooltip: {//item和line搭配，将实现鼠标放置柱条上即可显示提示框，无阴影或者线条
         //   trigger: 'item',
@@ -167,7 +170,7 @@ export default {
             type: 'bar',
             yAxisIndex: 1,//使两个柱状图重合的效果
             barWidth: '30%',
-            data: [this.Alldata.artLength, this.Alldata.artLength, this.Alldata.artLength, this.Alldata.artLength],
+            data: BarDataCounts,
             label: {
               show: false
             },
