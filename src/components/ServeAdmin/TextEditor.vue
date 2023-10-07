@@ -243,7 +243,7 @@ export default {
       });
     },
     Article() {
-      console.log('555');
+      console.log('防抖函数，用于延迟执行一个函数');
       const startData = {
         title: this.AddArtform.title,          // 标题
         Introduction: this.AddArtform.Introduction,   // 简介
