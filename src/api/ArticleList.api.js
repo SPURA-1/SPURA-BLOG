@@ -33,6 +33,13 @@ export function getarticles(params) {
 export function getNewArticles(params) {
     return service.get('/article/newArticles', params);
 }
+/**
+ * @description 获取最近发布的前两篇文章
+ * @url  /article/newArticleTwo
+ * */
+export function getNewArticlesTwo(params) {
+    return service.get('/article/newArticlesTwo', params);
+}
 
 /**
  * @description 获取单篇文章

@@ -7,7 +7,7 @@
       <el-col :xs="24" :sm="12" :md="8" v-for="(o, index) in dataList" :key="index">
         <el-card :body-style="{ padding: '0px' }">
           <div class="image-container">
-            <img :src="o.placeholder" class="image lazy-load" :data-src="o.cover" />
+            <img :src="o.placeholder" alt="TvImage" class="image lazy-load" :data-src="o.cover" />
           </div>
           <div style="padding: 10px">
             <a :href="o.url" target="blank" class="card-title">{{ o.title }}</a>

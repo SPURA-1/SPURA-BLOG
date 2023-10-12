@@ -23,7 +23,7 @@
       </div>
       <div class="h-information">
         <a href="">
-          <img src="../../assets/Images/preview.jpg">
+          <img src="../../assets/Images/preview.jpg" alt="Account Image">
         </a>
         <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
         <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">

@@ -1,5 +1,6 @@
 <template>
   <div class="body">
+    <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
     <div>
       <router-link class="back-button" to="/ArticleList">返回</router-link>
     </div>
@@ -28,11 +29,15 @@
 </template>
 
 <script>
+import backTop from '../../components/nav/ToTap.vue'
 import { getarticlesId } from '@/api/ArticleList.api';
 import hljs from 'highlight.js'; // 导入 highlight.js 库
 import 'highlight.js/styles/github.css'; // 导入高亮样式
 import Clipboard from 'clipboard'; // 一键复制
 export default {
+  components: {
+    backTop
+  },
   data() {
     return {
       lastScrollTop: 0,
@@ -44,6 +49,8 @@ export default {
       activeAnchor: null,
       headers: '',
       codeBlocks: [], // 用于存储所有的代码块内容
+      // 回到顶部组件颜色
+      topColor: '#66ccff',
     }
   },
   created() {
@@ -136,7 +143,7 @@ export default {
             this.articleContent = res.data.article.content
             this.generateAnchors();
           } else {
-
+            console.log('报错');
           }
         })
         .catch(err => {

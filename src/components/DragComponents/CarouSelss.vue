@@ -1,7 +1,7 @@
 <template>
   <el-carousel class="carousel" arrow="never">
-    <el-carousel-item v-for="(item,index) in imgs" :key="index">
-      <img :src="item.placeholder" class="img lazy-load" :data-src="item.cover">
+    <el-carousel-item v-for="(item,index) in imgs" :key="index" alt="TvImageButton">
+      <img :src="item.placeholder" alt="TvImage" class="img lazy-load" :data-src="item.cover">
     </el-carousel-item>
   </el-carousel>
 </template>

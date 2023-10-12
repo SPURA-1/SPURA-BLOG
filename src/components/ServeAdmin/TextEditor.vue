@@ -84,7 +84,7 @@ export default {
 
             // 上传之前触发
             onBeforeUpload(file) {
-              console.log(file, '上传之前触发');    // JS 语法
+              // console.log(file, '上传之前触发');    // JS 语法
               // file 选中的文件，格式如 { key: file }
               return file
 
@@ -97,25 +97,25 @@ export default {
 
             onProgress(progress) {       // JS 语法
               // progress 是 0-100 的数字
-              console.log('progress', progress)
+              // console.log('progress', progress)
             },
 
             // 单个文件上传成功之后
 
             onSuccess(file, res) {          // JS 语法
-              console.log(`${file.name} 上传成功`, res)
+              // console.log(`${file.name} 上传成功`, res)
             },
 
             // 单个文件上传失败
 
             onFailed(file, res) {           // JS 语法
-              console.log(`${file.name} 上传失败`, res)
+              // console.log(`${file.name} 上传失败`, res)
             },
 
             // 上传错误，或者触发 timeout 超时
 
             onError(file, err, res) {               // JS 语法
-              console.log(`${file.name} 上传出错`, err, res)
+              // console.log(`${file.name} 上传出错`, err, res)
             },
           },
           // 配置上传视频（同上传图片）
@@ -169,9 +169,7 @@ export default {
     },
     // 自定义插入图片
     insertImg(imageUrl) {
-      console.log('插入图片');
       const imgHtml = `<img src="${imageUrl}" alt="插入的图片" />`;
-      console.log(imgHtml);
       this.html += imgHtml;
       // this.editor.cmd.do('insertHTML', imgHtml);
     },
@@ -243,7 +241,6 @@ export default {
       });
     },
     Article() {
-      console.log('防抖函数，用于延迟执行一个函数');
       const startData = {
         title: this.AddArtform.title,          // 标题
         Introduction: this.AddArtform.Introduction,   // 简介

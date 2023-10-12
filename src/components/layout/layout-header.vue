@@ -3,7 +3,7 @@
     <div id="layout-header" :class="{ 'fixed': fixed, 'hidden': hidden }" @click.stop="mobileShow = false">
       <div class="site-logo">
         <router-link to="/">
-          <img src="@/assets/Main/logo.png" alt="Logo" title="首页">
+          <img src="@/assets/Main/logo.png" style="width:100%;height:100%;" alt="Logo" title="首页">
         </router-link>
       </div>
       <div class="menus-btn" @click.stop="mobileShow = !mobileShow">

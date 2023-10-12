@@ -20,7 +20,7 @@
       <a href="https://beian.miit.gov.cn/" target="_blank">沪ICP备2023022725号</a>
     </div>
     <div class="copyright" style="margin-top: 10px">
-      <iframe name="weather_inc" src="http://i.tianqi.com/?c=code&id=1" width="420" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+      <iframe title="weatherFrame" name="weather_inc" src="http://i.tianqi.com/?c=code&id=1" width="420" height="20" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
     </div>
 
   </div>

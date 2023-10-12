@@ -317,7 +317,6 @@ export default {
     // 删除角色
     DelButton(id) {
       if (this.canChangePassword) {
-        console.log(id);
       } else {
         // 没有权限执行角色删除操作
         this.$message.error("当前账号没有权限！");
@@ -326,7 +325,6 @@ export default {
     // 权限分配
     assignRole(id) {
       if (this.canChangePassword) {
-        console.log(id);
       } else {
         // 没有权限执行权限分配操作
         this.$message.error("当前账号没有权限！");

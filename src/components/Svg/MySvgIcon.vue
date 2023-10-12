@@ -200,6 +200,7 @@
 
 <script>
 import { gsap } from "gsap";
+
 export default {
   mounted() {
     const ID = "bongo-cat";
@@ -255,7 +256,7 @@ export default {
       .timeScale(1.6);
 
     gsap.from(".terminal-code line", {
-      drawSVG: "0%",
+      // drawSVG: "0%",
       duration: 0.1,
       stagger: 0.1,
       ease: "none",

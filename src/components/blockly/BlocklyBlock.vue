@@ -989,14 +989,13 @@ export default {
       // document.getElementById('screen-bottom').value = this.latestCode;
       const xmlData = Blockly.Xml.workspaceToDom(this.workspace);
       const xmlString = new XMLSerializer().serializeToString(xmlData);
-      console.log(xmlString);
       const params = {
         xmlData: xmlString
       }
       getBlocklyCode(params)
         .then(res => {
           if (res.status === 200) {
-            console.log(res.data.code, '**');
+            // console.log(res.data.code, '**');
 
           } else {
             console.log('报错');

@@ -89,7 +89,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.uploadedImages = res.data.images
-            console.log(res.data);
           } else {
             console.log('报错');
           }
@@ -104,11 +103,9 @@ export default {
     },
     // 点击文件列表中已上传的文件时的钩子
     handleRemove(file, fileList) {
-      console.log(file, fileList);
     },
     // 点击文件列表中已上传的文件时的钩子
     handlePreview(file) {
-      console.log(file);
     },
     // 编辑按钮
     editImage(index) {
@@ -131,7 +128,6 @@ export default {
         })
     },
     deleteImage(index) {
-      console.log(index);
       // if (this.canChangePassword) {
       //   console.log(index);
       // } else {

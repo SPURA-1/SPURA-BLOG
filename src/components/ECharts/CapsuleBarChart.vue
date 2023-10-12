@@ -47,7 +47,6 @@ export default {
         .then(res => {
           if (res.status === 200) {
             this.CategoryCountdata = res.data.categories;
-            console.log(this.CategoryCountdata, 'CategoryCountdata');
             this.createChart(); // 在获取数据后创建图表
           } else {
             console.log('报错');

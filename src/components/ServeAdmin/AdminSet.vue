@@ -107,23 +107,19 @@ export default {
     },
     // 点击文件列表中已上传的文件时的钩子
     handleRemove(file, fileList) {
-      console.log(file, fileList);
     },
     // 点击文件列表中已上传的文件时的钩子
     handlePreview(file) {
-      console.log(file);
     },
     // 编辑按钮
     editImage(index) {
       if (this.canChangePassword) {
-        console.log(index);
       } else {
         this.$message.error("当前账号没有权限！");
       }
     },
     deleteImage(index) {
       if (this.canChangePassword) {
-        console.log(index);
       } else {
         this.$message.error("当前账号没有权限！");
       }

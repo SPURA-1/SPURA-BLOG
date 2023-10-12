@@ -22,7 +22,7 @@
       <div class="sidebar">
         <div class="search-box">
           <input type="text" v-model="searchQuery" placeholder="搜索文章" />
-          <button class="filter-button" @click="searchArticles">搜索</button>
+          <button class="filter-button" @click="searchArticle">搜索</button>
         </div>
         <div class="category-filter">
           <div class="filter-header">
@@ -38,7 +38,7 @@
         </div>
 
         <div class="svgicon">
-          <test></test>
+          <MySvgIcon></MySvgIcon>
         </div>
       </div>
     </div>
@@ -47,12 +47,11 @@
 
 <script>
 import backTop from '../../components/nav/ToTap.vue'
-import moment from 'moment';
 import { getart, getCategoriesList, searchArticles } from '@/api/ArticleList.api'
-import test from '@/components/Svg/MySvgIcon.vue'
+import MySvgIcon from '@/components/Svg/MySvgIcon.vue'
 export default {
   components: {
-    test,
+    MySvgIcon,
     backTop
   },
   data() {
@@ -105,18 +104,18 @@ export default {
       this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
     },
     // 搜索文章
-    searchArticles() {
+    searchArticle() {
       const searchArtQuery = { searchQuery: this.searchQuery }
       searchArticles(searchArtQuery)
         .then(res => {
           if (res.status === 200) {
-            this.articles = res.data.articles;
-            this.articles = this.articles.map(item => ({
+            const articles = res.data.articles;
+            this.articles = articles.map(item => ({
               id: item.id,
               category: this.categoryNames[item.category],
-              content: item.content,
+              // content: item.content,
               image_path: item.image_path,
-              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
+              publish_date: item.formatted_publish_date,
               title: item.title,
               Introduction: item.Introduction
             }));
@@ -135,13 +134,13 @@ export default {
       getart(searchCategory)
         .then(res => {
           if (res.status === 200) {
-            this.articles = res.data.articles;
-            this.articles = this.articles.map(item => ({
+            const articles = res.data.articles;
+            this.articles = articles.map(item => ({
               id: item.id,
               category: this.categoryNames[item.category],
-              content: item.content,
+              // content: item.content,
               image_path: item.image_path,
-              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
+              publish_date: item.formatted_publish_date,
               title: item.title,
               Introduction: item.Introduction
             }));
@@ -153,12 +152,12 @@ export default {
           console.error('获取文章列表失败', error);
         });
     },
-    truncateContent(content) {
+    truncateContent(Introduction) {
       const maxLength = 40; // 限制内容显示的最大长度
-      if (content.length <= maxLength) {
-        return content;
+      if (Introduction.length <= maxLength) {
+        return Introduction;
       } else {
-        return content.slice(0, maxLength) + '...';
+        return Introduction.slice(0, maxLength) + '...';
       }
     }
   }

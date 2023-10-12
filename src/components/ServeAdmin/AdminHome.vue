@@ -508,8 +508,8 @@ export default {
       getNewArticles()
         .then(res => {
           if (res.status === 200) {
-            this.ArtList = res.data.articles;
-            this.ArtList = this.ArtList.map(item => ({
+            const ArtList = res.data.articles;
+            this.ArtList = ArtList.map(item => ({
               id: item.id,
               category: this.categoryNames[item.category],
               content: item.content,

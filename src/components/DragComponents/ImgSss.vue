@@ -1,6 +1,6 @@
 
 <template>
-  <el-image :src="src"></el-image>
+  <el-image :src="src" alt="TvImage"></el-image>
   <!-- <div>
     这里放什么
   </div> -->
