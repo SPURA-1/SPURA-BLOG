@@ -27,7 +27,6 @@
         </a>
         <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
         <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">
-        <!-- <img ref="loginBackgroundImg" src="" alt="Login Background" style="display: none;"> -->
         <h2 class="h-description">
           <a>
             {{ "ようこそSPURAのブログへ！" }}
@@ -56,19 +55,11 @@ export default {
   name: "layout-body",
   data() {
     return {
-      show: true,
-      minHeight: 600,
-      test: '',
       // 回到顶部组件颜色
       topColor: '#66ccff',
       loading: true, // 初始状态下显示加载动画
     }
   },
-  // beforeCreate() {
-  //   // 在 beforeCreate 钩子中可以执行一些初始化操作
-  //   // 此时 loading 为 true，加载动画显示
-  //   this.loading = true;
-  // },
   beforeMount() {
     this.loading = true; // 在 beforeMount 中显示加载动画
   },
@@ -76,39 +67,6 @@ export default {
     setTimeout(() => {
       this.loading = false; // 全部图片加载完成后关闭加载动画
     }, 1000);
-    // const images = document.querySelectorAll('img'); // 获取所有图片元素
-
-    // // 创建一个计数器，用于追踪加载完成的图片数量
-    // let imageCount = 0;
-
-    // // 监听每张图片的加载事件
-    // images.forEach((image) => {
-    //   image.addEventListener('load', () => {
-    //     imageCount++;
-    //     // 检查是否所有图片都已加载完成
-    //     if (imageCount === images.length) {
-    //          this.loading = false;
-    //     }
-    //   });
-    // });
-    //页面元素加载完成
-    window.addEventListener('scroll', this.watchScroll)
-    // 首页字体
-    // var that = this;
-    /*
-    在 mounted() 钩子函数中的回调函数中，this 不再指向 Vue 实例，
-    所以 Typeit 函数无法找到。
-    你可以在回调函数之前先将 this 存储在另一个变量中，
-    然后在回调函数中使用该变量
-    */
-    // var timer = setTimeout(function () {
-    //   Typeit(that.test, "#luke"); //打字机效果
-    //   clearTimeout(timer);
-    // }, 500);
-    // 获取预加载登录界面背景图片的元素
-    // const loginBackgroundImg = this.$refs.loginBackgroundImg;
-    // // 设置图片的src属性，触发预加载
-    // loginBackgroundImg.src = '../../assets/background.jpg';
   },
   methods: {},
 }
@@ -127,9 +85,6 @@ export default {
   scroll-behavior: smooth;
 }
 
-/*overflow: hidden;*/
-
-/*****/
 @media (max-width: 800px) {
   #layout-body {
     padding-top: 60px;
@@ -355,8 +310,10 @@ p .span2 {
 
 .h-information h2 a {
   background: linear-gradient(to right, #df2050, #48456d);
+  background-clip: text;
   -webkit-background-clip: text;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* color: transparent; */
 }
 
 .headImgBox .scene {

@@ -36,7 +36,7 @@ export default {
       rootMargin: '0px',
       threshold: 0.1
     };
-
+    //  IntersectionObserver 交叉观察器
     const observer = new IntersectionObserver(this.loadImage, options);
     images.forEach(img => {
       observer.observe(img);
