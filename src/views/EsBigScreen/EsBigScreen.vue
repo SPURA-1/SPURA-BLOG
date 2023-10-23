@@ -790,7 +790,7 @@ header {
 }
 header h1 {
   font-size: 2rem;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(17, 235, 215, 0.87);
   text-align: center;
   /* line-height: 1rem; */
   margin-top: 1rem;
@@ -800,7 +800,7 @@ header .show-time {
   top: 2.25rem;
   right: 0.375rem;
   /* line-height: 0.9375rem; */
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(17, 235, 215, 0.8);
   font-size: 1.25rem;
 }
 @media screen and (max-width: 1024px) {
@@ -817,7 +817,7 @@ header .show-time {
     top: 3.75rem;
     right: 0.375rem;
     /* line-height: 0.9375rem; */
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(17, 235, 215, 0.7);
     font-size: 0.25rem;
   }
 }
@@ -835,6 +835,9 @@ header .show-time {
   flex: 5;
   margin: 0 0.125rem 0.1875rem;
   overflow: hidden;
+}
+.mainbox .column .panel h2 {
+  color: #11ebd7;
 }
 .mainbox .panel {
   position: relative;
@@ -1043,8 +1046,8 @@ header .show-time {
 .no .no-bd ul li {
   flex: 1;
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.225rem;
+  color: rgb(17, 235, 215);
+  font-size: 1rem;
   height: 0.5rem;
   line-height: 0.5rem;
   padding-top: 0.125rem;

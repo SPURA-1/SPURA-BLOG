@@ -36,6 +36,7 @@ module.exports = {
         threshold: 200, // 仅压缩超过指定大小的文件
         minRatio: 0.8, // 仅压缩压缩比超过指定比例的文件
       }),
+      // 使用 BundleAnalyzerPlugin 插件
       new BundleAnalyzerPlugin(),
     ],
   },
