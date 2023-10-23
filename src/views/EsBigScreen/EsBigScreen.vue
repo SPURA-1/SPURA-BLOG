@@ -87,6 +87,7 @@ let Echarts = require("echarts/lib/echarts");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/geo");
 require("echarts/lib/chart/scatter");
+require("echarts/lib/chart/lines");
 import china from "@/assets/JS/china.json";
 import PlaybackDelayEchart from '@/components/ECharts/PlaybackDelayEcharts.vue'; // 导入PacketDataChart组件
 import CapsuleBarChart from '@/components/ECharts/CapsuleBarChart.vue'; // 导入PacketDataChart组件
@@ -393,6 +394,10 @@ export default {
         合肥: [117.2272, 31.8206],
         茂名: [110.9312, 21.6682],
       },
+      linePoints: [{ coords: [[116.4074, 39.9042], [121.4737, 31.2304]], lineStyle: { color: '#4ab2e5' } }
+        , { coords: [[113.2644, 23.1291], [121.4737, 31.2304]], lineStyle: { color: '#4fb6d2' } }
+        , { coords: [[106.55073, 29.56471], [121.4737, 31.2304]], lineStyle: { color: '#4fb6d2' } }
+        , { coords: [[104.06667, 30.66667], [121.4737, 31.2304]], lineStyle: { color: '#52b9c7' } }]
     };
   },
   mounted() {
@@ -686,8 +691,29 @@ export default {
             // 数据格式，其中 name 和 value 是必要的
             data: this.uniqueMapData,
             hoverAnimation: true, // 鼠标悬停时是否有动画效果
-            zlevel: 1, // 图层叠加顺序
+            zlevel: 10, // 图层叠加顺序
           },
+          // 数据流向
+          {
+            type: 'lines',//地图上的航线
+            zlevel: 2,
+            symbol: ['none', 'arrow'],
+            symbolSize: 10,
+            effect: {
+              show: true,
+              period: 6,
+              trailLength: 0,
+              symbol: 'arrow',
+              symbolSize: 15
+            },
+            lineStyle: {
+              color: '#E9BF1A',
+              with: 4,
+              opacity: 0.6,
+              curveness: 0.2
+            },
+            data: this.linePoints || []
+          }
           // {
           //   type: "effectScatter",
           //   coordinateSystem: "geo",
