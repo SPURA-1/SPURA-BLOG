@@ -560,6 +560,10 @@ export default {
       // 初始化 echarts 实例，将图表绑定到 this.$refs["charts"] 元素上
       this.chart = Echarts.init(this.$refs["echart"]);
 
+      // 飞机模型SVG
+      // var planePath =
+      //   'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+
       // 配置图表的 option（选项）
       const option = {
         // 背景颜色
@@ -635,6 +639,7 @@ export default {
           },
         },
         series: [
+          // 地图锚点动画1
           {
             type: "scatter", // 类型为散点图
             coordinateSystem: "geo", // 使用地理坐标系
@@ -696,24 +701,48 @@ export default {
           // 数据流向
           {
             type: 'lines',//地图上的航线
-            zlevel: 2,
-            symbol: ['none', 'arrow'],
-            symbolSize: 10,
+            zlevel: 1,
+            symbol: ['none', 'none'],
             effect: {
               show: true,
               period: 6,
-              trailLength: 0,
-              symbol: 'arrow',
-              symbolSize: 15
+              trailLength: 0.7,
+              // symbol: 'none',
+              color: '#E9BF1A', // 特效颜色
+              symbolSize: 4
             },
             lineStyle: {
               color: '#E9BF1A',
-              with: 4,
-              opacity: 0.6,
+              // with: 4,
+              opacity: 0.1,
               curveness: 0.2
             },
             data: this.linePoints || []
-          }
+          },
+          // 小飞机航线效果
+          // { 
+          //   type: 'lines',
+          //   zlevel: 2,
+          //   //symbol: ['none', 'arrow'],   // 用于设置箭头
+          //   symbolSize: 10,
+          //   effect: {
+          //     show: true,
+          //     period: 6,
+          //     trailLength: 0,
+          //     symbol: planePath, // 特效形状，可以用其他svg pathdata路径代替
+          //     symbolSize: 20
+          //   },
+          //   lineStyle: {
+          //     normal: {
+          //       color: '#fff',
+          //       width: 1,
+          //       opacity: 0.6,
+          //       curveness: 0.2
+          //     }
+          //   },
+          //   data: this.linePoints || [] // 特效的起始、终点位置，一个二维数组，相当于coords: convertData(item[1])
+          // },
+          // 地图锚点动画2
           // {
           //   type: "effectScatter",
           //   coordinateSystem: "geo",
@@ -838,6 +867,13 @@ header .show-time {
 }
 .mainbox .column .panel h2 {
   color: #11ebd7;
+  background: linear-gradient(
+    270deg,
+    rgba(39, 247, 237, 0) 0%,
+    rgba(17, 235, 215, 0.16) 49%,
+    rgba(17, 235, 215, 0.01) 82%,
+    rgba(17, 235, 215, 0) 100%
+  );
 }
 .mainbox .panel {
   position: relative;
