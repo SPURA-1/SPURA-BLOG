@@ -23,8 +23,8 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel pie">
-          <h2>图表图列</h2>
-          <div class="chart"></div>
+          <h2>仪表图</h2>
+          <GaugeBasicChart></GaugeBasicChart>
           <div class="panel-footer"></div>
         </div>
       </div>
@@ -69,8 +69,8 @@
           <div class="panel-footer"></div>
         </div>
         <div class="panel pie2">
-          <h2>图表图列</h2>
-          <div class="chart"></div>
+          <h2>雷达图</h2>
+          <BasicRadarChart></BasicRadarChart>
           <div class="panel-footer"></div>
         </div>
       </div>
@@ -93,8 +93,10 @@ import PlaybackDelayEchart from '@/components/ECharts/PlaybackDelayEcharts.vue';
 import CapsuleBarChart from '@/components/ECharts/CapsuleBarChart.vue'; // 导入PacketDataChart组件
 import PieChart from '@/components/ECharts/PieChart.vue'; // 导入PacketDataChart组件
 import BarChart from '@/components/ECharts/BarChart.vue'; // 导入PacketDataChart组件
+import BasicRadarChart from '@/components/ECharts/BasicRadarChart.vue'; // 导入PacketDataChart组件
+import GaugeBasicChart from '@/components/ECharts/GaugeBasicChart.vue'; // 导入PacketDataChart组件
 export default {
-  components: { PlaybackDelayEchart, CapsuleBarChart, PieChart, BarChart },
+  components: { PlaybackDelayEchart, CapsuleBarChart, PieChart, BarChart, BasicRadarChart, GaugeBasicChart },
   data() {
     return {
       chart: null, // 存储图表实例
@@ -708,11 +710,11 @@ export default {
               period: 6,
               trailLength: 0.7,
               // symbol: 'none',
-              color: '#E9BF1A', // 特效颜色
+              color: '#11ebd7', // 特效颜色
               symbolSize: 4
             },
             lineStyle: {
-              color: '#E9BF1A',
+              // color: '#11ebd7',
               // with: 4,
               opacity: 0.1,
               curveness: 0.2

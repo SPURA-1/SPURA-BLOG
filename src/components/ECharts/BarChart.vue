@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getCategorycount } from '@/api/ArticleList.api';
+// import { getCategorycount } from '@/api/ArticleList.api';
 import { getComment } from '@/api/MessageBoard.api';
 // 引入基本模板
 let Echarts = require("echarts/lib/echarts");

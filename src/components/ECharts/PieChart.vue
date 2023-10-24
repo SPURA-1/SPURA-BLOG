@@ -79,6 +79,7 @@ export default {
         },
         series: [
           {
+            bottom: '10%',
             name: '文章分类',
             type: 'pie',
             radius: [5, 100],
