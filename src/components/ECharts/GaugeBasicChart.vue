@@ -8,9 +8,8 @@
 // 引入基本模板
 let Echarts = require("echarts/lib/echarts");
 // 按需引入需要的组件模块
-require('echarts/lib/component/legend');
 require('echarts/lib/component/title');
-// require('echarts/lib/chart/gauge');
+require('echarts/lib/chart/gauge');
 export default {
   data() {
     return {
@@ -19,9 +18,13 @@ export default {
   },
   mounted() {
     this.createChart();
+    // 设置每秒更新图表数据
+    this.startUpdatingChart();
+  },
+  beforeDestroy() {
+    this.stopUpdatingChart(); // 在组件销毁前停止更新图表
   },
   methods: {
-
     createChart() {
       this.chart = Echarts.init(this.$refs.GaugeBasicChart);
       var placeHolderStyle = {
@@ -35,41 +38,23 @@ export default {
         borderWidth: 0,
       };
       const option = {
-        backgroundColor: "#000",
+        // backgroundColor: "#000",
         title: {
           text: "MBPs",
-          left: '43%',
-          top: "66%",
+          left: '45%',
+          top: "90%",
           textStyle: {
             color: '#74757a',
-            fontSize: '50'
+            fontSize: '15'
           }
         },
-        legend: {
-          legend: {
-            orient: 'vertical', //设置图例的方向
-            right: 10,
-            top: 'center',
-            itemGap: 30, //设置图例的间距
-          },
-        },
-
-        graphic: {
-          type: 'text',
-          left: '38%',
-          top: '75%',
-          style: {
-            text: '实时业务宽带',
-            textAlign: 'center',
-            fill: '#fff',
-            fontSize: 40,
-          },
-        },
-
         series: [
           // 仪表盘
           {
             type: 'gauge',
+            top: '2%',
+            // 控制表盘大小
+            radius: "90%",
             min: 0,
             max: 100,
             splitNumber: 5,
@@ -96,7 +81,8 @@ export default {
               // 仪表盘轴线样式
               lineStyle: {
                 width: 18,
-                shadowBlur: 30,
+                // 阴影模糊
+                shadowBlur: 5,
                 shadowColor: '#9a9696',
                 color: [[1, '#54565c']]
               },
@@ -119,11 +105,11 @@ export default {
             },
             //   指针
             pointer: {
-              length: "100%",
+              length: "80%",
               width: 12,
               itemStyle: {
                 shadowColor: "#404247",
-                shadowOffsetY: '10',
+                shadowOffsetY: '2',
                 shadowBlur: 10,
                 color: new Echarts.graphic.LinearGradient(1, 0, 0, 1, [
                   {
@@ -141,8 +127,8 @@ export default {
             detail: {
               // 是否开启标签的数字动画
               valueAnimation: true,
-              fontSize: 80,
-              offsetCenter: [0, '30%'],
+              fontSize: 20,
+              offsetCenter: [0, '80%'],
               color: '#fff',
             },
             data: [
@@ -154,7 +140,7 @@ export default {
           // 外圆线
           {
             type: 'pie',
-            radius: ['80%', '79%'],
+            radius: ['95%', '94%'],
             center: ['50%', '50%'],
             hoverAnimation: false, //鼠标移入变大
             startAngle: 225,
@@ -182,7 +168,26 @@ export default {
         ],
       };
       this.chart.setOption(option)
-    }
+    },
+    startUpdatingChart() {
+      this.updateInterval = setInterval(this.updateChartValue, 2000);
+    },
+    stopUpdatingChart() {
+      if (this.updateInterval) {
+        clearInterval(this.updateInterval); // 清除定时器
+      }
+    },
+    updateChartValue() {
+      // 更新图表数据
+      const newValue = Math.floor(Math.random() * 100); // 随机生成一个值
+      this.chart.setOption({
+        series: [
+          {
+            data: [{ value: newValue }],
+          },
+        ],
+      });
+    },
   }
 };
 </script>

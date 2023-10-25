@@ -37,12 +37,12 @@ export default {
         radar: {
           // shape: 'circle',
           indicator: [
-            { name: 'Sales', max: 6500 },
-            { name: 'Administration', max: 16000 },
-            { name: 'Information Technology', max: 30000 },
-            { name: 'Customer Support', max: 38000 },
-            { name: 'Development', max: 52000 },
-            { name: 'Marketing', max: 25000 }
+            { name: 'Sales', max: 500 },
+            { name: 'Administration', max: 500 },
+            { name: 'Information Technology', max: 500 },
+            { name: 'Customer Support', max: 500 },
+            { name: 'Development', max: 500 },
+            { name: 'Marketing', max: 500 }
           ]
         },
         series: [
@@ -51,11 +51,11 @@ export default {
             type: 'radar',
             data: [
               {
-                value: [4200, 3000, 20000, 35000, 50000, 18000],
+                value: [200, 300, 200, 500, 500, 180],
                 name: 'Allocated Budget'
               },
               {
-                value: [5000, 14000, 28000, 26000, 42000, 21000],
+                value: [500, 140, 280, 260, 420, 210],
                 name: 'Actual Spending'
               }
             ]
