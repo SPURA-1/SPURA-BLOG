@@ -44,11 +44,13 @@
 import { getGamesList, FileUpdate, getTetrisGame } from '@/api/GameList.api'
 import MarioGame from "@/views/Games/MarioGame.vue"; // 导入游戏组件
 import TetrisGame from "@/views/Games/TetrisGame.vue"; // 导入游戏组件
+import MarblesGame from "@/views/Games/MarblesGame.vue"; // 导入游戏组件
 
 export default {
   components: {
     MarioGame,
     TetrisGame,
+    MarblesGame
     // 其他组件
   },
   data() {
