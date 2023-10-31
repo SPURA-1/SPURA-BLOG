@@ -81,6 +81,13 @@
 <script>
 import { getAdminData } from '@/api/AdminHome.api';
 import { getComment } from '@/api/MessageBoard.api';
+import china from "@/assets/JS/china.json";
+import BarChart from '@/components/ECharts/BarChart.vue'; // 导入PacketDataChart组件
+import BasicRadarChart from '@/components/ECharts/BasicRadarChart.vue'; // 导入PacketDataChart组件
+import CapsuleBarChart from '@/components/ECharts/CapsuleBarChart.vue'; // 导入PacketDataChart组件
+import GaugeBasicChart from '@/components/ECharts/GaugeBasicChart.vue'; // 导入PacketDataChart组件
+import PieChart from '@/components/ECharts/PieChart.vue'; // 导入PacketDataChart组件
+import PlaybackDelayEchart from '@/components/ECharts/PlaybackDelayEcharts.vue'; // 导入PacketDataChart组件
 // 引入基本模板
 let Echarts = require("echarts/lib/echarts");
 // 按需引入需要的组件模块
@@ -88,13 +95,6 @@ require("echarts/lib/component/tooltip");
 require("echarts/lib/component/geo");
 require("echarts/lib/chart/scatter");
 require("echarts/lib/chart/lines");
-import china from "@/assets/JS/china.json";
-import PlaybackDelayEchart from '@/components/ECharts/PlaybackDelayEcharts.vue'; // 导入PacketDataChart组件
-import CapsuleBarChart from '@/components/ECharts/CapsuleBarChart.vue'; // 导入PacketDataChart组件
-import PieChart from '@/components/ECharts/PieChart.vue'; // 导入PacketDataChart组件
-import BarChart from '@/components/ECharts/BarChart.vue'; // 导入PacketDataChart组件
-import BasicRadarChart from '@/components/ECharts/BasicRadarChart.vue'; // 导入PacketDataChart组件
-import GaugeBasicChart from '@/components/ECharts/GaugeBasicChart.vue'; // 导入PacketDataChart组件
 export default {
   components: { PlaybackDelayEchart, CapsuleBarChart, PieChart, BarChart, BasicRadarChart, GaugeBasicChart },
   data() {
