@@ -93,7 +93,6 @@ require("echarts/lib/chart/scatter");
 
 import TimeOut from '../../assets/JS/TimeOut'
 import china from "@/assets/JS/china.json"
-import moment from 'moment';
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   // components: {
@@ -512,9 +511,7 @@ export default {
             this.ArtList = ArtList.map(item => ({
               id: item.id,
               category: this.categoryNames[item.category],
-              content: item.content,
-              image_path: item.image_path,
-              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
+              publish_date: item.formatted_publish_date,
               title: item.title,
               Introduction: item.Introduction
             }));
@@ -533,12 +530,12 @@ export default {
       this.$router.push({ name: 'ArticleShow', params: { id: articleId } });
     },
     // 限制最大字数
-    truncateContent(content) {
+    truncateContent(Introduction) {
       const maxLength = 40; // 限制内容显示的最大长度
-      if (content.length <= maxLength) {
-        return content;
+      if (Introduction.length <= maxLength) {
+        return Introduction;
       } else {
-        return content.slice(0, maxLength) + '...';
+        return Introduction.slice(0, maxLength) + '...';
       }
     },
     // 获取随机三句名人名言

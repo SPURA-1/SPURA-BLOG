@@ -62,7 +62,6 @@
 
 <script>
 import { getarticles, getCategoriesList, Updstatus, searchArticles } from '@/api/ArticleList.api';
-import moment from 'moment';
 export default {
   data() {
     return {
@@ -121,7 +120,7 @@ export default {
               category: item.category,
               Introduction: item.Introduction,
               image_path: item.image_path,
-              publish_date: moment(item.publish_date).format('YYYY-MM-DD HH:mm:ss'), // 使用 moment.js 格式化日期
+              publish_date: item.formatted_publish_date,
               title: item.title,
               status: item.status
             }));

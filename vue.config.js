@@ -3,6 +3,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
+  parallel: false,
   //公共路径
   publicPath: './',
   //输出文件目录
