@@ -402,6 +402,9 @@ export default {
         , { coords: [[104.06667, 30.66667], [121.4737, 31.2304]], lineStyle: { color: '#52b9c7' } }]
     };
   },
+  beforeDestroy() {
+    this.desLargeView();
+  },
   mounted() {
     this.getMapListData(); // 获取评论地区信息
     this.largeView();
