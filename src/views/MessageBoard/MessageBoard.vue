@@ -72,7 +72,7 @@
         </div>
         <div class="popular-locations-box">
           <div class="comment-title">热门地区</div>
-          <canvas id="ip-chart" style="width: 150px; height: 150px;"></canvas>
+          <canvas id="ip-chart" class="IpChart"></canvas>
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@ export default {
       currentIndex: 0, // 当前显示的消息索引
       interval: null, // 定时器
       commentCount: 5,  // 当前显示的评论数量
-      // visibleComments: [],
+      visibleComment: [],
       noMoreComments: false,  // 是否没有更多评论了
       // 回到顶部组件颜色
       topColor: '#66ccff',
@@ -414,35 +414,30 @@ export default {
         });
     },
     // 第一种做法：在前端获取所有评论在进行分页
-    loadMoreComments() {
-      this.commentCount += 5;  // 每次点击"查看更多"按钮，增加5条评论的显示数量
-      if (this.commentCount >= this.commentDatas.length) {
-        this.noMoreComments = true;  // 如果评论全部显示完毕，则显示"没有更多评论了"的提示
-      }
-    },
-    // 第二种做法：在后端分页请求指定的评论数量
     // loadMoreComments() {
-    //   const params = { offset: this.commentCount }
-    //   getMoreComments(params)
-    //     .then(response => {
-    //       const newComments = response.data.comments;
-    //       console.log(newComments, 'sssssssssssssss');
-    //       this.visibleComments = newComments
-    //       // 将新获取的评论添加到现有评论列表中
-    //       this.comments = [...this.comments, ...newComments];
-
-    //       // 增加评论数量
-    //       this.commentCount += newComments.length;
-
-    //       // 检查是否没有更多评论了
-    //       if (newComments.length === 0) {
-    //         this.noMoreComments = true;  // 如果评论不足五条或没有更多评论，则显示提示
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.error("Error fetching comments:", error);
-    //     });
+    //   this.commentCount += 5;  // 每次点击"查看更多"按钮，增加5条评论的显示数量
+    //   if (this.commentCount >= this.commentDatas.length) {
+    //     this.noMoreComments = true;  // 如果评论全部显示完毕，则显示"没有更多评论了"的提示
+    //   }
     // },
+    // 第二种做法：在后端分页请求指定的评论数量
+    loadMoreComments() {
+      const params = { offset: this.commentCount }
+      getMoreComments(params)
+        .then(response => {
+          const newComments = response.data.comments;
+          this.visibleComment = newComments
+          // 增加评论数量
+          this.commentCount += newComments.length;
+          // 检查是否没有更多评论了
+          if (newComments.length < 5) {
+            this.noMoreComments = true;  // 如果评论不足五条或没有更多评论，则显示提示
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching comments:", error);
+        });
+    },
 
     // 点赞区
     handleLikeClick() {
@@ -614,6 +609,7 @@ export default {
   flex-grow: 1;
   margin-right: 20px;
   max-width: 900px;
+  min-width: 500px;
 }
 
 .right-column {
@@ -631,11 +627,6 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
-}
-
-canvas {
-  width: 150px;
-  height: 150px;
 }
 
 .comment-input {
@@ -708,9 +699,9 @@ canvas {
   cursor: pointer;
 }
 
-.comment-list {
+/* .comment-list {
   /* 评论列表样式 */
-}
+/*} */
 
 .comment-item {
   position: relative;
@@ -892,5 +883,11 @@ canvas {
   background-color: #f2f2f2;
   border-radius: 10px;
   padding: 20px;
+}
+@media (max-width: 1400px) {
+  .popular-locations-box {
+    width: 350px;
+    height: 450px;
+  }
 }
 </style>

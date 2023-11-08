@@ -31,7 +31,7 @@ module.exports = {
     plugins: [
       // 添加 CompressionPlugin 插件实例
       new CompressionWebpackPlugin({
-        filename: '[path][base].gz', // 生成的压缩文件名格式
+        // filename: '[path][base].gz', // 生成的压缩文件名格式
         algorithm: 'gzip', // 使用 gzip 算法进行压缩
         test: /\.(js|css|html)$/, // 压缩文件的匹配规则
         threshold: 200, // 仅压缩超过指定大小的文件
