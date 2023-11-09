@@ -1,6 +1,11 @@
 {
   "name": "blog",
   "version": "10.1.0",
+  "author": {
+    "name": "SPURA",
+    "email": "spura126@163.com",
+    "url": "https://github.com/SPURA-1/SPURA-BLOG"
+  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
