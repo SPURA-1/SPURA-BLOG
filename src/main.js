@@ -5,6 +5,9 @@ import store from './store'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 
+import has from './utils/ButtonPermissions';
+Vue.directive('has', has);
+
 import {
   Pagination,
   Dialog,

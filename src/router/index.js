@@ -36,6 +36,7 @@ const routes = [
       {
         path: '/UpdateUser',
         name: 'UpdateUser',
+        meta: { btnPermissions: ['edit', 'delete'], },
         component: () => import('../components/ServeAdmin/UpdateUser.vue')
       },
       {
