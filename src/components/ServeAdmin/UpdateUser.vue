@@ -18,7 +18,7 @@
         <!-- 权限设置，可选择按钮隐藏或者跳出提示没有权限 -->
         <!-- <el-button type="primary" v-if="canChangePassword" @click="UpdateUser">提交修改</el-button> -->
         <el-button type="primary" @click="UpdateUser">提交修改</el-button>
-        <!-- v-has 可以选择不填，不填则从路由获取权限规则或者可以自己设置接口获取规则 -->
+        <!-- 自定义指令v-has 可以选择不填，不填则从路由获取权限规则或者可以自己设置接口获取规则 -->
         <el-button type="primary" v-has="1">测试</el-button>
         <el-button type="primary" v-has>编辑0</el-button>
 
