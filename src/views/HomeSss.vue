@@ -4,7 +4,7 @@
       <div :class="key" v-for="(item, key) in mainData" :key="key">
         <draggable v-bind="dragOptions" class="list-group" :list="item" @end="onEnd" @start="onStart">
           <transition-group name="list">
-            <div class="list-group-item" v-for="(element, index) in item" :key="index.id">
+            <div class="list-group-item" v-for="(element, index) in item" :key="String(index.id)">
               <div class="drag-handle">{{ element.title }}</div>
               <div class="component-box">
                 <component :is="element.name" />

@@ -69,7 +69,11 @@ const routes = [
         name: 'UserImage',
         component: () => import('../components/ServeAdmin/UserImage.vue')
       },
-
+      {
+        name: 'Test',
+        path: '/Test',
+        component: () => import('../views/Test/Test.vue'),
+      },
     ]
   },
   // Blog主页
