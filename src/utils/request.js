@@ -51,7 +51,7 @@ service.interceptors.response.use(
       console.log(status, 'status');
       switch (status) {
         case 400:
-          // Message.error("请求错误(400)，请重新申请");
+          Message.error("请求错误(400)，请重新申请");
           break;
         case 401:
           Message.error("登录错误(401)，请重新登录");
@@ -84,8 +84,9 @@ service.interceptors.response.use(
         case 505:
           Message.error("HTTP版本不受支持(505)");
           break;
-        default:
-          Message.error("网络连接出错");
+        //   break;
+        // default:
+        //   Message.error("网络连接出错");
       }
     } else {
       Message.error("连接服务器失败,请退出重试!");

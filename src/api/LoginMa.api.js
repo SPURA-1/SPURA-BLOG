@@ -20,3 +20,11 @@ export function UserLogin(params) {
 export function UserReg(params) {
     return service.post('/api/reguser', params);
 }
+
+/**
+ * @description 登录验证码
+ * @url  /api/reguser
+ * */
+export function UserCaptcha(params) {
+    return service.get('/api/captcha', params);
+}

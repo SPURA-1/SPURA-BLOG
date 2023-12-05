@@ -33,6 +33,10 @@
             <el-form-item label="密 码" prop="Password">
               <el-input type="password" v-model="loginForm.Password" autocomplete="off" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
+            <el-form-item label="验 证 码" prop="Captcha">
+              <img :src="captchaImg" @click="refreshCaptcha" style="width:45%;height:45%">
+              <el-input type="text" v-model="loginForm.Captcha" autocomplete="off" placeholder="请输入验证码"></el-input>
+            </el-form-item>
             <el-form-item>
               <!-- @click="loginHeadler()" -->
               <!-- @click="$router.push('/login')" -->
@@ -67,7 +71,7 @@
 </template>
 
 <script>
-import { UserLogin, UserReg } from '@/api/LoginMa.api';
+import { UserLogin, UserReg, UserCaptcha } from '@/api/LoginMa.api';
 export default {
   name: "LoginAndRegisterView",
   data() {
@@ -76,6 +80,10 @@ export default {
     // 密码强度校验器(以后加强)
     // const passwordValidator = (rule, value, callback) => {};
     return {
+      // 验证码Base64格式
+      captchaImg: '',
+      // 验证码文本
+      captchaText: '',
       left_show: true,
       right_show: false,
       login_show: true,
@@ -96,8 +104,18 @@ export default {
       loginForm: {
         username: "",
         Password: "",
+        Captcha: "",
       },
+
       Rules: {
+        Password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            pattern: /^\S{6,15}$/,
+            message: "密码必须是6-15的非空字符",
+            trigger: "blur",
+          },
+        ],
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           {
@@ -130,8 +148,31 @@ export default {
       throttleInterval: 2000, // 节流时间间隔，单位：毫秒
     };
   },
+  mounted() {
+    //获取登录表单账号input焦点
+    this.$refs.inputUsername.focus();
+  },
+  created() {
+    this.refreshCaptcha()
+  },
   computed: {},
   methods: {
+    // 获取验证码
+    refreshCaptcha() {
+      UserCaptcha()
+        .then(res => {
+          if (res.status === 200) {
+            const base64Image = res.data.captcha.captcha_data
+            this.captchaText = res.data.captcha.captcha_text
+            this.captchaImg = 'data:image/png;base64,' + base64Image
+          } else {
+            console.log('报错');
+          }
+        })
+        .catch(err => {
+          console.log(err, 'AXIOS');
+        })
+    },
     // 自定义校验规则
     // 参数: rule : 基础校验规则
     // value: 绑定该自定义验证规则的属性值
@@ -171,6 +212,7 @@ export default {
           this.login_show = false;
           this.loginForm.username = "";
           this.loginForm.Password = "";
+          this.loginForm.Captcha = "";
           clearTimeout(this.timer3);
           this.timer3 = null;
         }, 350);
@@ -238,9 +280,11 @@ export default {
       // 获取键盘输入的账号密码
       const Uid = this.loginForm.username
       const Pid = this.loginForm.Password
+      const Cid = this.loginForm.Captcha
       const params = new URLSearchParams();
       params.append('username', Uid);
       params.append('password', Pid);
+      params.append('captcha', Cid);
       UserLogin(params)
         .then((res) => {
           // console.log(res.data);
@@ -256,7 +300,7 @@ export default {
             // 登录成功后的跳转
             this.$router.push({ path: '/Admin-Main' });
           } else {
-            this.$message.error("账号或密码错误");
+            this.$message.error(res.data.message);
           }
         })
         .catch((error) => {
@@ -302,10 +346,6 @@ export default {
         }
       });
     },
-  },
-  mounted() {
-    //获取登录表单账号input焦点
-    this.$refs.inputUsername.focus();
   },
 };
 </script>
@@ -372,6 +412,9 @@ export default {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+    }
+    .right-form {
+      width: 88%;
     }
   }
 
