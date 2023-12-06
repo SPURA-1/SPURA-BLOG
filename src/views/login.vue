@@ -82,8 +82,6 @@ export default {
     return {
       // 验证码Base64格式
       captchaImg: '',
-      // 验证码文本
-      captchaText: '',
       left_show: true,
       right_show: false,
       login_show: true,
@@ -162,8 +160,7 @@ export default {
       UserCaptcha()
         .then(res => {
           if (res.status === 200) {
-            const base64Image = res.data.captcha.captcha_data
-            this.captchaText = res.data.captcha.captcha_text
+            const base64Image = res.data.captcha
             this.captchaImg = 'data:image/png;base64,' + base64Image
           } else {
             console.log('报错');
