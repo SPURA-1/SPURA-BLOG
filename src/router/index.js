@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { Message } from 'element-ui';
 // import SpuraBlog from '../views/SpuraBlog.vue';
+// 子菜单展开使用
+import EmptyComponent from '@/components/ServeAdmin/EmptyComponents.vue';
 
 // Vue.use(ElementUI);
 Vue.use(VueRouter)
@@ -23,7 +25,11 @@ const routes = [
     name: 'Admin-Main',
     component: () => import('../views/Admin-Main/Admin-Main.vue'),
     redirect: '/AdminHome',
-    meta: { requireAuth: true },
+    meta: {
+      requireAuth: true,
+      title: '组件',
+      icon: 'box-open'
+    },
     // meta 标记 需要登录才能使用
     // meta: { requireAuth:true}
     children: [
@@ -31,39 +37,101 @@ const routes = [
       {
         path: '/AdminHome',
         name: 'AdminHome',
+        meta: { title: '主页', icon: 'el-icon-menu' },
         component: () => import('../components/ServeAdmin/AdminHome.vue')
       },
       {
-        path: '/UpdateUser',
-        name: 'UpdateUser',
-        meta: { btnPermissions: ['edit', 'delete'], },
-        component: () => import('../components/ServeAdmin/UpdateUser.vue')
+        path: '/UserInfo',
+        component: EmptyComponent, // 或者使用重定向
+        meta: { title: '个人信息', icon: 'el-icon-user' },
+        children: [
+          {
+            path: '/Account',
+            component: EmptyComponent, // 或者使用重定向
+            meta: { title: '账号密码', icon: 'el-icon-coordinate' },
+            children: [
+              {
+                path: '/UpdateUser',
+                component: () => import('../components/ServeAdmin/UpdateUser.vue'),
+                meta: { title: '更换密码' },
+              }
+            ]
+          },
+          {
+            path: '/TextEditor',
+            component: () => import('../components/ServeAdmin/TextEditor.vue'),
+            meta: { title: '发布内容' },
+          },
+          {
+            path: '/AdminSet',
+            component: () => import('../components/ServeAdmin/AdminSet.vue'),
+            meta: { title: '文章封面' },
+          },
+        ],
       },
       {
-        path: '/UserList',
-        name: 'UserList',
-        component: () => import('../components/ServeAdmin/UserList.vue')
+        path: '/User',
+        component: EmptyComponent, // 或者使用重定向
+        meta: { title: '用户信息', icon: 'el-icon-s-custom' },
+        children: [
+          {
+            path: '/UserList',
+            name: 'UserList',
+            component: () => import('../components/ServeAdmin/UserList.vue'),
+            meta: { title: '账号管理', icon: 'el-icon-s-custom' },
+          },
+          {
+            path: '/ArtList',
+            name: 'ArtList',
+            component: () => import('../components/ServeAdmin/ArtList.vue'),
+            meta: { title: '文章管理', icon: 'el-icon-s-custom' },
+          }
+        ],
       },
+      // {
+      //   path: '/UpdateUser',
+      //   name: 'UpdateUser',
+      //   meta: { btnPermissions: ['edit', 'delete'], },
+      //   component: () => import('../components/ServeAdmin/UpdateUser.vue')
+      // },
+      // {
+      //   path: '/UserList',
+      //   name: 'UserList',
+      //   component: () => import('../components/ServeAdmin/UserList.vue')
+      // },
+      // {
+      //   path: '/AdminSet',
+      //   name: 'AdminSet',
+      //   component: () => import('../components/ServeAdmin/AdminSet.vue')
+      // },
+      // {
+      //   path: '/TextEditor',
+      //   name: 'TextEditor',
+      //   component: () => import('../components/ServeAdmin/TextEditor.vue')
+      // },
+      // {
+      //   path: '/ArtList',
+      //   name: 'ArtList',
+      //   component: () => import('../components/ServeAdmin/ArtList.vue')
+      // },
       {
-        path: '/AdminSet',
-        name: 'AdminSet',
-        component: () => import('../components/ServeAdmin/AdminSet.vue')
+        path: '/Game',
+        component: EmptyComponent, // 或者使用重定向
+        meta: { title: '游戏信息', icon: 'el-icon-s-custom' },
+        children: [
+          {
+            path: '/GameManage',
+            name: 'GameManage',
+            component: () => import('../components/ServeAdmin/GameManage.vue'),
+            meta: { title: '游戏管理', icon: 'el-icon-mouse' },
+          },
+        ],
       },
-      {
-        path: '/TextEditor',
-        name: 'TextEditor',
-        component: () => import('../components/ServeAdmin/TextEditor.vue')
-      },
-      {
-        path: '/ArtList',
-        name: 'ArtList',
-        component: () => import('../components/ServeAdmin/ArtList.vue')
-      },
-      {
-        path: '/GameManage',
-        name: 'GameManage',
-        component: () => import('../components/ServeAdmin/GameManage.vue')
-      },
+      // {
+      //   path: '/GameManage',
+      //   name: 'GameManage',
+      //   component: () => import('../components/ServeAdmin/GameManage.vue')
+      // },
       {
         path: '/UserImage',
         name: 'UserImage',
