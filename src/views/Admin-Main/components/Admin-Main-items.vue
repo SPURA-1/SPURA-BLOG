@@ -1,7 +1,5 @@
 <template>
-  <div style="width:100%">
-
-    <!-- 使用 el-menu-item-group 包裹 el-menu-item 和 el-submenu -->
+  <div>
     <template v-for="(item, i) in menu">
       <!-- 判断没有子路由的 -->
       <el-menu-item

@@ -4,6 +4,8 @@
     <AdminMainHeader />
     <!-- 页面主体 -->
     <div class="foot-container">
+      <!-- 配置主题组件 -->
+      <AdminSet />
       <!-- 侧边栏区域 -->
       <div class="page-scroll">
         <el-aside
@@ -11,13 +13,14 @@
           class="el-aside"
         >
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
+          <!-- unique-opened 只允许展开一个 -->
           <el-menu
+            unique-opened
+            :default-active="activePath"
             class="el-menu-vertical-demo"
-            :collapse="isCollapse"
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
-            mode="vertical"
           >
             <AsideItems
               :menu="menu"
@@ -41,35 +44,30 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'; // 导入 mapGetters
-import AdminMainHeader from "@/views/Admin-Main/Admin-Main-header.vue"; // 导入头部组件
-import AsideItems from "@/views/Admin-Main/Admin-Main-items.vue"; // 导入导航栏递归子组件
+import AdminMainHeader from "@/views/Admin-Main/components/Admin-Main-header.vue"; // 导入头部组件
+import AsideItems from "@/views/Admin-Main/components/Admin-Main-items.vue"; // 导入导航栏递归子组件
+import AdminSet from "@/views/Admin-Main/components/Admin-Main-setting.vue"; // 导入配置主题子组件
 export default {
   components: {
     AdminMainHeader,
-    AsideItems
+    AsideItems,
+    AdminSet
   },
   data() {
     return {
       ImageUrl: 'http://47.115.231.184:5555',
-      isCollapse: true,
-      activePath: '',
+      activePath: '/AdminHome',
       menu: [],
     };
-  },
-  computed: {
-    ...mapGetters(['userData', 'userRole']),
-    canChangePassword() {
-      const canChange = this.userRole === 1;
-      return canChange;
-    }
   },
   mounted() {
     const routerdata = this.$router.options.routes
     const backendRoute = routerdata.find(route => route.name === 'Admin-Main');
     this.menu = backendRoute ? backendRoute.children : [];
-    console.log(this.menu);
-
+  },
+  created() {
+    // 从sessionStorage中把保存的激活菜单的地址取出来
+    // this.activePath=window.sessionStorage.getItem('activePath')
   },
   methods: {
     // 侧边栏展开
@@ -107,10 +105,6 @@ export default {
     //   this.activePath=activePath
     // }
   },
-  created() {
-    // 从sessionStorage中把保存的激活菜单的地址取出来
-    // this.activePath=window.sessionStorage.getItem('activePath')
-  }
 };
 </script>
 
@@ -139,8 +133,10 @@ export default {
   background-color: #545c64;
   min-width: 0;
 }
+
 .el-menu-vertical-demo {
   width: 200px;
+  border: none; // NavMenu 导航菜单 去除下划白线
 }
 // 主体
 .el-main {

@@ -40,8 +40,14 @@
         <el-card>
           <div class="left-container">
             <p style="color:#02abe9;margin-bottom:5px;">最近发布</p>
-            <div v-for="newArt in ArtList" :key="newArt.id">
-              <h4 class="artTitle" @click="navigateToArticle(newArt.id)">{{ newArt.title }}</h4>
+            <div
+              v-for="newArt in ArtList"
+              :key="newArt.id"
+            >
+              <h4
+                class="artTitle"
+                @click="navigateToArticle(newArt.id)"
+              >{{ newArt.title }}</h4>
               <p style="text-indent: 2em;">{{ truncateContent(newArt.Introduction) }}</p>
               <div>
                 <p style="display:flex;justify-content: flex-end;">{{ newArt.category }}</p>
@@ -52,10 +58,13 @@
         </el-card>
         <!-- 最近任务结果视图 接口为报告数据-->
         <el-card>
-          <div class="left-container">
+          <div class="right-container">
             <p style="color:#02abe9;margin-bottom:10px;">名人名言</p>
             <div class="all-test-box">
-              <div v-for="quote in famousQuote" :key="quote.id">
+              <div
+                v-for="quote in famousQuote"
+                :key="quote.id"
+              >
                 <h4>{{ quote.aphorism }}</h4>
                 <div>
                   <p style="display:flex;justify-content: flex-end;flex-direction: column;">{{ quote.author }}</p>
@@ -67,12 +76,21 @@
       </div>
       <!-- 右边容器 -->
       <div class="right-box">
-        <div ref="echart" id="map"></div>
+        <div
+          ref="echart"
+          id="map"
+        ></div>
       </div>
 
     </div>
-    <footer class="chart-box" style="width: 100%; overflow: auto">
-      <p id="htmer_time" style="color: #fd7286;font-size: large;font-weight: bolder;"></p>
+    <footer
+      class="chart-box"
+      style="width: 100%; overflow: auto"
+    >
+      <p
+        id="htmer_time"
+        style="color: #fd7286;font-size: large;font-weight: bolder;"
+      ></p>
     </footer>
 
   </div>
@@ -741,7 +759,7 @@ export default {
     // min-width: 1200px;
     padding-top: 10px;
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     .left-box {
       width: 40%;
       height: 100%;
@@ -758,19 +776,22 @@ export default {
         .artTitle:hover {
           color: deepskyblue;
         }
+      }
+      .right-container {
+        width: 100%;
+        height: 270px;
+        background-color: #fff;
         .all-test-box {
           height: calc(100% - 20px);
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;
           overflow: auto;
-          .test-box:hover {
-            background-color: rgba(0, 102, 255, 0.1);
-          }
         }
       }
     }
     .right-box {
+      padding-left: 80px;
       #map {
         width: 800px;
         height: 100%;

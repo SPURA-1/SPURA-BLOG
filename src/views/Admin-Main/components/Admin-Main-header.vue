@@ -4,8 +4,8 @@
     <img
       class="Logo"
       style="margin-left:30px;"
-      src="../../assets/Main/logo.png"
-      alt=""
+      src="@/assets/Main/logo.png"
+      alt="Logo"
     />
     <!-- 右侧的菜单 -->
     <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
@@ -24,7 +24,7 @@
           <!-- 头像 -->
           <img
             :src="ImageUrl + userData.userImage"
-            alt=""
+            alt="userImage"
             class="avatar"
           />
           <span>个人中心</span>

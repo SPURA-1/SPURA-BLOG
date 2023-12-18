@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/Admin-Main',
     name: 'Admin-Main',
-    component: () => import('../views/Admin-Main/Admin-Main.vue'),
+    component: () => import('../views/Admin-Main/index.vue'),
     redirect: '/AdminHome',
     meta: {
       requireAuth: true,

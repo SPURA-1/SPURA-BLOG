@@ -3,20 +3,42 @@
     <!-- 头部区域 -->
     <el-header class="el-header">
       <!-- 左侧的 logo -->
-      <img class="Logo" style="margin-left:30px;" src="../../assets/Main/logo.png" alt="" />
+      <img
+        class="Logo"
+        style="margin-left:30px;"
+        src="../../assets/Main/logo.png"
+        alt=""
+      />
       <!-- 右侧的菜单 -->
       <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
       <!-- select	菜单激活回调 -->
       <!-- :default-active 与当前激活的菜单绑定“path” -->
-      <el-menu class="el-menu-top" mode="horizontal" @select="handleSelect" background-color="#23262E" text-color="#fff" active-text-color="#409EFF">
+      <el-menu
+        class="el-menu-top"
+        mode="horizontal"
+        @select="handleSelect"
+        background-color="#23262E"
+        text-color="#fff"
+        active-text-color="#409EFF"
+      >
         <el-submenu index="1">
           <template slot="title">
             <!-- 头像 -->
-            <img :src="ImageUrl + userData.userImage" alt="" class="avatar" />
+            <img
+              :src="ImageUrl + userData.userImage"
+              alt=""
+              class="avatar"
+            />
             <span>个人中心</span>
           </template>
-          <el-menu-item class="MenuTop" index="/Userimage"><i class="el-icon-camera"></i>更换头像</el-menu-item>
-          <el-menu-item class="MenuTop" index="/UpdateUser"><i class="el-icon-key"></i>更换密码</el-menu-item>
+          <el-menu-item
+            class="MenuTop"
+            index="/Userimage"
+          ><i class="el-icon-camera"></i>更换头像</el-menu-item>
+          <el-menu-item
+            class="MenuTop"
+            index="/UpdateUser"
+          ><i class="el-icon-key"></i>更换密码</el-menu-item>
         </el-submenu>
         <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
       </el-menu>
@@ -26,15 +48,31 @@
     <div class="foot-container">
       <!-- 侧边栏区域 -->
       <div class="page-scroll">
-        <el-aside width="auto" class="el-aside">
+        <el-aside
+          width="auto"
+          class="el-aside"
+        >
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
-          <el-menu unique-opened :default-active="activePath" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+          <el-menu
+            unique-opened
+            :default-active="activePath"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+            @select="handleSelect"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+          >
             <!-- 一级菜单 用户信息 -->
             <el-menu-item index="/AdminHome">
               <i class="el-icon-menu"></i>
               <span slot="title">主页</span>
             </el-menu-item>
-            <el-submenu index="1" class="el-submenu">
+            <el-submenu
+              index="1"
+              class="el-submenu"
+            >
               <!-- 一级菜单的模板区域 -->
               <template slot="title">
                 <!-- 图标 -->
@@ -44,7 +82,10 @@
               </template>
 
               <!-- 二级菜单 -->
-              <el-submenu v-if="canChangePassword" index="2">
+              <el-submenu
+                v-if="canChangePassword"
+                index="2"
+              >
                 <template slot="title">账号</template>
                 <el-menu-item index="/UpdateUser">更换密码</el-menu-item>
               </el-submenu>

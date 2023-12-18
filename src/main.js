@@ -15,6 +15,10 @@ import {
   MenuItem,
   Submenu,
   Input,
+  drawer,
+  scrollbar,
+  RadioGroup,
+  RadioButton,
   Switch,
   Select,
   Option,
@@ -36,6 +40,7 @@ import {
   Carousel,
   CarouselItem,
   Header,
+  Main,
   Aside,
   Timeline,
   TimelineItem,
@@ -51,6 +56,10 @@ Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(Submenu);
 Vue.use(Input);
+Vue.use(drawer);
+Vue.use(scrollbar);
+Vue.use(RadioGroup);
+Vue.use(RadioButton);
 Vue.use(Switch);
 Vue.use(Select);
 Vue.use(Option);
@@ -73,6 +82,7 @@ Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(CarouselItem);
 Vue.use(Header);
+Vue.use(Main);
 Vue.use(Aside);
 Vue.use(Timeline);
 Vue.use(TimelineItem);
