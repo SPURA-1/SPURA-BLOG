@@ -88,32 +88,6 @@ const routes = [
           }
         ],
       },
-      // {
-      //   path: '/UpdateUser',
-      //   name: 'UpdateUser',
-      //   meta: { btnPermissions: ['edit', 'delete'], },
-      //   component: () => import('../components/ServeAdmin/UpdateUser.vue')
-      // },
-      // {
-      //   path: '/UserList',
-      //   name: 'UserList',
-      //   component: () => import('../components/ServeAdmin/UserList.vue')
-      // },
-      // {
-      //   path: '/AdminSet',
-      //   name: 'AdminSet',
-      //   component: () => import('../components/ServeAdmin/AdminSet.vue')
-      // },
-      // {
-      //   path: '/TextEditor',
-      //   name: 'TextEditor',
-      //   component: () => import('../components/ServeAdmin/TextEditor.vue')
-      // },
-      // {
-      //   path: '/ArtList',
-      //   name: 'ArtList',
-      //   component: () => import('../components/ServeAdmin/ArtList.vue')
-      // },
       {
         path: '/Game',
         component: EmptyComponent, // 或者使用重定向
@@ -127,20 +101,17 @@ const routes = [
           },
         ],
       },
-      // {
-      //   path: '/GameManage',
-      //   name: 'GameManage',
-      //   component: () => import('../components/ServeAdmin/GameManage.vue')
-      // },
       {
         path: '/UserImage',
         name: 'UserImage',
-        component: () => import('../components/ServeAdmin/UserImage.vue')
+        component: () => import('../components/ServeAdmin/UserImage.vue'),
+        meta: { title: '头像管理', icon: 'el-icon-mouse' },
       },
       {
         name: 'Test',
         path: '/Test',
         component: () => import('../views/Test/Test.vue'),
+        meta: { title: '测试', icon: 'el-icon-mouse' },
       },
     ]
   },

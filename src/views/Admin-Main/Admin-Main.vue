@@ -7,103 +7,31 @@
       <!-- 侧边栏区域 -->
       <div class="page-scroll">
         <el-aside
-          width="auto"
+          width="200px"
           class="el-aside"
         >
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
           <el-menu
-            unique-opened
-            :default-active="activePath"
             class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-            @select="handleSelect"
+            :collapse="isCollapse"
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
+            mode="vertical"
           >
-            <!-- 一级菜单 用户信息 -->
-            <el-menu-item index="/AdminHome">
-              <i class="el-icon-menu"></i>
-              <span slot="title">主页</span>
-            </el-menu-item>
-            <el-submenu
-              index="1"
-              class="el-submenu"
-            >
-              <!-- 一级菜单的模板区域 -->
-              <template slot="title">
-                <!-- 图标 -->
-                <i class="el-icon-user"></i>
-                <!-- 一级导航名称 -->
-                <span>个人信息</span>
-              </template>
-
-              <!-- 二级菜单 -->
-              <el-submenu
-                v-if="canChangePassword"
-                index="2"
-              >
-                <template slot="title">账号</template>
-                <el-menu-item index="/UpdateUser">更换密码</el-menu-item>
-              </el-submenu>
-
-              <el-menu-item index="/TextEditor">发布内容</el-menu-item>
-
-              <el-menu-item index="/AdminSet">文章封面</el-menu-item>
-            </el-submenu>
-
-            <!-- 权限管理 -->
-            <el-submenu index="3">
-              <!-- 一级菜单的模板区域 -->
-              <template slot="title">
-                <!-- 图标 -->
-                <i class="el-icon-menu"></i>
-                <!-- 一级导航名称 -->
-                <span>用户管理</span>
-              </template>
-              <!-- 二级菜单 -->
-              <el-menu-item index="/UserList">账号</el-menu-item>
-
-              <el-menu-item index="/ArtList">文章</el-menu-item>
-            </el-submenu>
-
-            <!-- 文章管理 disabled 设置不可点击-->
-            <el-submenu index="4">
-              <!-- 一级菜单 -->
-              <template slot="title">
-                <i class="el-icon-document"></i>
-                <span slot="title">生活</span>
-              </template>
-              <!-- 二级菜单 -->
-              <el-menu-item index="/GameManage">游戏列表</el-menu-item>
-
-              <el-submenu index="4-2">
-                <template slot="title">更新模块</template>
-                <el-menu-item index="4-2-1">更新模块</el-menu-item>
-              </el-submenu>
-            </el-submenu>
-
-            <el-submenu index="5">
-              <!-- 一级菜单 -->
-              <template slot="title">
-                <i class="el-icon-setting"></i>
-                <span slot="title">数据统计</span>
-              </template>
-              <!-- 二级菜单 -->
-              <el-submenu index="5-1">
-                <template slot="title">去过的地方</template>
-                <el-menu-item index="5-1-1">地图锚点</el-menu-item>
-                <el-menu-item index="/AdminHome">数据信息</el-menu-item>
-              </el-submenu>
-            </el-submenu>
+            <AsideItems
+              :menu="menu"
+              style="width:100%"
+            />
           </el-menu>
         </el-aside>
       </div>
       <div class="mainBody">
         <!-- 页面主体区域 -->
         <div class="el-main">
-          <router-view></router-view>
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
         </div>
         <!-- 底部 footer 区域 -->
         <!-- <el-footer>© www.spura.com - spura后台</el-footer> -->
@@ -115,15 +43,18 @@
 <script>
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 import AdminMainHeader from "@/views/Admin-Main/Admin-Main-header.vue"; // 导入头部组件
+import AsideItems from "@/views/Admin-Main/Admin-Main-items.vue"; // 导入导航栏递归子组件
 export default {
   components: {
-    AdminMainHeader
+    AdminMainHeader,
+    AsideItems
   },
   data() {
     return {
       ImageUrl: 'http://47.115.231.184:5555',
       isCollapse: true,
       activePath: '',
+      menu: [],
     };
   },
   computed: {
@@ -132,6 +63,13 @@ export default {
       const canChange = this.userRole === 1;
       return canChange;
     }
+  },
+  mounted() {
+    const routerdata = this.$router.options.routes
+    const backendRoute = routerdata.find(route => route.name === 'Admin-Main');
+    this.menu = backendRoute ? backendRoute.children : [];
+    console.log(this.menu);
+
   },
   methods: {
     // 侧边栏展开
@@ -201,7 +139,9 @@ export default {
   background-color: #545c64;
   min-width: 0;
 }
-
+.el-menu-vertical-demo {
+  width: 200px;
+}
 // 主体
 .el-main {
   width: 100%;
