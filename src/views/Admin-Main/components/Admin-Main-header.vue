@@ -18,7 +18,7 @@
       :default-active="activePath"
       background-color="#23262E"
       text-color="#fff"
-      active-text-color="#ffd04b"
+      :active-text-color="SettingColor"
     >
       <el-submenu index="1">
         <template slot="title">
@@ -55,6 +55,10 @@ export default {
   props: {
     // 父组件传递的 activePath
     activePath: {
+      type: String,
+      required: true,
+    },
+    SettingColor: {
       type: String,
       required: true,
     },

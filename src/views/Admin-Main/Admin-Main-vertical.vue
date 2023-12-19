@@ -4,11 +4,12 @@
     <AdminMainHeader
       :activePath="activePath"
       @saveNavState="saveNavState"
+      :SettingColor="SettingColor"
     />
     <!-- 页面主体 -->
     <div class="foot-container">
       <!-- 配置主题组件 -->
-      <AdminSet />
+      <AdminSet :SettingColor="SettingColor" />
       <!-- 侧边栏区域 -->
       <div class="page-scroll">
         <el-aside
@@ -23,7 +24,7 @@
             class="el-menu-vertical-demo"
             background-color="#545c64"
             text-color="#fff"
-            active-text-color="#ffd04b"
+            :active-text-color="SettingColor"
           >
             <AsideItems
               :menu="menu"
@@ -56,6 +57,13 @@ export default {
     AdminMainHeader,
     AsideItems,
     AdminSet
+  },
+  props: {
+    // 父组件传递的 SettingColor
+    SettingColor: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {

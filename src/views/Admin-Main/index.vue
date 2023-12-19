@@ -1,9 +1,9 @@
 <template>
   <div v-if="SettingBar=== 'horizontal'">
-    <AdminHorizontal />
+    <AdminHorizontal :SettingColor="SettingColor" />
   </div>
   <div v-else>
-    <AdminVertical />
+    <AdminVertical :SettingColor="SettingColor" />
   </div>
 </template>
 
@@ -18,7 +18,8 @@ export default {
   name: 'MainPage',
   data() {
     return {
-      SettingBar: ''
+      SettingBar: '',
+      SettingColor: ''
     }
   },
   computed: {
@@ -27,6 +28,7 @@ export default {
     const storedSetting = localStorage.getItem('SPURA-setting');
     const parsedSetting = JSON.parse(storedSetting);
     this.SettingBar = parsedSetting.layout || 'vertical';
+    this.SettingColor = parsedSetting.name || 'gold';
   },
   methods: {
   },

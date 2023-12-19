@@ -1,6 +1,7 @@
 <template>
   <div class="main-container">
     <!-- 头部区域 -->
+    <!-- :style="{ backgroundColor: SettingColor }" 可添加配置颜色 -->
     <div class="top-main">
       <div>
         <img
@@ -10,7 +11,10 @@
           alt="Logo"
         />
       </div>
-      <div style="padding-top: 3px;">
+      <div
+        style="padding-top:3px;"
+        class="top-menu"
+      >
         <!-- 可以设置默认起始 default-active="/UpdateUser" -->
         <!-- unique-opened 只允许展开一个 -->
         <el-menu
@@ -19,7 +23,7 @@
           :default-active="activePath"
           background-color="#545c64"
           text-color="#fff"
-          active-text-color="#ffd04b"
+          :active-text-color="SettingColor"
         >
           <AsideItems
             :menu="menu"
@@ -35,7 +39,7 @@
           @select="handleSelect"
           background-color="#545c64"
           text-color="#fff"
-          active-text-color="#ffd04b"
+          :active-text-color="SettingColor"
         >
           <el-submenu index="1">
             <template slot="title">
@@ -67,7 +71,7 @@
     <div class="admin-main">
       <el-main>
         <!-- 配置主题组件 -->
-        <AdminSet />
+        <AdminSet :SettingColor="SettingColor" />
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
@@ -84,6 +88,13 @@ export default {
   components: {
     AsideItems,
     AdminSet
+  },
+  props: {
+    // 父组件传递的 SettingColor
+    SettingColor: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -153,6 +164,14 @@ export default {
   background-color: #545c64;
   display: flex;
   justify-content: space-between;
+}
+// 去除导航栏的箭头标志
+.top-menu {
+  ::v-deep .el-submenu__title {
+    .el-icon-arrow-down {
+      display: none;
+    }
+  }
 }
 .avatar {
   width: 40px;

@@ -1,7 +1,11 @@
 <template>
   <span v-if="SettingBar">
     <div class="setting-bar-setting">
-      <div @click="handleOpenSettingBar">
+      <div
+        @click="handleOpenSettingBar"
+        :style="{ backgroundColor: SettingColor }"
+        style="border-radius:10px;"
+      >
         <i
           class="el-icon-s-tools"
           style="color: #fff"
@@ -33,9 +37,9 @@
                 v-model="setting.name"
                 style="display:flex;"
               >
-                <el-radio-button label="default">默认</el-radio-button>
+                <el-radio-button label="gold">默认</el-radio-button>
                 <el-radio-button label="green">绿荫草场</el-radio-button>
-                <el-radio-button label="glory">荣耀典藏</el-radio-button>
+                <el-radio-button label="red">荣耀典藏</el-radio-button>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="布局">
@@ -77,12 +81,19 @@
 <script>
 export default {
   name: 'SettingBar',
+  props: {
+    // 父组件传递的 SettingColor
+    SettingColor: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       drawerVisible: false,
       SettingBar: true,
       setting: {
-        name: 'default',
+        name: 'gold',
         layout: '',
         // header: 'fixed',
         // tabsBar: '',
@@ -102,7 +113,7 @@ export default {
         try {
           const parsedSetting = JSON.parse(storedSetting);
           this.setting = {
-            name: parsedSetting.name || 'default',
+            name: parsedSetting.name || 'gold',
             layout: parsedSetting.layout || 'vertical',
             // 其他属性...
           };
@@ -138,8 +149,6 @@ export default {
   min-height: 60px;
   text-align: center;
   cursor: pointer;
-  background: #409eff;
-  border-radius: 4px;
 
   > div {
     padding-top: 10px;
