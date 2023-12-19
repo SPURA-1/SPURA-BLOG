@@ -24,6 +24,7 @@
           <AsideItems
             :menu="menu"
             style="display:flex"
+            @saveNavState="saveNavState"
           />
         </el-menu>
       </div>
@@ -46,10 +47,19 @@
               />
               <span>个人中心</span>
             </template>
-            <el-menu-item index="/Userimage"><i class="el-icon-camera"></i>更换头像</el-menu-item>
-            <el-menu-item index="/UpdateUser"><i class="el-icon-key"></i>更换密码</el-menu-item>
+            <el-menu-item
+              index="/Userimage"
+              @click="saveNavState('/Userimage')"
+            ><i class="el-icon-camera"></i>更换头像</el-menu-item>
+            <el-menu-item
+              index="/UpdateUser"
+              @click="saveNavState('/UpdateUser')"
+            ><i class="el-icon-key"></i>更换密码</el-menu-item>
           </el-submenu>
-          <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
+          <el-menu-item
+            index="10"
+            @click="logoutHandler"
+          ><i class="el-icon-switch-button"></i>退出</el-menu-item>
         </el-menu>
       </div>
     </div>
@@ -77,8 +87,8 @@ export default {
   },
   data() {
     return {
-      ImageUrl: 'http://47.115.231.184:5555',
-      activePath: '/AdminHome',
+      ImageUrl: this.$store.state.ImageUrl,
+      activePath: '',
       menu: [],
     };
   },
@@ -92,7 +102,7 @@ export default {
   },
   created() {
     // 从sessionStorage中把保存的激活菜单的地址取出来
-    // this.activePath=window.sessionStorage.getItem('activePath')
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     // 侧边栏展开
@@ -124,11 +134,11 @@ export default {
       this.$router.push(index)
     },
     // 保存链接的激活状态
-    // saveNavState(activePath){
-    //   // 当点击其他链接时，还需要为activePath重新赋值
-    //   window.sessionStorage.setItem('activePath',activePath)
-    //   this.activePath=activePath
-    // }
+    saveNavState(activePath) {
+      // 当点击其他链接时，还需要为activePath重新赋值
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
+    }
   },
 };
 </script>

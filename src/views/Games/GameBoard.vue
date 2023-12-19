@@ -2,13 +2,27 @@
   <div class="main_wrapper">
     <div class="game_page">
       <div class="game_area">
-        <div class="game_container" v-for="game in games" :key="game.id" @mouseover="showDescription(game)" @touchstart="handleTouchStart(game)" @touchend="handleTouchEnd()" @click="showGame(game)">
+        <div
+          class="game_container"
+          v-for="game in games"
+          :key="game.id"
+          @mouseover="showDescription(game)"
+          @touchstart="handleTouchStart(game)"
+          @touchend="handleTouchEnd()"
+          @click="showGame(game)"
+        >
           <div class="game_cover">
-            <img :src="ImageUrl+game.cover" alt="Game Cover">
+            <img
+              :src="ImageUrl+game.cover"
+              alt="Game Cover"
+            >
           </div>
         </div>
       </div>
-      <div class="description_area" v-if="selectedGame && !isMobile">
+      <div
+        class="description_area"
+        v-if="selectedGame && !isMobile"
+      >
         <div class="description_container">
           <div class="game_description">
             <h3>{{ selectedGame.name }}</h3>
@@ -17,7 +31,10 @@
           </div>
         </div>
       </div>
-      <div class="description_area" v-if="!selectedGame">
+      <div
+        class="description_area"
+        v-if="!selectedGame"
+      >
         <p>外部触摸游戏封面以查看游戏介绍</p>
         <p>TEST</p>
       </div>
@@ -25,18 +42,27 @@
     <!-- 游戏界面组件 -->
     <!-- 游戏弹出界面过渡 -->
     <transition name="game-popup">
-      <div v-if="showGamePopup" class="game-popup">
+      <div
+        v-if="showGamePopup"
+        class="game-popup"
+      >
         <h3>{{ selectedGame.name }}</h3>
         <!-- 放置游戏比如马里奥的内容 -->
         <!-- 在主页面中显示你的游戏组件 -->
         <div class="gamebody">
           <component :is="selectedGame.componentName" />
         </div>
-        <button @click="closeGamePopup" class="close-button">X</button>
+        <button
+          @click="closeGamePopup"
+          class="close-button"
+        >X</button>
       </div>
     </transition>
     <!-- 遮罩层 -->
-    <div v-if="showGamePopup" class="overlay"></div>
+    <div
+      v-if="showGamePopup"
+      class="overlay"
+    ></div>
   </div>
 </template>
 
@@ -55,7 +81,7 @@ export default {
   },
   data() {
     return {
-      ImageUrl: 'http://47.115.231.184:5555',
+      ImageUrl: this.$store.state.ImageUrl,
       games: [],
       selectedGame: null,
       touchStartTime: 0,

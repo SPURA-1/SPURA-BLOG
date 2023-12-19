@@ -11,6 +11,7 @@ export default new Vuex.Store({
     userImage: null,
     userNickname: null,
     useName: null,
+    ImageUrl: 'http://47.115.231.184:5555',
   },
   getters: {
     userRole: state => state.userRole,

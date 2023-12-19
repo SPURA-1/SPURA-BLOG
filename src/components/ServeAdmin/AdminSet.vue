@@ -3,27 +3,54 @@
     <!-- 已上传的图片列表 -->
     <div class="uploaded-images">
       <p>已上传的图片:</p>
-      <el-table :data="uploadedImages" border stripe>
+      <el-table
+        :data="uploadedImages"
+        border
+        stripe
+      >
         <el-table-column type="index"></el-table-column>
-        <el-table-column prop="file_path" label="图片">
+        <el-table-column
+          prop="file_path"
+          label="图片"
+        >
           <template slot-scope="scope">
-            <img style="width: 100px; height: 100px" :src="imageUrl+scope.row.file_path" class="uploaded-image" />
+            <img
+              style="width: 100px; height: 100px"
+              :src="imageUrl+scope.row.file_path"
+              class="uploaded-image"
+            />
           </template>
         </el-table-column>
-        <el-table-column prop="comment" label="备注">
+        <el-table-column
+          prop="comment"
+          label="备注"
+        >
           <template slot-scope="scope">
             <div>
               {{commentNames[scope.row.comment]}}
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column
+          prop="name"
+          label="名称"
+        ></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <!-- 编辑按钮 -->
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="editImage(scope.row.id)"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              @click="editImage(scope.row.id)"
+            ></el-button>
             <!-- 删除按钮 -->
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteImage(scope.row.id)"></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              @click="deleteImage(scope.row.id)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -33,13 +60,28 @@
 
     <!-- 文章封面上传 -->
     <div class="avatar-uploader">
-      <el-upload ref="avatarUpload" drag class="avatar-upload" action="" :http-request="submitUpload" :auto-upload="false" :on-change="handleAvatarSuccess" :on-preview="handlePreview" :on-remove="handleRemove" name="image">
+      <el-upload
+        ref="avatarUpload"
+        drag
+        class="avatar-upload"
+        action=""
+        :http-request="submitUpload"
+        :auto-upload="false"
+        :on-change="handleAvatarSuccess"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        name="image"
+      >
         <i class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
     </div>
 
     <!-- 点击按钮上传 -->
-    <el-button class="upload-button" type="primary" @click="submitUpload">
+    <el-button
+      class="upload-button"
+      type="primary"
+      @click="submitUpload"
+    >
       上传
     </el-button>
   </div>
@@ -51,7 +93,7 @@ export default {
   data() {
     return {
       fileList: [],
-      imageUrl: 'http://47.115.231.184:5555',
+      imageUrl: this.$store.state.ImageUrl,
       uploadedImages: [], // 用于存储已上传的图片 URL
       commentNames: {
         1: '文章封面',

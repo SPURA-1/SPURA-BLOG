@@ -15,9 +15,10 @@
       class="el-menu-top"
       mode="horizontal"
       @select="handleSelect"
+      :default-active="activePath"
       background-color="#23262E"
       text-color="#fff"
-      active-text-color="#409EFF"
+      active-text-color="#ffd04b"
     >
       <el-submenu index="1">
         <template slot="title">
@@ -31,14 +32,19 @@
         </template>
         <el-menu-item
           class="MenuTop"
-          index="/Userimage"
+          index="/UserImage"
+          @click="saveNavState('/UserImage')"
         ><i class="el-icon-camera"></i>更换头像</el-menu-item>
         <el-menu-item
           class="MenuTop"
           index="/UpdateUser"
+          @click="saveNavState('/UpdateUser')"
         ><i class="el-icon-key"></i>更换密码</el-menu-item>
       </el-submenu>
-      <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
+      <el-menu-item
+        index="10"
+        @click="logoutHandler"
+      ><i class="el-icon-switch-button"></i>退出</el-menu-item>
     </el-menu>
   </el-header>
 </template>
@@ -46,11 +52,16 @@
 <script>
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
+  props: {
+    // 父组件传递的 activePath
+    activePath: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      ImageUrl: 'http://47.115.231.184:5555',
-      isCollapse: true,
-      activePath: '',
+      ImageUrl: this.$store.state.ImageUrl,
     };
   },
   computed: {
@@ -80,11 +91,12 @@ export default {
       this.$router.push(index)
     },
     // 保存链接的激活状态
-    // saveNavState(activePath){
-    //   // 当点击其他链接时，还需要为activePath重新赋值
-    //   window.sessionStorage.setItem('activePath',activePath)
-    //   this.activePath=activePath
-    // }
+    saveNavState(activePath) {
+      this.$emit('saveNavState', activePath);
+      // 当点击其他链接时，还需要为activePath重新赋值
+      // window.sessionStorage.setItem('activePath', activePath)
+      // this.activePath = activePath
+    }
   },
 }
 </script>

@@ -6,7 +6,7 @@
         v-if="!item.children"
         :key="i"
         :index="item.path"
-        @click="$router.push({ path: item.path })"
+        @click="handleClick(item.path)"
       >
         <i :class="'' + (item.meta?.icon || 'default-icon')"></i>
         <span>{{ item.meta?.title || 'Default Title' }}</span>
@@ -22,7 +22,10 @@
           <span>{{ item.meta?.title || 'Default Title' }}</span>
         </template>
         <!-- 子路由 -->
-        <AsideItem :menu="item.children"></AsideItem>
+        <AsideItem
+          :menu="item.children"
+          @saveNavState="handleSaveNavState"
+        ></AsideItem>
       </el-submenu>
     </template>
   </div>
@@ -33,6 +36,15 @@ export default {
   name: "AsideItem",
   props: {
     menu: { type: Array },
+  },
+  methods: {
+    handleClick(index) {
+      this.$emit('saveNavState', index);
+      this.$router.push({ path: index })
+    },
+    handleSaveNavState(activePath) {
+      this.$emit('saveNavState', activePath);
+    },
   },
 };
 </script>

@@ -1,7 +1,10 @@
 <template>
   <div class="main-container">
     <!-- 头部区域 -->
-    <AdminMainHeader />
+    <AdminMainHeader
+      :activePath="activePath"
+      @saveNavState="saveNavState"
+    />
     <!-- 页面主体 -->
     <div class="foot-container">
       <!-- 配置主题组件 -->
@@ -25,6 +28,7 @@
             <AsideItems
               :menu="menu"
               style="width:100%"
+              @saveNavState="saveNavState"
             />
           </el-menu>
         </el-aside>
@@ -55,8 +59,7 @@ export default {
   },
   data() {
     return {
-      ImageUrl: 'http://47.115.231.184:5555',
-      activePath: '/AdminHome',
+      activePath: '',
       menu: [],
     };
   },
@@ -67,7 +70,7 @@ export default {
   },
   created() {
     // 从sessionStorage中把保存的激活菜单的地址取出来
-    // this.activePath=window.sessionStorage.getItem('activePath')
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     // 侧边栏展开
@@ -99,11 +102,11 @@ export default {
       this.$router.push(index)
     },
     // 保存链接的激活状态
-    // saveNavState(activePath){
-    //   // 当点击其他链接时，还需要为activePath重新赋值
-    //   window.sessionStorage.setItem('activePath',activePath)
-    //   this.activePath=activePath
-    // }
+    saveNavState(activePath) {
+      // 当点击其他链接时，还需要为activePath重新赋值
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
+    }
   },
 };
 </script>

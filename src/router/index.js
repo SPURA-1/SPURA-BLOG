@@ -43,29 +43,29 @@ const routes = [
       {
         path: '/UserInfo',
         component: EmptyComponent, // 或者使用重定向
-        meta: { title: '个人信息', icon: 'el-icon-user' },
+        meta: { title: '个人信息', icon: 'el-icon-tickets' },
         children: [
           {
             path: '/Account',
             component: EmptyComponent, // 或者使用重定向
-            meta: { title: '账号密码', icon: 'el-icon-coordinate' },
+            meta: { title: '账号密码', icon: 'el-icon-coin' },
             children: [
               {
                 path: '/UpdateUser',
                 component: () => import('../components/ServeAdmin/UpdateUser.vue'),
-                meta: { title: '更换密码' },
+                meta: { title: '更换密码', icon: 'el-icon-key' },
               }
             ]
           },
           {
             path: '/TextEditor',
             component: () => import('../components/ServeAdmin/TextEditor.vue'),
-            meta: { title: '发布内容' },
+            meta: { title: '发布内容', icon: 'el-icon-upload' },
           },
           {
             path: '/AdminSet',
             component: () => import('../components/ServeAdmin/AdminSet.vue'),
-            meta: { title: '文章封面' },
+            meta: { title: '文章封面', icon: 'el-icon-picture-outline' },
           },
         ],
       },
@@ -78,20 +78,20 @@ const routes = [
             path: '/UserList',
             name: 'UserList',
             component: () => import('../components/ServeAdmin/UserList.vue'),
-            meta: { title: '账号管理', icon: 'el-icon-s-custom' },
+            meta: { title: '账号管理', icon: 'el-icon-edit-outline' },
           },
           {
             path: '/ArtList',
             name: 'ArtList',
             component: () => import('../components/ServeAdmin/ArtList.vue'),
-            meta: { title: '文章管理', icon: 'el-icon-s-custom' },
+            meta: { title: '文章管理', icon: 'el-icon-reading' },
           }
         ],
       },
       {
         path: '/Game',
         component: EmptyComponent, // 或者使用重定向
-        meta: { title: '游戏信息', icon: 'el-icon-s-custom' },
+        meta: { title: '游戏信息', icon: 'el-icon-coordinate' },
         children: [
           {
             path: '/GameManage',
@@ -105,13 +105,13 @@ const routes = [
         path: '/UserImage',
         name: 'UserImage',
         component: () => import('../components/ServeAdmin/UserImage.vue'),
-        meta: { title: '头像管理', icon: 'el-icon-mouse' },
+        meta: { title: '头像管理', icon: 'el-icon-camera' },
       },
       {
         name: 'Test',
         path: '/Test',
         component: () => import('../views/Test/Test.vue'),
-        meta: { title: '测试', icon: 'el-icon-mouse' },
+        meta: { title: '测试', icon: 'el-icon-guide' },
       },
     ]
   },
