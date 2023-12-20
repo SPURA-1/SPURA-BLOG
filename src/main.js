@@ -8,6 +8,9 @@ import axios from 'axios'
 import has from './utils/ButtonPermissions';
 Vue.directive('has', has);
 
+// 导入全局错误处理逻辑
+import '@/utils/errorLogs';
+
 import {
   Pagination,
   Dialog,
@@ -31,6 +34,8 @@ import {
   Form,
   FormItem,
   Slider,
+  Popover,
+  Tag,
   Icon,
   Row,
   Col,
@@ -71,7 +76,9 @@ Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
 Vue.use(Form);
 Vue.use(FormItem);
+Vue.use(Popover);
 Vue.use(Slider);
+Vue.use(Tag);
 Vue.use(Icon);
 Vue.use(Row);
 Vue.use(Col);
