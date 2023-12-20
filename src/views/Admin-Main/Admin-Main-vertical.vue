@@ -1,44 +1,18 @@
 <template>
   <div class="main-container">
     <!-- 头部区域 -->
-    <AdminMainHeader
-      :activePath="activePath"
-      @saveNavState="saveNavState"
-      :SettingColor="SettingColor"
-    />
+    <AdminMainHeader :activePath="activePath" @saveNavState="saveNavState" :SettingColor="SettingColor" />
     <!-- 页面主体 -->
     <div class="foot-container">
       <!-- 配置主题组件 -->
-<<<<<<< HEAD
-      <AdminSet />
-=======
       <AdminSet :SettingColor="SettingColor" />
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
       <!-- 侧边栏区域 -->
       <div class="page-scroll">
-        <el-aside
-          width="200px"
-          class="el-aside"
-        >
+        <el-aside width="200px" class="el-aside">
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
           <!-- unique-opened 只允许展开一个 -->
-          <el-menu
-            unique-opened
-            :default-active="activePath"
-            class="el-menu-vertical-demo"
-            background-color="#545c64"
-            text-color="#fff"
-<<<<<<< HEAD
-            active-text-color="#ffd04b"
-=======
-            :active-text-color="SettingColor"
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
-          >
-            <AsideItems
-              :menu="menu"
-              style="width:100%"
-              @saveNavState="saveNavState"
-            />
+          <el-menu unique-opened :default-active="activePath" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" :active-text-color="SettingColor">
+            <AsideItems :menu="menu" style="width:100%" @saveNavState="saveNavState" />
           </el-menu>
         </el-aside>
       </div>
@@ -65,13 +39,6 @@ export default {
     AdminMainHeader,
     AsideItems,
     AdminSet
-<<<<<<< HEAD
-  },
-  data() {
-    return {
-      ImageUrl: 'http://47.115.231.184:5555',
-      activePath: '/AdminHome',
-=======
   },
   props: {
     // 父组件传递的 SettingColor
@@ -83,7 +50,6 @@ export default {
   data() {
     return {
       activePath: '',
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
       menu: [],
     };
   },
@@ -94,11 +60,7 @@ export default {
   },
   created() {
     // 从sessionStorage中把保存的激活菜单的地址取出来
-<<<<<<< HEAD
-    // this.activePath=window.sessionStorage.getItem('activePath')
-=======
     this.activePath = window.sessionStorage.getItem('activePath')
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
   },
   methods: {
     // 侧边栏展开

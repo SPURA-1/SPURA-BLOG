@@ -1,16 +1,9 @@
 <template>
   <div v-if="SettingBar=== 'horizontal'">
-<<<<<<< HEAD
-    <AdminHorizontal />
-  </div>
-  <div v-else>
-    <AdminVertical />
-=======
     <AdminHorizontal :SettingColor="SettingColor" />
   </div>
   <div v-else>
     <AdminVertical :SettingColor="SettingColor" />
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
   </div>
 </template>
 
@@ -25,12 +18,8 @@ export default {
   name: 'MainPage',
   data() {
     return {
-<<<<<<< HEAD
-      SettingBar: ''
-=======
       SettingBar: '',
       SettingColor: ''
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
     }
   },
   computed: {
@@ -39,10 +28,7 @@ export default {
     const storedSetting = localStorage.getItem('SPURA-setting');
     const parsedSetting = JSON.parse(storedSetting);
     this.SettingBar = parsedSetting.layout || 'vertical';
-<<<<<<< HEAD
-=======
     this.SettingColor = parsedSetting.name || 'gold';
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
   },
   methods: {
   },

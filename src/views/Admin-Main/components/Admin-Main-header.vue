@@ -1,103 +1,31 @@
 <template>
   <el-header class="el-header">
     <!-- 左侧的 logo -->
-    <img
-      class="Logo"
-      style="margin-left:30px;"
-      src="@/assets/Main/logo.png"
-      alt="Logo"
-    />
-<<<<<<< HEAD
-    <!-- 右侧的菜单 -->
-    <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
-    <!-- select	菜单激活回调 -->
-    <!-- :default-active 与当前激活的菜单绑定“path” -->
-    <el-menu
-      class="el-menu-top"
-      mode="horizontal"
-      @select="handleSelect"
-      background-color="#23262E"
-      text-color="#fff"
-      active-text-color="#409EFF"
-    >
-      <el-submenu index="1">
-        <template slot="title">
-          <!-- 头像 -->
-          <img
-            :src="ImageUrl + userData.userImage"
-            alt="userImage"
-            class="avatar"
-          />
-          <span>个人中心</span>
-        </template>
-        <el-menu-item
-          class="MenuTop"
-          index="/Userimage"
-        ><i class="el-icon-camera"></i>更换头像</el-menu-item>
-        <el-menu-item
-          class="MenuTop"
-          index="/UpdateUser"
-        ><i class="el-icon-key"></i>更换密码</el-menu-item>
-      </el-submenu>
-      <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
-    </el-menu>
-=======
+    <img class="Logo" style="margin-left:30px;" src="@/assets/Main/logo.png" alt="Logo" />
     <div style="display:flex;align-items: center;">
       <ErrorLog style="padding-right: 20px;" />
       <!-- 右侧的菜单 -->
       <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
       <!-- select	菜单激活回调 -->
       <!-- :default-active 与当前激活的菜单绑定“path” -->
-      <el-menu
-        class="el-menu-top"
-        mode="horizontal"
-        @select="handleSelect"
-        :default-active="activePath"
-        background-color="#23262E"
-        text-color="#fff"
-        :active-text-color="SettingColor"
-      >
+      <el-menu class="el-menu-top" mode="horizontal" @select="handleSelect" :default-active="activePath" background-color="#23262E" text-color="#fff" :active-text-color="SettingColor">
         <el-submenu index="1">
           <template slot="title">
             <!-- 头像 -->
-            <img
-              :src="ImageUrl + userData.userImage"
-              alt="userImage"
-              class="avatar"
-            />
+            <img :src="ImageUrl + userData.userImage" alt="userImage" class="avatar" />
             <span>个人中心</span>
           </template>
-          <el-menu-item
-            class="MenuTop"
-            index="/UserImage"
-            @click="saveNavState('/UserImage')"
-          ><i class="el-icon-camera"></i>更换头像</el-menu-item>
-          <el-menu-item
-            class="MenuTop"
-            index="/UpdateUser"
-            @click="saveNavState('/UpdateUser')"
-          ><i class="el-icon-key"></i>更换密码</el-menu-item>
+          <el-menu-item class="MenuTop" index="/UserImage" @click="saveNavState('/UserImage')"><i class="el-icon-camera"></i>更换头像</el-menu-item>
+          <el-menu-item class="MenuTop" index="/UpdateUser" @click="saveNavState('/UpdateUser')"><i class="el-icon-key"></i>更换密码</el-menu-item>
         </el-submenu>
-        <el-menu-item
-          index="10"
-          @click="logoutHandler"
-        ><i class="el-icon-switch-button"></i>退出</el-menu-item>
+        <el-menu-item index="10" @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
       </el-menu>
     </div>
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
   </el-header>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'; // 导入 mapGetters
-<<<<<<< HEAD
-export default {
-  data() {
-    return {
-      ImageUrl: 'http://47.115.231.184:5555',
-      isCollapse: true,
-      activePath: '',
-=======
 import ErrorLog from "@/components/ServeAdmin/components/ErrorLog.vue"; // 导入配置主题子组件
 export default {
   components: {
@@ -117,7 +45,6 @@ export default {
   data() {
     return {
       ImageUrl: this.$store.state.ImageUrl,
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
     };
   },
   computed: {
@@ -147,20 +74,12 @@ export default {
       this.$router.push(index)
     },
     // 保存链接的激活状态
-<<<<<<< HEAD
-    // saveNavState(activePath){
-    //   // 当点击其他链接时，还需要为activePath重新赋值
-    //   window.sessionStorage.setItem('activePath',activePath)
-    //   this.activePath=activePath
-    // }
-=======
     saveNavState(activePath) {
       this.$emit('saveNavState', activePath);
       // 当点击其他链接时，还需要为activePath重新赋值
       // window.sessionStorage.setItem('activePath', activePath)
       // this.activePath = activePath
     }
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
   },
 }
 </script>

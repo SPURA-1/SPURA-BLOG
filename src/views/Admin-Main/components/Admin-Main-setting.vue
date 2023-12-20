@@ -1,19 +1,8 @@
 <template>
   <span v-if="SettingBar">
     <div class="setting-bar-setting">
-<<<<<<< HEAD
-      <div @click="handleOpenSettingBar">
-=======
-      <div
-        @click="handleOpenSettingBar"
-        :style="{ backgroundColor: SettingColor }"
-        style="border-radius:10px;"
-      >
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
-        <i
-          class="el-icon-s-tools"
-          style="color: #fff"
-        ></i>
+      <div @click="handleOpenSettingBar" :style="{ backgroundColor: SettingColor }" style="border-radius:10px;">
+        <i class="el-icon-s-tools" style="color: #fff"></i>
         <p>主题配置</p>
       </div>
       <!-- <div>
@@ -22,34 +11,15 @@
       </div> -->
     </div>
 
-    <el-drawer
-      :visible.sync="drawerVisible"
-      :append-to-body="true"
-      direction="rtl"
-      size="300px"
-      title="主题配置"
-    >
+    <el-drawer :visible.sync="drawerVisible" :append-to-body="true" direction="rtl" size="300px" title="主题配置">
       <el-scrollbar style="height: auto; overflow: hidden">
         <div class="el-drawer__body">
-          <el-form
-            ref="form"
-            :model="setting"
-            label-position="top"
-          >
+          <el-form ref="form" :model="setting" label-position="top">
             <el-form-item label="主题">
-              <el-radio-group
-                v-model="setting.name"
-                style="display:flex;"
-              >
-<<<<<<< HEAD
-                <el-radio-button label="default">默认</el-radio-button>
-                <el-radio-button label="green">绿荫草场</el-radio-button>
-                <el-radio-button label="glory">荣耀典藏</el-radio-button>
-=======
+              <el-radio-group v-model="setting.name" style="display:flex;">
                 <el-radio-button label="gold">默认</el-radio-button>
                 <el-radio-button label="green">绿荫草场</el-radio-button>
                 <el-radio-button label="red">荣耀典藏</el-radio-button>
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
               </el-radio-group>
             </el-form-item>
             <el-form-item label="布局">
@@ -75,14 +45,8 @@
       </el-scrollbar>
 
       <div class="el-drawer__footer">
-        <el-button
-          type="primary"
-          @click="handleSaveSetting"
-        >保存</el-button>
-        <el-button
-          type=""
-          @click="drawerVisible = false"
-        >取消</el-button>
+        <el-button type="primary" @click="handleSaveSetting">保存</el-button>
+        <el-button type="" @click="drawerVisible = false">取消</el-button>
       </div>
     </el-drawer>
   </span>
@@ -91,8 +55,6 @@
 <script>
 export default {
   name: 'SettingBar',
-<<<<<<< HEAD
-=======
   props: {
     // 父组件传递的 SettingColor
     SettingColor: {
@@ -100,17 +62,12 @@ export default {
       required: true,
     },
   },
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
   data() {
     return {
       drawerVisible: false,
       SettingBar: true,
       setting: {
-<<<<<<< HEAD
-        name: 'default',
-=======
         name: 'gold',
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
         layout: '',
         // header: 'fixed',
         // tabsBar: '',
@@ -130,11 +87,7 @@ export default {
         try {
           const parsedSetting = JSON.parse(storedSetting);
           this.setting = {
-<<<<<<< HEAD
-            name: parsedSetting.name || 'default',
-=======
             name: parsedSetting.name || 'gold',
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
             layout: parsedSetting.layout || 'vertical',
             // 其他属性...
           };
@@ -170,11 +123,6 @@ export default {
   min-height: 60px;
   text-align: center;
   cursor: pointer;
-<<<<<<< HEAD
-  background: #409eff;
-  border-radius: 4px;
-=======
->>>>>>> 02d9f3c5b28fb654aae9b63eb63905a160299830
 
   > div {
     padding-top: 10px;
