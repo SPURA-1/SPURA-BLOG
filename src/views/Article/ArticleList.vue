@@ -1,17 +1,35 @@
 <template>
   <div class="body">
-    <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
+    <backTop
+      :defaultProps="55"
+      :date="1000"
+      :color="topColor"
+      style="z-index:999;"
+    ></backTop>
     <div class="left-side">
       <div class="articles">
-        <div v-for="article in articles" :key="article.id" class="article" @click="navigateToArticle(article.id)">
+        <div
+          v-for="article in articles"
+          :key="article.id"
+          class="article"
+          @click="navigateToArticle(article.id)"
+        >
           <div class="image-container">
-            <img class="image_cover" :src="ImageUrl+article.image_path" alt="文章图片" v-if="article.image_path" />
+            <img
+              class="image_cover"
+              :src="ImageUrl+article.image_path"
+              alt="文章图片"
+              v-if="article.image_path"
+            />
           </div>
           <div class="article-details">
             <h2>{{ article.title }}</h2>
             <p class="article-content">{{ truncateContent(article.Introduction) }}</p>
             <div class="article-meta">
-              <p class="" style="display:flex;justify-content: flex-end;">{{ article.category }}</p>
+              <p
+                class=""
+                style="display:flex;justify-content: flex-end;"
+              >{{ article.category }}</p>
               <p style="display:flex;justify-content: flex-end;">{{ article.publish_date }}</p>
             </div>
           </div>
@@ -21,19 +39,37 @@
     <div class="right-side">
       <div class="sidebar">
         <div class="search-box">
-          <input type="text" v-model="searchQuery" placeholder="搜索文章" />
-          <button class="filter-button" @click="searchArticle">搜索</button>
+          <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="搜索文章"
+          />
+          <button
+            class="filter-button"
+            @click="searchArticle"
+          >搜索</button>
         </div>
         <div class="category-filter">
           <div class="filter-header">
             <h3>分类筛选</h3>
           </div>
           <div class="filter-content">
-            <select class="category-select" v-model="selectedCategory">
+            <select
+              class="category-select"
+              v-model="selectedCategory"
+            >
               <option value="">全部分类</option>
-              <option v-for="category in categories" :key="category.id" :value="category.id" :label="category.name">{{ category.name }}</option>
+              <option
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.id"
+                :label="category.name"
+              >{{ category.name }}</option>
             </select>
-            <button class="filter-button" @click="filterByCategory">筛选</button>
+            <button
+              class="filter-button"
+              @click="filterByCategory"
+            >筛选</button>
           </div>
         </div>
 
@@ -60,7 +96,7 @@ export default {
       searchQuery: '',
       selectedCategory: '',
       categories: [], // 从后端获取文章分类列表
-      ImageUrl: 'http://47.115.231.184:5555',
+      ImageUrl: this.$store.state.ImageUrl,
       // 回到顶部组件颜色
       topColor: '#66ccff',
     };

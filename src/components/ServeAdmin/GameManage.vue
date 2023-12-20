@@ -3,21 +3,48 @@
     <!-- 已上传的图片列表 -->
     <div class="uploaded-images">
       <p>已上传的图片:</p>
-      <el-table :data="uploadedImages" border stripe>
+      <el-table
+        :data="uploadedImages"
+        border
+        stripe
+      >
         <el-table-column type="index"></el-table-column>
-        <el-table-column prop="file_path" label="图片">
+        <el-table-column
+          prop="file_path"
+          label="图片"
+        >
           <template slot-scope="scope">
-            <img style="width:100px;height:100px" :src="ImageUrl+scope.row.file_path" class="uploaded-image" />
+            <img
+              style="width:100px;height:100px"
+              :src="ImageUrl+scope.row.file_path"
+              class="uploaded-image"
+            />
           </template>
         </el-table-column>
-        <el-table-column prop="created_at" label="上传时间"></el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="上传时间"
+        ></el-table-column>
+        <el-table-column
+          prop="name"
+          label="名称"
+        ></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <!-- 编辑按钮 -->
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="editImage(scope.$index)"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              @click="editImage(scope.$index)"
+            ></el-button>
             <!-- 删除按钮 -->
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteImage(scope.$index)"></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              @click="deleteImage(scope.$index)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -30,7 +57,10 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+            ></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -39,38 +69,81 @@
       </el-row>
     </el-card>
     <!-- 用户列表区域 -->
-    <el-table :data="GameList" border stripe>
+    <el-table
+      :data="GameList"
+      border
+      stripe
+    >
       <!-- 在这里绑定表格的数据 userList -->
       <el-table-column type="index"></el-table-column>
       <!-- 添加索引列 -->
-      <el-table-column prop="name" label="名称"> </el-table-column>
+      <el-table-column
+        prop="name"
+        label="名称"
+      > </el-table-column>
       <!-- prop是取得userList中每一个对象中的对应属性值 -->
-      <el-table-column prop="description" label="介绍"> </el-table-column>
-      <el-table-column prop="cover" label="封面">
+      <el-table-column
+        prop="description"
+        label="介绍"
+      > </el-table-column>
+      <el-table-column
+        prop="cover"
+        label="封面"
+      >
         <template slot-scope="scope">
-          <img style="width: 100px; height: 100px" :src="ImageUrl+scope.row.cover" alt="Game Cover">
+          <img
+            style="width: 100px; height: 100px"
+            :src="ImageUrl+scope.row.cover"
+            alt="Game Cover"
+          >
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180px">
+      <el-table-column
+        label="操作"
+        width="180px"
+      >
         <!-- slot-scope="scope" -->
         <template>
           <!-- 修改按钮 -->
-          <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            size="mini"
+          ></el-button>
           <!-- 删除按钮 -->
-          <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+          ></el-button>
 
         </template>
       </el-table-column>
     </el-table>
     <!-- 头像上传 -->
     <div class="avatar-uploader">
-      <el-upload ref="avatarUpload" drag class="avatar-upload" action="" :http-request="submitUpload" :auto-upload="false" :on-change="handleAvatarSuccess" :on-preview="handlePreview" :on-remove="handleRemove" name="image">
+      <el-upload
+        ref="avatarUpload"
+        drag
+        class="avatar-upload"
+        action=""
+        :http-request="submitUpload"
+        :auto-upload="false"
+        :on-change="handleAvatarSuccess"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        name="image"
+      >
         <i class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
     </div>
 
     <!-- 点击按钮上传 -->
-    <el-button class="upload-button" type="primary" @click="submitUpload">
+    <el-button
+      class="upload-button"
+      type="primary"
+      @click="submitUpload"
+    >
       上传
     </el-button>
   </div>
@@ -82,7 +155,7 @@ import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
     return {
-      ImageUrl: 'http://47.115.231.184:5555',
+      ImageUrl: this.$store.state.ImageUrl,
       fileList: [],
       GameList: [],
       uploadedImages: [], // 用于存储已上传的图片 URL

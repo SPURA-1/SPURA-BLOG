@@ -1,74 +1,156 @@
 <template>
   <div>
     <div class="button-group">
-      <button :class="{ active: currentTab === 'control' }" @click="currentTab = 'control'">型号汇聚</button>
-      <button :class="{ active: currentTab === 'manufacturer' }" @click="currentTab = 'manufacturer'">按型号</button>
+      <button
+        :class="{ active: currentTab === 'control' }"
+        @click="currentTab = 'control'"
+      >1</button>
+      <button
+        :class="{ active: currentTab === 'manufacturer' }"
+        @click="currentTab = 'manufacturer'"
+      >2</button>
     </div>
     <div v-if="currentTab === 'control'">
-      <el-form ref="form" :model="form" :rules="rules">
-        <el-table :data="form.responseData" :key="form.responseData.ID" row-key="id" border style="margin-top:10px; overflow:auto; max-height:800px;">
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rules"
+      >
+        <el-table
+          :data="form.responseData"
+          :key="form.responseData.ID"
+          row-key="id"
+          border
+          style="margin-top:10px; overflow:auto; max-height:800px;"
+        >
 
           <el-table-column label="姓名">
             <template slot="header">
               <span class="requiredclass">姓名</span>
             </template>
             <template slot-scope="scope">
-              <el-form-item :prop=" 'responseData.' + scope.$index + '.Name' " :rules='rules.Name'>
+              <el-form-item
+                :prop=" 'responseData.' + scope.$index + '.Name' "
+                :rules='rules.Name'
+              >
                 <el-input v-model="scope.row.Name"></el-input>
               </el-form-item>
             </template>
           </el-table-column>
-          <el-table-column prop="ManufacturerCount" label="支持设备类型数量">
+          <el-table-column
+            prop="ManufacturerCount"
+            label="数量"
+          >
             <template slot-scope="scope">
-              <el-form-item :prop=" 'responseData.' + scope.$index + '.ManufacturerCount' " :rules='rules.Count'>
+              <el-form-item
+                :prop=" 'responseData.' + scope.$index + '.ManufacturerCount' "
+                :rules='rules.Count'
+              >
                 <el-input v-model.number="scope.row.ManufacturerCount"></el-input>
               </el-form-item>
             </template>
           </el-table-column>
-          <el-table-column prop="Comment" label="备注信息">
+          <el-table-column
+            prop="Comment"
+            label="备注信息"
+          >
 
           </el-table-column>
-          <el-table-column prop="CreateTime" label="创建时间">
+          <el-table-column
+            prop="CreateTime"
+            label="创建时间"
+          >
 
           </el-table-column>
-          <el-table-column prop="UpdateTime" label="更新时间">
+          <el-table-column
+            prop="UpdateTime"
+            label="更新时间"
+          >
 
           </el-table-column>
-          <el-table-column prop="operate" label="操作" width="160">
+          <el-table-column
+            prop="operate"
+            label="操作"
+            width="160"
+          >
             <template slot-scope="scope">
-              <el-button type="danger" size="mini" @click="del(scope.$index)" icon='el-icon-delete'></el-button>
-              <el-button type="primary" size="mini" @click="add" icon='el-icon-plus'></el-button>
+              <el-button
+                type="danger"
+                size="mini"
+                @click="del(scope.$index)"
+                icon='el-icon-delete'
+              ></el-button>
+              <el-button
+                type="primary"
+                size="mini"
+                @click="add"
+                icon='el-icon-plus'
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-form>
     </div>
     <div v-if="currentTab === 'manufacturer'">
-      <el-table :data="responseMenuData" :key="responseMenuData.ID" border style="margin-top:10px; overflow:auto; max-height:800px;">
+      <el-table
+        :data="responseMenuData"
+        :key="responseMenuData.ID"
+        border
+        style="margin-top:10px; overflow:auto; max-height:800px;"
+      >
 
-        <el-table-column prop="Name" label="名称">
+        <el-table-column
+          prop="Name"
+          label="名称"
+        >
 
         </el-table-column>
-        <el-table-column prop="ManufacturerName" label="厂商">
+        <el-table-column
+          prop="ManufacturerName"
+          label="厂商"
+        >
 
         </el-table-column>
-        <el-table-column prop="ManufacturerModel" label="型号">
+        <el-table-column
+          prop="ManufacturerModel"
+          label="型号"
+        >
 
         </el-table-column>
-        <el-table-column prop="Comment" label="备注信息">
+        <el-table-column
+          prop="Comment"
+          label="备注信息"
+        >
 
         </el-table-column>
-        <el-table-column prop="CreateTime" label="创建时间">
+        <el-table-column
+          prop="CreateTime"
+          label="创建时间"
+        >
         </el-table-column>
-        <el-table-column prop="UpdateTime" label="更新时间">
+        <el-table-column
+          prop="UpdateTime"
+          label="更新时间"
+        >
         </el-table-column>
-        <el-table-column prop="operate" label="操作" width="160">
+        <el-table-column
+          prop="operate"
+          label="操作"
+          width="160"
+        >
           <template slot-scope="scope">
-            <el-button>修改</el-button>&nbsp;
-            <el-button>删除</el-button>
+            <el-button size="mini">修改</el-button>&nbsp;
+            <el-button size="mini">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+    </div>
+    <div>
+      <el-tag
+        type='danger'
+        size="medium "
+        style="font-size:20px;margin-top:10px;"
+      >点击删除触发错误报警提醒</el-tag>
     </div>
   </div>
 </template>
@@ -121,7 +203,7 @@ export default {
   },
   methods: {
     add() {
-      console.log(this.form, 'ss');
+      console.log(this.form, 'ssqqqqqq');
       this.form.responseData.push({
         Name: "",
         ManufacturerCount: null,

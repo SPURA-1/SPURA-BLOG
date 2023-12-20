@@ -8,6 +8,9 @@ import axios from 'axios'
 import has from './utils/ButtonPermissions';
 Vue.directive('has', has);
 
+// 导入全局错误处理逻辑
+import '@/utils/errorLogs';
+
 import {
   Pagination,
   Dialog,
@@ -15,6 +18,10 @@ import {
   MenuItem,
   Submenu,
   Input,
+  drawer,
+  scrollbar,
+  RadioGroup,
+  RadioButton,
   Switch,
   Select,
   Option,
@@ -27,6 +34,8 @@ import {
   Form,
   FormItem,
   Slider,
+  Popover,
+  Tag,
   Icon,
   Row,
   Col,
@@ -36,6 +45,7 @@ import {
   Carousel,
   CarouselItem,
   Header,
+  Main,
   Aside,
   Timeline,
   TimelineItem,
@@ -51,6 +61,10 @@ Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(Submenu);
 Vue.use(Input);
+Vue.use(drawer);
+Vue.use(scrollbar);
+Vue.use(RadioGroup);
+Vue.use(RadioButton);
 Vue.use(Switch);
 Vue.use(Select);
 Vue.use(Option);
@@ -62,7 +76,9 @@ Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
 Vue.use(Form);
 Vue.use(FormItem);
+Vue.use(Popover);
 Vue.use(Slider);
+Vue.use(Tag);
 Vue.use(Icon);
 Vue.use(Row);
 Vue.use(Col);
@@ -73,6 +89,7 @@ Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(CarouselItem);
 Vue.use(Header);
+Vue.use(Main);
 Vue.use(Aside);
 Vue.use(Timeline);
 Vue.use(TimelineItem);

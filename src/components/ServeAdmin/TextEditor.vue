@@ -1,37 +1,95 @@
 <template>
   <div>
     <div>
-      <div class="editor-body" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0px;">
+      <div
+        class="editor-body"
+        style="border: 1px solid #ccc; padding: 10px; margin: 10px 0px;"
+      >
         <p class="preview-title">实时预览：</p>
-        <div v-html="parsedHtml" class="article-content"></div>
+        <div
+          v-html="parsedHtml"
+          class="article-content"
+        ></div>
       </div>
     </div>
 
     <div style="border: 1px solid #ccc;">
-      <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
-      <Editor style="height: 500px;" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
+      <Toolbar
+        style="border-bottom: 1px solid #ccc"
+        :editor="editor"
+        :defaultConfig="toolbarConfig"
+        :mode="mode"
+      />
+      <Editor
+        style="height: 500px;"
+        v-model="html"
+        :defaultConfig="editorConfig"
+        :mode="mode"
+        @onCreated="onCreated"
+      />
     </div>
     <!-- 添加文章 -->
-    <el-dialog :visible.sync="addArt" title="添加" width="30%" center>
-      <el-form :model="AddArtform" label-position="left">
-        <el-form-item label="文章标题" :label-width="formLabelWidth">
-          <el-input v-model="AddArtform.title" autocomplete="off"></el-input>
+    <el-dialog
+      :visible.sync="addArt"
+      title="添加"
+      width="30%"
+      center
+    >
+      <el-form
+        :model="AddArtform"
+        label-position="left"
+      >
+        <el-form-item
+          label="文章标题"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="AddArtform.title"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="文章简介" :label-width="formLabelWidth">
-          <el-input v-model="AddArtform.Introduction" autocomplete="off"></el-input>
+        <el-form-item
+          label="文章简介"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="AddArtform.Introduction"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="文章分类" :label-width="formLabelWidth">
-          <el-select v-model="AddArtform.category" placeholder="请选择分类" autocomplete="off">
-            <el-option v-for="category in categories" :key="category.id" :value="category.id" :label="category.name"></el-option>
+        <el-form-item
+          label="文章分类"
+          :label-width="formLabelWidth"
+        >
+          <el-select
+            v-model="AddArtform.category"
+            placeholder="请选择分类"
+            autocomplete="off"
+          >
+            <el-option
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id"
+              :label="category.name"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="addArt = false">取消</el-button>
-        <el-button type="primary" @click="publishArticle">创建</el-button>
+        <el-button
+          type="primary"
+          @click="publishArticle"
+        >创建</el-button>
       </div>
     </el-dialog>
-    <el-button type="primary" @click="openArtDialog">发表文章</el-button>
+    <el-button
+      type="primary"
+      @click="openArtDialog"
+    >发表文章</el-button>
   </div>
 </template>
 
@@ -155,7 +213,7 @@ export default {
           if (res.status === 200) {
             this.$message.success('文件上传成功');
             // 上传成功后，将返回的图片地址保存到一个变量中
-            const Url = 'http://47.115.231.184:5555';
+            const Url = this.$store.state.ImageUrl;
             const fileUrl = res.data.fileContentPath;
             const imageUrl = Url + fileUrl;
             // 在 insertImg 方法中插入图片

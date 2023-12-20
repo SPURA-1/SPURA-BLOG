@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- 导航区 -->
-    <el-breadcrumb class="el-breadcrumb" separator-class="el-icon-arrow-right">
+    <el-breadcrumb
+      class="el-breadcrumb"
+      separator-class="el-icon-arrow-right"
+    >
       <el-breadcrumb-item :to="{ path: '/AdminHome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>账号</el-breadcrumb-item>
       <el-breadcrumb-item>添加新账号</el-breadcrumb-item>
@@ -11,98 +14,228 @@
       <!-- 搜索与添加区域 -->
       <el-row :gutter="50">
         <el-col :span="8">
-          <el-input v-model="searchQuery" placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search" @click="searchUserList"></el-button>
+          <el-input
+            v-model="searchQuery"
+            placeholder="请输入内容"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="searchUserList"
+            ></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addUserShow">添加用户</el-button>
+          <el-button
+            type="primary"
+            @click="addUserShow"
+          >添加用户</el-button>
         </el-col>
       </el-row>
     </el-card>
     <!-- 添加用户 -->
-    <el-dialog :visible.sync="addUser" title="添加" width="350px">
-      <el-form :model="addUserform" :rules="Rules" ref="addUserform" label-position="left">
-        <el-form-item label="用户ID" prop="username">
-          <el-input v-model="addUserform.username" autocomplete="off"></el-input>
+    <el-dialog
+      :visible.sync="addUser"
+      title="添加"
+      width="350px"
+    >
+      <el-form
+        :model="addUserform"
+        :rules="Rules"
+        ref="addUserform"
+        label-position="left"
+      >
+        <el-form-item
+          label="用户ID"
+          prop="username"
+        >
+          <el-input
+            v-model="addUserform.username"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="addUserform.password" autocomplete="off"></el-input>
+        <el-form-item
+          label="密码"
+          prop="password"
+        >
+          <el-input
+            v-model="addUserform.password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="addUser = false">取消</el-button>
-        <el-button type="primary" @click="addNewUser">创建</el-button>
+        <el-button
+          type="primary"
+          @click="addNewUser"
+        >创建</el-button>
       </div>
     </el-dialog>
     <!-- 用户列表区域 -->
-    <el-table :data="userList" border stripe>
+    <el-table
+      :data="userList"
+      border
+      stripe
+    >
       <!-- 在这里绑定表格的数据 userList -->
       <el-table-column type="index"></el-table-column>
       <!-- 添加索引列 -->
-      <el-table-column prop="username" label="用户ID"> </el-table-column>
-      <el-table-column prop="nickname" label="昵称"> </el-table-column>
-      <el-table-column prop="user_role" label="权限">
+      <el-table-column
+        prop="username"
+        label="用户ID"
+      > </el-table-column>
+      <el-table-column
+        prop="nickname"
+        label="昵称"
+      > </el-table-column>
+      <el-table-column
+        prop="user_role"
+        label="权限"
+      >
         <template slot-scope="scope">
           <span :style="{ color: scope.row.user_role === '管理员' ? '#00cc00' : '' }">{{ scope.row.user_role }}</span>
         </template>
       </el-table-column>
       <!-- prop是取得userList中每一个对象中的对应属性值 -->
-      <el-table-column prop="email" label="邮箱"> </el-table-column>
-      <el-table-column prop="user_pic" label="头像">
+      <el-table-column
+        prop="email"
+        label="邮箱"
+      > </el-table-column>
+      <el-table-column
+        prop="user_pic"
+        label="头像"
+      >
         <template slot-scope="scope">
           <!-- <img style="width:150px;height:150px;" :src="scope.row.user_pic" alt="" /> -->
-          <el-image style="width: 100px; height: 100px" :src="ImageUrl+scope.row.user_pic" :previewSrcList="evaluatePictureList" @click="clickevaluatePicture(scope.row)">
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="ImageUrl+scope.row.user_pic"
+            :previewSrcList="evaluatePictureList"
+            @click="clickevaluatePicture(scope.row)"
+          >
           </el-image>
         </template>
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.mg_state" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="upUserStarts(scope.row)">
+          <el-switch
+            v-model="scope.row.mg_state"
+            :active-value="1"
+            :inactive-value="0"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            @change="upUserStarts(scope.row)"
+          >
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180px">
+      <el-table-column
+        label="操作"
+        width="180px"
+      >
         <!-- slot-scope="scope" -->
         <template slot-scope="scope">
           <!-- 修改按钮 -->
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="EditButton(scope.row.id)"></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            size="mini"
+            @click="EditButton(scope.row.id)"
+          ></el-button>
           <!-- 删除按钮 -->
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="DelButton(scope.row.id)"></el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+            @click="DelButton(scope.row.id)"
+          ></el-button>
           <!-- 分配角色按钮 -->
-          <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-            <el-button type="warning" icon="el-icon-setting" @click="assignRole" size="mini"></el-button>
+          <el-tooltip
+            effect="dark"
+            content="分配角色"
+            placement="top"
+            :enterable="false"
+          >
+            <el-button
+              type="warning"
+              icon="el-icon-setting"
+              @click="assignRole"
+              size="mini"
+            ></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="EditButtonPage" title="修改" width="550px">
+    <el-dialog
+      :visible.sync="EditButtonPage"
+      title="修改"
+      width="550px"
+    >
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
+        <div
+          slot="header"
+          class="clearfix"
+        >
           <span>基本资料</span>
         </div>
         <!-- 表单 -->
-        <el-form :model="userForm" :rules="userFormRules" ref="userFormRef" label-width="100px">
-          <el-form-item label="登录名称" prop="username">
+        <el-form
+          :model="userForm"
+          :rules="userFormRules"
+          ref="userFormRef"
+          label-width="100px"
+        >
+          <el-form-item
+            label="登录名称"
+            prop="username"
+          >
             <!-- 禁用用户名输入框 disabled -->
-            <el-input v-model="userForm.username" disabled></el-input>
+            <el-input
+              v-model="userForm.username"
+              disabled
+            ></el-input>
           </el-form-item>
-          <el-form-item label="用户昵称" prop="nickname">
-            <el-input v-model="userForm.nickname" minlength="1" maxlength="10"></el-input>
+          <el-form-item
+            label="用户昵称"
+            prop="nickname"
+          >
+            <el-input
+              v-model="userForm.nickname"
+              minlength="1"
+              maxlength="10"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="用户邮箱" prop="email">
+          <el-form-item
+            label="用户邮箱"
+            prop="email"
+          >
             <el-input v-model="userForm.email"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="UpdateUser">提交修改</el-button>
+            <el-button
+              type="primary"
+              @click="UpdateUser"
+            >提交修改</el-button>
             <el-button @click="resetUpdateUser">重置</el-button>
           </el-form-item>
         </el-form>
       </el-card>
     </el-dialog>
     <!-- 分页区域 -->
-    <el-pagination @size-change="handleSizeChange" @current-change="handeleCurrentChange" :current-page="queryIofo.pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="queryIofo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handeleCurrentChange"
+      :current-page="queryIofo.pagenum"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="queryIofo.pagesize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    >
     </el-pagination>
   </div>
 </template>
@@ -113,7 +246,7 @@ import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
     return {
-      ImageUrl: 'http://47.115.231.184:5555',
+      ImageUrl: this.$store.state.ImageUrl,
       addUser: false,
       // 获取用户列表的参数
       queryIofo: {
