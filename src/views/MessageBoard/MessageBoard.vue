@@ -6,7 +6,12 @@
       </div>
     </div>
     <div class="message_board">
-      <div v-for="(message, index) in visibleMessages" :key="index" :class="['message', { 'new-message': message.isNew }]" :style="{ top: `${message.top}px` }">{{ message.text }}
+      <div
+        v-for="(message, index) in visibleMessages"
+        :key="index"
+        :class="['message', { 'new-message': message.isNew }]"
+        :style="{ top: `${message.top}px` }"
+      >{{ message.text }}
       </div>
     </div>
     <div class="content">
@@ -14,37 +19,69 @@
         <!-- 发送评论 -->
         <div class="comment-module">
           <div class="comment-title">发表评论</div>
-          <textarea class="comment-input" placeholder="请输入评论内容" v-model="commentContent"></textarea>
+          <textarea
+            class="comment-input"
+            placeholder="请输入评论内容"
+            v-model="commentContent"
+          ></textarea>
           <!-- 表情 -->
           <div class="emoji-selector">
-            <button class="emoji-button" @click="toggleEmojiPicker">OwO表情</button>
-            <div class="emoji-panel" v-show="showEmojiPicker">
+            <button
+              class="emoji-button"
+              @click="toggleEmojiPicker"
+            >OwO表情</button>
+            <div
+              class="emoji-panel"
+              v-show="showEmojiPicker"
+            >
               <picker @select="handleEmojiClick"></picker>
             </div>
           </div>
           <!-- 名称 -->
           <div class="name-option">
             <label class="name-option-label">
-              <input type="radio" value="auto" v-model="nameOption">
+              <input
+                type="radio"
+                value="auto"
+                v-model="nameOption"
+              >
               自动设置名称
             </label>
             <label class="name-option-label">
-              <input type="radio" value="custom" v-model="nameOption">
+              <input
+                type="radio"
+                value="custom"
+                v-model="nameOption"
+              >
               留下你的名称
             </label>
-            <div v-if="nameOption === 'custom'" class="name-input">
-              <input type="text" placeholder="请输入你的名称" v-model="customName">
+            <div
+              v-if="nameOption === 'custom'"
+              class="name-input"
+            >
+              <input
+                type="text"
+                placeholder="请输入你的名称"
+                v-model="customName"
+              >
             </div>
           </div>
           <!-- <button class="submit-button" @click="submitComment">提交评论</button> -->
-          <CustomButton buttonText="提交评论" @button-click="handleThrottledStatusChange" />
+          <CustomButton
+            buttonText="提交评论"
+            @button-click="handleThrottledStatusChange"
+          />
         </div>
         <!-- 评论列表 -->
         <div class="comment-module">
           <div class="comment-title">评论列表 || 活捉 {{ commentDatas.length }} 条</div>
           <h2 class="comment-title"></h2>
           <div class="comment-list">
-            <div v-for="comment in visibleComments" :key="comment.id" class="comment-item">
+            <div
+              v-for="comment in visibleComments"
+              :key="comment.id"
+              class="comment-item"
+            >
               <div class="comment-user">{{ comment.username }}</div>
               <div class="comment-content">{{ comment.content }}</div>
               <div class="comment-time">{{ formatTime(comment.created_time) }}</div>
@@ -53,8 +90,15 @@
               </div>
             </div>
           </div>
-          <button class="load-more-button" @click="loadMoreComments" v-if="commentCount < commentDatas.length">查看更多</button>
-          <p v-if="noMoreComments" class="no-more-comments">没有更多评论了</p>
+          <button
+            class="load-more-button"
+            @click="loadMoreComments"
+            v-if="commentCount < commentDatas.length"
+          >查看更多</button>
+          <p
+            v-if="noMoreComments"
+            class="no-more-comments"
+          >没有更多评论了</p>
         </div>
 
       </div>
@@ -66,17 +110,28 @@
         <div class="likebox">
           <div class="comment-title">点赞框</div>
           <div class="like-info">
-            <div class="heart" @click="handleLikeClick"></div>
+            <div
+              class="heart"
+              @click="handleLikeClick"
+            ></div>
             <div class="likecounts">{{ likecounts }}</div>
           </div>
         </div>
         <div class="popular-locations-box">
           <div class="comment-title">热门地区</div>
-          <canvas id="ip-chart" class="IpChart"></canvas>
+          <canvas
+            id="ip-chart"
+            class="IpChart"
+          ></canvas>
         </div>
       </div>
     </div>
-    <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
+    <backTop
+      :defaultProps="55"
+      :date="1000"
+      :color="topColor"
+      style="z-index:999;"
+    ></backTop>
   </div>
 </template>
 
@@ -385,7 +440,7 @@ export default {
           console.log(error, 'AXIOS报错');
         });
     },
-    // 获取评论列表
+    // 获取弹幕评论列表
     getComments() {
       getComment()
         .then(response => {
@@ -569,6 +624,15 @@ export default {
   justify-content: center;
   align-items: center;
   margin-bottom: 5px;
+  animation: animated-border 1.5s infinite;
+}
+@keyframes animated-border {
+  0% {
+    box-shadow: 0 0 0 0 rgba(173, 46, 46, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 50px 0 rgba(16, 219, 202, 0);
+  }
 }
 
 /* 文字留言 */

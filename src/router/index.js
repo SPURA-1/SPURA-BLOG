@@ -108,6 +108,12 @@ const routes = [
         meta: { title: '头像管理', icon: 'el-icon-camera' },
       },
       {
+        path: '/Comment',
+        name: 'Comment',
+        component: () => import('../components/ServeAdmin/CommentManage.vue'),
+        meta: { title: '评论管理', icon: 'el-icon-camera' },
+      },
+      {
         name: 'Test',
         path: '/Test',
         component: () => import('../views/Test/Test.vue'),

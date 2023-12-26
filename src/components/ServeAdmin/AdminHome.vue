@@ -2,7 +2,10 @@
   <div class="div1">
     <!-- 资源视图 -->
     <div class="top-wrap">
-      <el-card class="box-card">
+      <el-card
+        class="box-card"
+        shadow="hover"
+      >
         <div style="display:flex;justify-content: space-between">
           <p style="margin-bottom:20px;">资源总览</p>
           <div style="display:flex;flex-direction: column;">
@@ -37,7 +40,7 @@
     <div class="bottom-wrap">
       <!-- 左边容器 -->
       <div class="left-box">
-        <el-card>
+        <el-card shadow="hover">
           <div class="left-container">
             <p style="color:#02abe9;margin-bottom:5px;">最近发布</p>
             <div
@@ -57,7 +60,7 @@
           </div>
         </el-card>
         <!-- 最近任务结果视图 接口为报告数据-->
-        <el-card>
+        <el-card shadow="hover">
           <div class="right-container">
             <p style="color:#02abe9;margin-bottom:10px;">名人名言</p>
             <div class="all-test-box">

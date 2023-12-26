@@ -6,8 +6,7 @@
       separator-class="el-icon-arrow-right"
     >
       <el-breadcrumb-item :to="{ path: '/AdminHome' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>文章</el-breadcrumb-item>
-      <el-breadcrumb-item>文章编辑</el-breadcrumb-item>
+      <el-breadcrumb-item>评论管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图区域 -->
     <el-card>
@@ -25,59 +24,36 @@
             ></el-button>
           </el-input>
         </el-col>
-        <el-col :span="4">
-          <el-button
-            type="primary"
-            @click="addArt"
-          >发表文章</el-button>
-        </el-col>
       </el-row>
     </el-card>
     <!-- 用户列表区域 -->
     <el-table
-      :data="ArtList"
+      :data="CommentList"
       border
       stripe
     >
-      <!-- 在这里绑定表格的数据 ArtList -->
+      <!-- 在这里绑定表格的数据 CommentList -->
       <el-table-column type="index"></el-table-column>
       <!-- 添加索引列 -->
       <el-table-column
-        prop="title"
-        label="标题"
+        prop="username"
+        label="用户名"
       > </el-table-column>
       <!-- prop是取得userList中每一个对象中的对应属性值 -->
       <el-table-column
         show-overflow-tooltip
-        prop="Introduction"
-        label="简介"
+        prop="ip"
+        label="IP地址"
       > </el-table-column>
       <el-table-column
-        prop="image_path"
-        label="图片"
+        prop="content"
+        label="评论"
       >
-        <template slot-scope="scope">
-          <el-image
-            style="width: 100px; height: 100px"
-            :src="ImageUrl+scope.row.image_path"
-            :previewSrcList="evaluatePictureList"
-          >
-          </el-image>
-        </template></el-table-column>
+      </el-table-column>
       <el-table-column
         prop="publish_date"
         label="日期"
       > </el-table-column>
-      <el-table-column
-        prop="category"
-        label="分类"
-      >
-        <template slot-scope="scope">
-          <div>
-            {{categoryNames[scope.row.category]}}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
           <el-switch
@@ -120,83 +96,49 @@
 </template>
 
 <script>
-import { getarticles, getCategoriesList, Updstatus, searchArticles } from '@/api/ArticleList.api';
+import { getComment, Updstatus } from '@/api/MessageBoard.api'
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   data() {
     return {
       ImageUrl: this.$store.state.ImageUrl,
-      // 获取用户列表的参数
+      // 分页器-获取用户列表的参数
       queryIofo: {
         query: "",
         pagenum: 1,
         pagesize: 2,
       },
+      total: 0,
       // 评价图片列表
       evaluatePictureList: [],
-      ArtList: [],
-      categories: [], // 假设你从后端获取文章分类列表
-      total: 0,
+      CommentList: [],
       searchQuery: '',
       lastUpdateTimestamp: 0, //上次点击时间
       throttleInterval: 2000, // 节流时间间隔，单位：毫秒
     };
   },
   created() {
-    // 先获取分类列表的ID和Name
-    this.fetchCategoryList();
     // 获取用户列表页面
-    this.getArtList();
-
+    this.getComment();
   },
   computed: {
-    categoryNames() {
-      const categoryMap = {}; // 使用一个对象来存储分类 id 到名称的映射
-      this.categories.forEach(category => {
-        categoryMap[category.id] = category.name;
-      });
-      return categoryMap;
-    }
   },
   methods: {
-    // 获取分类列表
-    fetchCategoryList() {
-      getCategoriesList()
-        .then(res => {
-          if (res.status === 200) {
-            this.categories = res.data.categories;
-          } else {
-            console.log('报错');
-          }
-        })
-        .catch(err => {
-          console.log(err, 'axios报错');
-        })
-    },
-    getArtList() {
-      getarticles()
+    getComment() {
+      getComment()
         .then((res) => {
           if (res.status === 200) {
-            this.ArtList = res.data.articles;
-            this.ArtList = this.ArtList.map(item => ({
+            this.CommentList = res.data.comments;
+            this.CommentList = this.CommentList.map(item => ({
               id: item.id,
-              category: item.category,
-              Introduction: item.Introduction,
-              image_path: item.image_path,
+              username: item.username,
+              ip: item.city,
+              content: item.content,
               publish_date: item.formatted_publish_date,
-              title: item.title,
-              status: item.status
+              status: item.status,
+              username: item.username
             }));
-            // 遍历 ArtList，将不为 null，不为空 且不存在于 evaluatePictureList 中的图片路径添加到列表中
-            this.ArtList.forEach(item => {
-              const imagePath = this.ImageUrl + item.image_path;
-              if (item.image_path !== null && item.image_path !== "" && !this.evaluatePictureList.includes(imagePath)) {
-                this.evaluatePictureList.push(imagePath);
-              }
-            });
-            // this.$message.success("获取用户失败");
           } else {
-
             console.log('报错');
           }
         })
@@ -209,25 +151,26 @@ export default {
     //   // 一旦每页几条发生变化，则触发这个事件，把数据中的pagesize更新
     //   this.queryIofo.pagesize = newSize;
     //   // 重新用新的queryIofo参数获取用户数据，渲染页面
-    //   this.getArtList();
+    //   this.getComment();
     // },
     // // 监听页码变化
     // handleCurrentChange(newPage) {
     //   this.queryIofo.pagenum = newPage;
     //   // 重新用新的queryIofo参数获取用户数据，渲染页面
-    //   this.getArtList();
+    //   this.getComment();
     // },
 
     // 修改文章的显示
     updateStatus(row) {
       const tableData = {
         status: row.status,
-        articleId: row.id,
+        commentId: row.id,
       }
+      console.log(tableData, 'ppp');
       Updstatus(tableData)
         .then(res => {
           if (res.status === 200) {
-            // this.getArtList(); // 更新列表数据
+            // this.getComment(); // 更新列表数据
             this.$message.success("状态更新成功");
           } else {
             this.$message.error("状态更新失败");
@@ -252,7 +195,7 @@ export default {
       searchArticles(search)
         .then(res => {
           if (res.status === 200) {
-            this.ArtList = res.data.articles
+            this.CommentList = res.data.articles
           } else {
             console.log('报错');
           }
@@ -260,9 +203,6 @@ export default {
         .catch(err => {
           console.log(err, 'AXIOS报错');
         })
-    },
-    addArt() {
-      this.$router.push('/TextEditor');
     },
   },
 };

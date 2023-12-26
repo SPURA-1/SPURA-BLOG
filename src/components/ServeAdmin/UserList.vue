@@ -115,7 +115,6 @@
             style="width: 100px; height: 100px"
             :src="ImageUrl+scope.row.user_pic"
             :previewSrcList="evaluatePictureList"
-            @click="clickevaluatePicture(scope.row)"
           >
           </el-image>
         </template>
@@ -322,6 +321,13 @@ export default {
               user_role: this.options.find(option => option.value === item.user_role)?.label
             }));
             this.total = res.data.total;
+            // 遍历 ArtList，将不为 null，不为空 且不存在于 evaluatePictureList 中的图片路径添加到列表中
+            this.userList.forEach(item => {
+              const imagePath = this.ImageUrl + item.user_pic;
+              if (item.user_pic !== null && item.user_pic !== "" && !this.evaluatePictureList.includes(imagePath)) {
+                this.evaluatePictureList.push(imagePath);
+              }
+            });
           } else {
             return this.$message.error("获取用户失败");
 
@@ -476,13 +482,6 @@ export default {
       // 重新用新的queryIofo参数获取用户数据，渲染页面
       this.getUserList();
     },
-    // 点击评价图片，大图预览多张图片
-    clickevaluatePicture(row) {
-      var srclist = []
-      srclist.push(this.ImageUrl + row.user_pic)
-
-      this.evaluatePictureList = srclist// 赋值
-    }
   },
 };
 // this.userList=res.data.users

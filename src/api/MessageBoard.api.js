@@ -25,6 +25,14 @@ export function getComment(params) {
 }
 
 /**
+ * @description 留言板评论状态显示详情
+ * @url  /comment//Updstatus
+ * */
+export function Updstatus(params) {
+    return service.post('/comment//Updstatus', params);
+}
+
+/**
  * @description 留言板评论加载更多
  * @url  /comment/getMoreComments
  * */
