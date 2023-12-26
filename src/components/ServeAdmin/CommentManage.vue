@@ -1,13 +1,7 @@
 <template>
   <div>
-    <!-- 导航区 -->
-    <el-breadcrumb
-      class="el-breadcrumb"
-      separator-class="el-icon-arrow-right"
-    >
-      <el-breadcrumb-item :to="{ path: '/AdminHome' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>评论管理</el-breadcrumb-item>
-    </el-breadcrumb>
+    <!-- 面包屑导航区 -->
+    <top-bar />
     <!-- 用户列表区域 -->
     <el-table
       :data="CommentList"

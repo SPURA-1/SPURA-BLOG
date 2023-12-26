@@ -1,5 +1,7 @@
 <template>
   <div>
+    <!-- 面包屑导航区 -->
+    <top-bar />
     <div>
       <div
         class="editor-body"

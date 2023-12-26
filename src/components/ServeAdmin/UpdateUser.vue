@@ -1,30 +1,60 @@
 <template>
-  <el-card class="box-card">
-    <div slot="header" class="clearfix">
-      <span>更新密码</span>
-    </div>
-    <!-- 表单 -->
-    <el-form :model="userForm" :rules="userFormRules" ref="userFormRef" label-width="100px">
-      <el-form-item label="原密码" prop="oldPwd">
-        <el-input v-model="userForm.oldPwd"></el-input>
-      </el-form-item>
-      <el-form-item label="新密码" prop="newPwd">
-        <el-input v-model="userForm.newPwd"></el-input>
-      </el-form-item>
-      <el-form-item label="确认新密码" prop="rePwd">
-        <el-input v-model="userForm.rePwd"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <!-- 权限设置，可选择按钮隐藏或者跳出提示没有权限 -->
-        <!-- <el-button type="primary" v-if="canChangePassword" @click="UpdateUser">提交修改</el-button> -->
-        <el-button type="primary" @click="UpdateUser">提交修改</el-button>
-        <!-- 自定义指令v-has 可以选择不填，不填则从路由获取权限规则或者可以自己设置接口获取规则 -->
-        <el-button type="primary" v-has="1">测试</el-button>
-        <el-button type="primary" v-has>编辑0</el-button>
+  <div>
+    <!-- 面包屑导航区 -->
+    <top-bar style="margin-bottom:10px;" />
+    <el-card class="box-card">
+      <div
+        slot="header"
+        class="clearfix"
+      >
+        <span>更新密码</span>
+      </div>
+      <!-- 表单 -->
+      <el-form
+        :model="userForm"
+        :rules="userFormRules"
+        ref="userFormRef"
+        label-width="100px"
+      >
+        <el-form-item
+          label="原密码"
+          prop="oldPwd"
+        >
+          <el-input v-model="userForm.oldPwd"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="新密码"
+          prop="newPwd"
+        >
+          <el-input v-model="userForm.newPwd"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="确认新密码"
+          prop="rePwd"
+        >
+          <el-input v-model="userForm.rePwd"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <!-- 权限设置，可选择按钮隐藏或者跳出提示没有权限 -->
+          <!-- <el-button type="primary" v-if="canChangePassword" @click="UpdateUser">提交修改</el-button> -->
+          <el-button
+            type="primary"
+            @click="UpdateUser"
+          >提交修改</el-button>
+          <!-- 自定义指令v-has 可以选择不填，不填则从路由获取权限规则或者可以自己设置接口获取规则 -->
+          <el-button
+            type="primary"
+            v-has="1"
+          >测试</el-button>
+          <el-button
+            type="primary"
+            v-has
+          >编辑0</el-button>
 
-      </el-form-item>
-    </el-form>
-  </el-card>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script>

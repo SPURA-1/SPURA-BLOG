@@ -27,7 +27,7 @@ const routes = [
     redirect: '/AdminHome',
     meta: {
       requireAuth: true,
-      title: '组件',
+      title: '首页',
       icon: 'box-open'
     },
     // meta 标记 需要登录才能使用
@@ -76,13 +76,11 @@ const routes = [
         children: [
           {
             path: '/UserList',
-            name: 'UserList',
             component: () => import('../components/ServeAdmin/UserList.vue'),
             meta: { title: '账号管理', icon: 'el-icon-edit-outline' },
           },
           {
             path: '/ArtList',
-            name: 'ArtList',
             component: () => import('../components/ServeAdmin/ArtList.vue'),
             meta: { title: '文章管理', icon: 'el-icon-reading' },
           }
@@ -95,7 +93,6 @@ const routes = [
         children: [
           {
             path: '/GameManage',
-            name: 'GameManage',
             component: () => import('../components/ServeAdmin/GameManage.vue'),
             meta: { title: '游戏管理', icon: 'el-icon-mouse' },
           },
@@ -103,18 +100,15 @@ const routes = [
       },
       {
         path: '/UserImage',
-        name: 'UserImage',
         component: () => import('../components/ServeAdmin/UserImage.vue'),
         meta: { title: '头像管理', icon: 'el-icon-camera' },
       },
       {
         path: '/Comment',
-        name: 'Comment',
         component: () => import('../components/ServeAdmin/CommentManage.vue'),
         meta: { title: '评论管理', icon: 'el-icon-s-comment' },
       },
       {
-        name: 'Test',
         path: '/Test',
         component: () => import('../views/Test/Test.vue'),
         meta: { title: '测试', icon: 'el-icon-guide' },

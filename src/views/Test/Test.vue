@@ -1,5 +1,7 @@
 <template>
   <div>
+    <!-- 面包屑导航区 -->
+    <top-bar style="margin-bottom:10px;" />
     <div class="button-group">
       <button
         :class="{ active: currentTab === 'control' }"

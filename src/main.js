@@ -8,6 +8,9 @@ import axios from 'axios'
 import has from './utils/ButtonPermissions';
 Vue.directive('has', has);
 
+import TopBar from '@/components/ServeAdmin/components/Breadcrumb.vue';
+Vue.component('top-bar', TopBar); // 注册 TopBar 组件
+
 // 导入全局错误处理逻辑
 import '@/utils/errorLogs';
 

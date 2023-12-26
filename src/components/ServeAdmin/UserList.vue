@@ -1,14 +1,7 @@
 <template>
   <div>
-    <!-- 导航区 -->
-    <el-breadcrumb
-      class="el-breadcrumb"
-      separator-class="el-icon-arrow-right"
-    >
-      <el-breadcrumb-item :to="{ path: '/AdminHome' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>账号</el-breadcrumb-item>
-      <el-breadcrumb-item>添加新账号</el-breadcrumb-item>
-    </el-breadcrumb>
+    <!-- 面包屑导航区 -->
+    <top-bar />
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->

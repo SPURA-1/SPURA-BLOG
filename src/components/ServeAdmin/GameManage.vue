@@ -1,5 +1,7 @@
 <template>
   <div class="avatar-container">
+    <!-- 面包屑导航区 -->
+    <top-bar />
     <!-- 已上传的图片列表 -->
     <div class="uploaded-images">
       <p>已上传的图片:</p>
