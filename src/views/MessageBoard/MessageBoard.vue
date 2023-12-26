@@ -625,6 +625,11 @@ export default {
   align-items: center;
   margin-bottom: 5px;
   animation: animated-border 1.5s infinite;
+  background: linear-gradient(to top, #4caf50, #4caf50 -10px, transparent 10px),
+    linear-gradient(to right, #c1ef8c, #c1ef8c -10px, transparent 10px),
+    linear-gradient(to bottom, #8bc34a, #8bc34a -10px, transparent 10px),
+    linear-gradient(to left, #009688, #009688 -10px, transparent 10px);
+  background-origin: content-box;
 }
 @keyframes animated-border {
   0% {
@@ -661,7 +666,7 @@ export default {
 .new-message {
   padding: 2px;
   border: 2px solid rgb(221, 218, 15);
-  animation: scrollIn 5s linear; /* 5秒内从右侧滚动进入屏幕 */
+  animation: scrollIn 2s linear; /* 5秒内从右侧滚动进入屏幕 */
 }
 
 .content {
