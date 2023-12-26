@@ -141,7 +141,6 @@ export default {
         status: row.status,
         commentId: row.id,
       }
-      console.log(tableData, 'ppp');
       Updstatus(tableData)
         .then(res => {
           if (res.status === 200) {
