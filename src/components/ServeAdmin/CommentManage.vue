@@ -8,24 +8,6 @@
       <el-breadcrumb-item :to="{ path: '/AdminHome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>评论管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 卡片视图区域 -->
-    <el-card>
-      <!-- 搜索与添加区域 -->
-      <el-row :gutter="50">
-        <el-col :span="8">
-          <el-input
-            v-model="searchQuery"
-            placeholder="请输入内容"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="searchArt"
-            ></el-button>
-          </el-input>
-        </el-col>
-      </el-row>
-    </el-card>
     <!-- 用户列表区域 -->
     <el-table
       :data="CommentList"
@@ -112,7 +94,6 @@ export default {
       // 评价图片列表
       evaluatePictureList: [],
       CommentList: [],
-      searchQuery: '',
       lastUpdateTimestamp: 0, //上次点击时间
       throttleInterval: 2000, // 节流时间间隔，单位：毫秒
     };
@@ -188,21 +169,6 @@ export default {
         this.updateStatus(row); // 执行实际的状态更新逻辑
         this.lastUpdateTimestamp = currentTime; // 更新上次更新时间戳
       }
-    },
-    // 搜索文章
-    searchArt() {
-      const search = { searchQuery: this.searchQuery }
-      searchArticles(search)
-        .then(res => {
-          if (res.status === 200) {
-            this.CommentList = res.data.articles
-          } else {
-            console.log('报错');
-          }
-        })
-        .catch(err => {
-          console.log(err, 'AXIOS报错');
-        })
     },
   },
 };

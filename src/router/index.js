@@ -111,7 +111,7 @@ const routes = [
         path: '/Comment',
         name: 'Comment',
         component: () => import('../components/ServeAdmin/CommentManage.vue'),
-        meta: { title: '评论管理', icon: 'el-icon-camera' },
+        meta: { title: '评论管理', icon: 'el-icon-s-comment' },
       },
       {
         name: 'Test',
