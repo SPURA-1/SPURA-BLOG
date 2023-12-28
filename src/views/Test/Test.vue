@@ -101,48 +101,36 @@
         style="margin-top:10px; overflow:auto; max-height:800px;"
       >
 
+        <!-- 使用v-for循环生成el-table-column -->
         <el-table-column
-          prop="Name"
-          label="名称"
-        >
-
-        </el-table-column>
-        <el-table-column
-          prop="ManufacturerName"
-          label="厂商"
-        >
-
-        </el-table-column>
-        <el-table-column
-          prop="ManufacturerModel"
-          label="型号"
-        >
-
-        </el-table-column>
-        <el-table-column
-          prop="Comment"
-          label="备注信息"
-        >
-
-        </el-table-column>
-        <el-table-column
-          prop="CreateTime"
-          label="创建时间"
+          v-for="column in tableColumns"
+          :key="column.prop"
+          :prop="column.prop"
+          :label="column.label"
+          :align="column.align"
         >
         </el-table-column>
         <el-table-column
-          prop="UpdateTime"
-          label="更新时间"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="operate"
           label="操作"
-          width="160"
+          fixed="right"
         >
           <template slot-scope="scope">
-            <el-button size="mini">修改</el-button>&nbsp;
-            <el-button size="mini">删除</el-button>
+            <el-button
+              text
+              size="small"
+              type="primary"
+              @click="detailButton(scope.row)"
+            >
+              详情
+            </el-button>
+            <el-button
+              text
+              size="small"
+              type="danger"
+              @click="delButton(scope.row.id)"
+            >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -174,6 +162,13 @@ export default {
       }
     };
     return {
+      tableColumns: [
+        { prop: 'Name', label: '名称', align: 'center' },
+        { prop: 'ManufacturerCount', label: '数量', align: 'center' },
+        { prop: 'Comment', label: '备注信息', align: 'center' },
+        { prop: 'CreateTime', label: '创建时间', align: 'center' },
+        { prop: 'UpdateTime', label: '更新时间', align: 'center' },
+      ],
       rules: {
         Name: [
           { required: true, message: '名字不能为空', trigger: 'blur' }
@@ -215,7 +210,14 @@ export default {
       this.form.responseData.splice(index, 1);
       this.$refs.form.validate()
     },
-
+    detailButton(row) {
+      console.log(row, '详情');
+      // 处理详情按钮点击事件
+    },
+    delButton(id) {
+      console.log(id, '删除');
+      // 处理删除按钮点击事件
+    }
   }
 }
 </script>

@@ -104,7 +104,9 @@ export default {
     };
   },
   created() {
-    this.AllImage();
+    this.AllImage().then(result => {
+      this.uploadedImages = result
+    })
   },
   methods: {
     submitUpload(file) {
@@ -132,18 +134,39 @@ export default {
 
       this.fileList = []; // 清空文件列表
     },
+    // AllImage() {
+    //   GetImages()
+    //     .then(res => {
+    //       if (res.status === 200) {
+    //         this.uploadedImages = res.data.images
+    //       } else {
+    //         console.log('报错');
+    //       }
+    //     })
+    //     .catch(err => {
+    //       console.log(err, 'AXIOS报错');
+    //     })
+    // },
     AllImage() {
-      GetImages()
-        .then(res => {
-          if (res.status === 200) {
-            this.uploadedImages = res.data.images
-          } else {
-            console.log('报错');
-          }
-        })
-        .catch(err => {
-          console.log(err, 'AXIOS报错');
-        })
+      // 返回一个 Promise 对象
+      return new Promise((resolve, reject) => {
+        // 模拟异步操作
+        setTimeout(() => {
+          GetImages()
+            .then(res => {
+              if (res.status === 200) {
+                resolve(res.data.images);
+              } else {
+                // 如果失败，调用 reject 并传递错误信息
+                reject('请求失败');
+              }
+            })
+            .catch(err => {
+              console.error(err, 'AXIOS错误');
+              reject(err);
+            })
+        }, 1000);
+      });
     },
     // 文件上传成功后的钩子
     handleAvatarSuccess(res, file, fileList) {
