@@ -9,7 +9,7 @@
 
 <script>
 // import Loading from './components/Loading/Loading.vue';
-import { mapGetters } from 'vuex'; // 导入 mapGetters
+// import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
   // components: {
   //   Loading,
@@ -17,18 +17,13 @@ export default {
   name: 'app',
   data() {
     return {
-      isLoading: true
+      // isLoading: true
     }
   },
   mounted() {
     // this.loadData(); // 在页面加载完成后调用加载数据方法
   },
   computed: {
-    ...mapGetters(['userRole']),
-    canChangePassword() {
-      const canChange = this.userRole === 1;
-      return canChange;
-    }
   },
   methods: {
     // loadData() {
@@ -47,6 +42,11 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  * {
+    width: 100%;
+  }
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

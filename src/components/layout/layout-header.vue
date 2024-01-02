@@ -19,7 +19,7 @@
         class="menus-btn"
         @click.stop="mobileShow = !mobileShow"
       >
-        Menus
+        Menu
       </div>
       <div
         class="site-menus"
@@ -254,6 +254,10 @@ export default {
   .menus-btn {
     display: block;
     visibility: visible;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 10px;
+    font-size: 20px;
   }
 
   .site-menus {

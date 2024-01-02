@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div ref="BasicRadarChart" style="width:100%;height:17rem;"></div>
+    <div
+      ref="BasicRadarChart"
+      style="width:100%;height:17rem;"
+    ></div>
   </div>
 </template>
 
@@ -30,19 +33,19 @@ export default {
           data: ['Allocated Budget', 'Actual Spending'],
           textStyle: {
             fontSize: 12,
-            color: "#fff",
+            color: "#1E1E1E",
           },
           // top: 'bottom',
         },
         radar: {
           // shape: 'circle',
           indicator: [
-            { name: 'Sales', max: 500 },
-            { name: 'Administration', max: 500 },
-            { name: 'Information Technology', max: 500 },
-            { name: 'Customer Support', max: 500 },
-            { name: 'Development', max: 500 },
-            { name: 'Marketing', max: 500 }
+            { name: '分析能力', max: 500 },
+            { name: '沟通能力', max: 500 },
+            { name: '团队合作', max: 500 },
+            { name: '解决问题能力', max: 500 },
+            { name: '创新思维', max: 500 },
+            { name: '学习能力', max: 500 }
           ]
         },
         series: [
@@ -51,12 +54,12 @@ export default {
             type: 'radar',
             data: [
               {
-                value: [200, 300, 200, 500, 500, 180],
-                name: 'Allocated Budget'
+                value: [250, 250, 250, 250, 250, 250],
+                name: '平均'
               },
               {
-                value: [500, 140, 280, 260, 420, 210],
-                name: 'Actual Spending'
+                value: [500, 500, 500, 500, 500, 500],
+                name: '期望'
               }
             ]
           }

@@ -6,6 +6,7 @@
         <AdminPage></AdminPage>
       </div>
     </div>
+    <!-- 电脑端页面内容 -->
     <div v-else>
       <!-- 头部背景图片 -->
       <div class="headImgBox">
@@ -65,15 +66,16 @@
         ></backTop>
         <Home></Home>
       </div>
-      <div
-        v-if="loading"
-        class="loading"
-      >
-        <div class="spinner-container">
-          <div class="spinner"></div>
-        </div>
-        <p class="load">Loading...</p>
+    </div>
+    <!-- 进度条 -->
+    <div
+      v-if="loading"
+      class="loading"
+    >
+      <div class="spinner-container">
+        <div class="spinner"></div>
       </div>
+      <p class="load">Loading...</p>
     </div>
   </div>
 </template>
@@ -124,10 +126,9 @@ export default {
 
 <style scoped>
 #layout-body {
+  width: 100%;
   /* header = 80px */
   padding-top: 80px;
-  margin-left: 10px;
-  margin-right: 10px;
   min-height: -moz-calc(100vh - 80px);
   min-height: -webkit-calc(100vh - 80px);
   min-height: calc(100vh - 80px);
@@ -135,10 +136,10 @@ export default {
   scroll-behavior: smooth;
 }
 
-@media (max-width: 800px) {
+/* @media (max-width: 800px) {
   #layout-body {
   }
-}
+} */
 
 /* 首页文字缓慢显示 */
 p {
