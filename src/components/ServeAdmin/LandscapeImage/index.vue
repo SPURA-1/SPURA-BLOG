@@ -2,30 +2,31 @@
   <div>
     <!-- 面包屑导航区 -->
     <top-bar />
+    <el-button
+      style="margin-bottom:5px"
+      type="primary"
+      @click="addArt"
+    >上传照片</el-button>
     <!-- 用户列表区域 -->
     <el-table
-      :data="CommentList"
+      :data="ArtList"
       border
       stripe
     >
-      <!-- 在这里绑定表格的数据 CommentList -->
+      <!-- 在这里绑定表格的数据 ArtList -->
       <el-table-column type="index"></el-table-column>
-      <!-- 添加索引列 -->
       <el-table-column
-        prop="username"
-        label="用户名"
-      > </el-table-column>
-      <!-- prop是取得userList中每一个对象中的对应属性值 -->
-      <el-table-column
-        show-overflow-tooltip
-        prop="ip"
-        label="IP地址"
-      > </el-table-column>
-      <el-table-column
-        prop="content"
-        label="评论"
+        prop="image_path"
+        label="图片"
       >
-      </el-table-column>
+        <template slot-scope="scope">
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="ImageUrl+scope.row.image_path"
+            :previewSrcList="evaluatePictureList"
+          >
+          </el-image>
+        </template></el-table-column>
       <el-table-column
         prop="publish_date"
         label="日期"
@@ -68,50 +69,65 @@
     <!-- 分页区域 -->
     <!-- <el-pagination @size-change="handleSizeChange" @current-change="handeleCurrentChange" :current-page="queryIofo.pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="queryIofo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination> -->
+    <el-dialog
+      :visible.sync="dialogVisibleSet"
+      title="照片上传"
+    >
+      <LandscapeImage @uploadComplete="handleUploadComplete" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getComment, Updstatus } from '@/api/MessageBoard.api'
-import { mapGetters } from 'vuex'; // 导入 mapGetters
+import { getAlllandscapeImages, Updstatus } from '@/api/homePage.api';
+import LandscapeImage from "@/components/ServeAdmin/LandscapeImage/components/LandscapeImage.vue";
 export default {
+  components: {
+    LandscapeImage,
+  },
   data() {
     return {
+      dialogVisibleSet: false,
       ImageUrl: this.$store.state.ImageUrl,
-      // 分页器-获取用户列表的参数
+      // 获取用户列表的参数
       queryIofo: {
         query: "",
         pagenum: 1,
         pagesize: 2,
       },
-      total: 0,
       // 评价图片列表
       evaluatePictureList: [],
-      CommentList: [],
+      ArtList: [],
+      total: 0,
       lastUpdateTimestamp: 0, //上次点击时间
       throttleInterval: 2000, // 节流时间间隔，单位：毫秒
     };
   },
   created() {
     // 获取用户列表页面
-    this.getComment();
-  },
-  computed: {
+    this.getArtList();
   },
   methods: {
-    getComment() {
-      getComment()
+    getArtList() {
+      getAlllandscapeImages()
         .then((res) => {
           if (res.status === 200) {
-            this.CommentList = res.data.comments;
-            this.CommentList = this.CommentList.map(item => ({
+            this.ArtList = res.data.images;
+            this.ArtList = this.ArtList.map(item => ({
               id: item.id,
-              username: item.username,
-              ip: item.city,
-              content: item.content,
+              description: description,
+              image_path: item.image_path,
               publish_date: item.formatted_publish_date,
-              status: item.status,
+              status: item.status
             }));
+            // 遍历 ArtList，将不为 null，不为空 且不存在于 evaluatePictureList 中的图片路径添加到列表中
+            this.ArtList.forEach(item => {
+              const imagePath = this.ImageUrl + item.image_path;
+              if (item.image_path !== null && item.image_path !== "" && !this.evaluatePictureList.includes(imagePath)) {
+                this.evaluatePictureList.push(imagePath);
+              }
+            });
+            // this.$message.success("获取用户失败");
           } else {
             console.log('报错');
           }
@@ -125,28 +141,32 @@ export default {
     //   // 一旦每页几条发生变化，则触发这个事件，把数据中的pagesize更新
     //   this.queryIofo.pagesize = newSize;
     //   // 重新用新的queryIofo参数获取用户数据，渲染页面
-    //   this.getComment();
+    //   this.getArtList();
     // },
     // // 监听页码变化
     // handleCurrentChange(newPage) {
     //   this.queryIofo.pagenum = newPage;
     //   // 重新用新的queryIofo参数获取用户数据，渲染页面
-    //   this.getComment();
+    //   this.getArtList();
     // },
 
     // 修改文章的显示
     updateStatus(row) {
       const tableData = {
         status: row.status,
-        commentId: row.id,
+        landscapeId: row.id,
       }
+      console.log(tableData);
       Updstatus(tableData)
         .then(res => {
           if (res.status === 200) {
-            // this.getComment(); // 更新列表数据
-            this.$message.success("状态更新成功");
+
+            console.log(tableData, 'console.log(tableData);');
+            console.log(res, 'sss');
+            // this.getArtList(); // 更新列表数据
+            this.$message.success(res.data);
           } else {
-            this.$message.error("状态更新失败");
+            this.$message.error(res.data);
           }
         })
         .catch(error => {
@@ -163,8 +183,17 @@ export default {
       } else {
         // 提示用户更新过于频繁
         this.$message.warning('状态更新过于频繁，请稍后再试！');
-        this.getComment();
+        this.getArtList();
       }
+    },
+    addArt() {
+      this.dialogVisibleSet = true;
+      console.log(this.dialogVisibleSet);
+    },
+    handleUploadComplete() {
+      // 文件上传完成后的回调
+      this.dialogVisibleSet = false; // 隐藏 el-dialog
+      this.getArtList();
     },
   },
 };

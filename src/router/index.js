@@ -109,6 +109,11 @@ const routes = [
         meta: { title: '评论管理', icon: 'el-icon-s-comment' },
       },
       {
+        path: '/LandscapeImage',
+        component: () => import('../components/ServeAdmin/LandscapeImage/index.vue'),
+        meta: { title: '风景管理', icon: 'el-icon-s-comment' },
+      },
+      {
         path: '/Test',
         component: () => import('../views/Test/Test.vue'),
         meta: { title: '测试', icon: 'el-icon-guide' },

@@ -1,48 +1,79 @@
 <template>
-  <div style="">
-    <!-- 头部背景图片 -->
-    <div class="headImgBox">
-      <!-- 我们使用<video>元素来添加视频背景。autoplay属性使视频自动播放，
+  <div>
+    <div v-if="isMobile">
+      <!-- 手机端页面内容 -->
+      <div id="layout-body">
+        <AdminPage></AdminPage>
+      </div>
+    </div>
+    <div v-else>
+      <!-- 头部背景图片 -->
+      <div class="headImgBox">
+        <!-- 我们使用<video>元素来添加视频背景。autoplay属性使视频自动播放，
         muted属性使视频静音，loop属性使视频循环播放。<source>元素用于指定视频文件的路径和类型。 -->
-      <video autoplay muted loop id="background-video">
-        <source src="../../assets/Images/headBg.mp4" type="video/mp4">
-      </video>
-      <div class="scene">
-        <p>
-          <span class="span1">H</span>
-          <span class="span1">E</span>
-          <span class="span1">L</span>
-          <span class="span1">L</span>
-          <span class="span1">O</span>
-          <span class="span1">W</span>
-          <span class="span1">O</span>
-          <span class="span1">R</span>
-          <span class="span1">L</span>
-          <span class="span1">D</span>
-        </p>
-      </div>
-      <div class="h-information">
-        <a href="">
-          <img src="../../assets/Images/preview.jpg" alt="Account Image">
-        </a>
-        <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
-        <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">
-        <h2 class="h-description">
-          <a>
-            {{ "ようこそSPURAのブログへ！" }}
+        <video
+          autoplay
+          muted
+          loop
+          id="background-video"
+        >
+          <source
+            src="../../assets/Images/headBg.mp4"
+            type="video/mp4"
+          >
+        </video>
+        <div class="scene">
+          <p>
+            <span class="span1">H</span>
+            <span class="span1">E</span>
+            <span class="span1">L</span>
+            <span class="span1">L</span>
+            <span class="span1">O</span>
+            <span class="span1">W</span>
+            <span class="span1">O</span>
+            <span class="span1">R</span>
+            <span class="span1">L</span>
+            <span class="span1">D</span>
+          </p>
+        </div>
+        <div class="h-information">
+          <a href="">
+            <img
+              src="../../assets/Images/preview.jpg"
+              alt="Account Image"
+            >
           </a>
-        </h2>
+          <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
+          <img
+            src="../../assets/background.jpg"
+            alt="Login Background"
+            style="display: none;"
+          >
+          <h2 class="h-description">
+            <a>
+              {{ "ようこそSPURAのブログへ！" }}
+            </a>
+          </h2>
+        </div>
       </div>
-    </div>
-    <div id="layout-body">
-      <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
-      <Home></Home>
-    </div>
-    <div v-if="loading" class="loading">
-      <div class="spinner-container">
-        <div class="spinner"></div>
+      <div id="layout-body">
+        <backTop
+          :defaultProps="55"
+          :date="1000"
+          :color="topColor"
+          style="z-index:999;"
+        ></backTop>
+        <Home></Home>
       </div>
-      <p class="ppp">Loading...</p>
+      <div
+        v-if="loading"
+        class="loading"
+      >
+        <div class="spinner-container">
+          <div class="spinner"></div>
+        </div>
+        <p class="load">Loading...</p>
+      </div>
     </div>
   </div>
 </template>
@@ -50,15 +81,28 @@
 <script>
 import backTop from '../nav/ToTap.vue'
 import Home from '../../views/HomeSss.vue'
+import AdminPage from '@/components/mobilePage/AdminPage.vue'
 export default {
-  components: { backTop, Home },
+  components: { backTop, Home, AdminPage },
   name: "layout-body",
   data() {
     return {
+      // 是否为手机端
+      isMobile: false,
       // 回到顶部组件颜色
       topColor: '#66ccff',
       loading: true, // 初始状态下显示加载动画
     }
+  },
+  created() {
+    // 在组件创建时检查是否为手机端
+    this.checkIsMobile();
+    // 添加窗口大小改变事件监听器，以便动态检测
+    window.addEventListener('resize', this.checkIsMobile);
+  },
+  destroyed() {
+    // 移除窗口大小改变事件监听器
+    window.removeEventListener('resize', this.checkIsMobile);
   },
   beforeMount() {
     this.loading = true; // 在 beforeMount 中显示加载动画
@@ -68,7 +112,13 @@ export default {
       this.loading = false; // 全部图片加载完成后关闭加载动画
     }, 1000);
   },
-  methods: {},
+  methods: {
+    checkIsMobile() {
+      // 设置阈值，小于该值认为是手机端
+      const mobileThreshold = 768;
+      this.isMobile = window.innerWidth < mobileThreshold;
+    },
+  },
 }
 </script>
 
@@ -87,7 +137,6 @@ export default {
 
 @media (max-width: 800px) {
   #layout-body {
-    padding-top: 60px;
   }
 }
 
@@ -397,7 +446,7 @@ p .span2 {
   }
 }
 
-.ppp {
+.load {
   margin-top: 20px;
   margin-left: 20px;
   color: #fff;

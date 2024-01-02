@@ -1,28 +1,53 @@
 <template>
   <div>
-    <div id="layout-header" :class="{ 'fixed': fixed, 'hidden': hidden }" @click.stop="mobileShow = false">
+    <div
+      id="layout-header"
+      :class="{ 'fixed': fixed, 'hidden': hidden }"
+      @click.stop="mobileShow = false"
+    >
       <div class="site-logo">
         <router-link to="/">
-          <img src="@/assets/Main/logo.png" style="width:100%;height:100%;" alt="Logo" title="首页">
+          <img
+            src="@/assets/Main/logo.png"
+            style="width:100%;height:100%;"
+            alt="Logo"
+            title="首页"
+          >
         </router-link>
       </div>
-      <div class="menus-btn" @click.stop="mobileShow = !mobileShow">
+      <div
+        class="menus-btn"
+        @click.stop="mobileShow = !mobileShow"
+      >
         Menus
       </div>
-      <div class="site-menus" :class="{ 'mobileShow': mobileShow }" @click.stop="mobileShow = !mobileShow">
+      <div
+        class="site-menus"
+        :class="{ 'mobileShow': mobileShow }"
+        @click.stop="mobileShow = !mobileShow"
+      >
         <div class="menu-item">
           <router-link to="/">首页</router-link>
         </div>
         <div class="menu-item">
           <router-link to="/ArticleList">文章</router-link>
         </div>
-        <div class="menu-item">
+        <div
+          class="menu-item"
+          v-if="!mobileShow"
+        >
           <router-link to="/EsBigScreen">可视化大屏</router-link>
         </div>
-        <div class="menu-item">
+        <div
+          class="menu-item"
+          v-if="!mobileShow"
+        >
           <router-link to="/blockly">编程</router-link>
         </div>
-        <div class="menu-item">
+        <div
+          class="menu-item"
+          v-if="!mobileShow"
+        >
           <router-link to="/GameBoard">娱乐</router-link>
         </div>
         <div class="menu-item">

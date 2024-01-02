@@ -237,6 +237,10 @@ export default {
       if (currentTime - this.lastUpdateTimestamp >= this.throttleInterval) {
         this.updateStatus(row); // 执行实际的状态更新逻辑
         this.lastUpdateTimestamp = currentTime; // 更新上次更新时间戳
+      } else {
+        // 提示用户更新过于频繁
+        this.$message.warning('状态更新过于频繁，请稍后再试！');
+        this.getArtList();
       }
     },
     // 搜索文章
