@@ -12,44 +12,21 @@
       <div class="headImgBox">
         <!-- 我们使用<video>元素来添加视频背景。autoplay属性使视频自动播放，
         muted属性使视频静音，loop属性使视频循环播放。<source>元素用于指定视频文件的路径和类型。 -->
-        <video
-          autoplay
-          muted
-          loop
-          id="background-video"
-        >
-          <source
-            src="../../assets/Images/headBg.mp4"
-            type="video/mp4"
-          >
+        <video autoplay muted loop id="background-video">
+          <source src="../../assets/Images/headBg.mp4" type="video/mp4">
         </video>
         <div class="scene">
           <p>
-            <span class="span1">H</span>
-            <span class="span1">E</span>
-            <span class="span1">L</span>
-            <span class="span1">L</span>
-            <span class="span1">O</span>
-            <span class="span1">W</span>
-            <span class="span1">O</span>
-            <span class="span1">R</span>
-            <span class="span1">L</span>
-            <span class="span1">D</span>
+            <!-- 界面文字 -->
+            <span v-for="letter in letters" :key="letter" class="span1">{{ letter }}</span>
           </p>
         </div>
         <div class="h-information">
           <a href="">
-            <img
-              src="../../assets/Images/preview.jpg"
-              alt="Account Image"
-            >
+            <img src="../../assets/Images/preview.jpg" alt="Account Image">
           </a>
           <!-- 在主页中添加一个隐藏的img标签，用于预加载登录界面的背景图片 -->
-          <img
-            src="../../assets/background.jpg"
-            alt="Login Background"
-            style="display: none;"
-          >
+          <img src="../../assets/background.jpg" alt="Login Background" style="display: none;">
           <h2 class="h-description">
             <a>
               {{ "ようこそSPURAのブログへ！" }}
@@ -58,20 +35,12 @@
         </div>
       </div>
       <div id="layout-body">
-        <backTop
-          :defaultProps="55"
-          :date="1000"
-          :color="topColor"
-          style="z-index:999;"
-        ></backTop>
+        <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
         <Home></Home>
       </div>
     </div>
     <!-- 进度条 -->
-    <div
-      v-if="loading"
-      class="loading"
-    >
+    <div v-if="loading" class="loading">
       <div class="spinner-container">
         <div class="spinner"></div>
       </div>
@@ -91,6 +60,8 @@ export default {
     return {
       // 是否为手机端
       isMobile: false,
+      // 界面文字
+      letters: 'HelloWorld',
       // 回到顶部组件颜色
       topColor: '#66ccff',
       loading: true, // 初始状态下显示加载动画

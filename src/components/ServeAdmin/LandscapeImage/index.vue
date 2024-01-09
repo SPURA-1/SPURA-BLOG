@@ -2,66 +2,31 @@
   <div>
     <!-- 面包屑导航区 -->
     <top-bar />
-    <el-button
-      style="margin-bottom:5px"
-      type="primary"
-      @click="addArt"
-    >上传照片</el-button>
+    <el-button style="margin-bottom:5px" type="primary" @click="addArt">上传照片</el-button>
     <!-- 用户列表区域 -->
-    <el-table
-      :data="ArtList"
-      border
-      stripe
-    >
+    <el-table :data="ArtList" border stripe>
       <!-- 在这里绑定表格的数据 ArtList -->
       <el-table-column type="index"></el-table-column>
-      <el-table-column
-        prop="image_path"
-        label="图片"
-      >
+      <el-table-column prop="image_path" label="图片">
         <template slot-scope="scope">
-          <el-image
-            style="width: 100px; height: 100px"
-            :src="ImageUrl+scope.row.image_path"
-            :previewSrcList="evaluatePictureList"
-          >
+          <el-image style="width: 100px; height: 100px" :src="ImageUrl+scope.row.image_path" :previewSrcList="evaluatePictureList">
           </el-image>
         </template></el-table-column>
-      <el-table-column
-        prop="publish_date"
-        label="日期"
-      > </el-table-column>
+      <el-table-column prop="description" label="描述"> </el-table-column>
+      <el-table-column prop="formatted_publish_date" label="日期"> </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.status"
-            :active-value="1"
-            :inactive-value="0"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            @change="handleThrottledStatusChange(scope.row)"
-          >
+          <el-switch v-model="scope.row.status" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="handleThrottledStatusChange(scope.row)">
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        width="180px"
-      >
+      <el-table-column label="操作" width="180px">
         <!-- slot-scope="scope" -->
         <template>
           <!-- 修改按钮 -->
-          <el-button
-            type="primary"
-            icon="el-icon-edit"
-            size="mini"
-          ></el-button>
+          <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
           <!-- 删除按钮 -->
-          <el-button
-            type="danger"
-            icon="el-icon-delete"
-            size="mini"
-          ></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
 
         </template>
       </el-table-column>
@@ -69,10 +34,7 @@
     <!-- 分页区域 -->
     <!-- <el-pagination @size-change="handleSizeChange" @current-change="handeleCurrentChange" :current-page="queryIofo.pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="queryIofo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination> -->
-    <el-dialog
-      :visible.sync="dialogVisibleSet"
-      title="照片上传"
-    >
+    <el-dialog :visible.sync="dialogVisibleSet" title="照片上传">
       <LandscapeImage @uploadComplete="handleUploadComplete" />
     </el-dialog>
   </div>
@@ -117,7 +79,7 @@ export default {
               id: item.id,
               description: description,
               image_path: item.image_path,
-              publish_date: item.formatted_publish_date,
+              formatted_publish_date: item.formatted_publish_date,
               status: item.status
             }));
             // 遍历 ArtList，将不为 null，不为空 且不存在于 evaluatePictureList 中的图片路径添加到列表中
