@@ -24,6 +24,7 @@ export function UserReg(params) {
 /**
  * @description 登录验证码
  * @url  /api/reguser
+ * 正常获取验证码必须添加 responseType: 'arraybuffer'
  * */
 export function UserCaptcha(params) {
     return service.get('/api/captcha', params);
