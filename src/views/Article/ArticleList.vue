@@ -2,19 +2,18 @@
   <div class="body">
     <backTop
       :defaultProps="55"
-      :date="1000"
       :color="topColor"
       style="z-index:999;"
     ></backTop>
-    <div class="left-side">
-      <div class="articles">
+    <div class="left_side">
+      <div class="articlesList">
         <div
           v-for="article in articles"
           :key="article.id"
           class="article"
           @click="navigateToArticle(article.id)"
         >
-          <div class="image-container">
+          <div class="image_container">
             <img
               class="image_cover"
               :src="ImageUrl+article.image_path"
@@ -22,9 +21,9 @@
               v-if="article.image_path"
             />
           </div>
-          <div class="article-details">
+          <div class="article_details">
             <h2>{{ article.title }}</h2>
-            <p class="article-content">{{ truncateContent(article.Introduction) }}</p>
+            <p class="article_content">{{ truncateContent(article.Introduction) }}</p>
             <div class="article-meta">
               <p
                 class=""
@@ -36,26 +35,26 @@
         </div>
       </div>
     </div>
-    <div class="right-side">
+    <div class="right_side">
       <div class="sidebar">
-        <div class="search-box">
+        <div class="search_box">
           <input
             type="text"
             v-model="searchQuery"
             placeholder="搜索文章"
           />
           <button
-            class="filter-button"
+            class="filter_button"
             @click="searchArticle"
           >搜索</button>
         </div>
         <div class="category-filter">
-          <div class="filter-header">
+          <div class="filter_header">
             <h3>分类筛选</h3>
           </div>
-          <div class="filter-content">
+          <div class="filter_content">
             <select
-              class="category-select"
+              class="category_select"
               v-model="selectedCategory"
             >
               <option value="">全部分类</option>
@@ -67,7 +66,7 @@
               >{{ category.name }}</option>
             </select>
             <button
-              class="filter-button"
+              class="filter_button"
               @click="filterByCategory"
             >筛选</button>
           </div>
@@ -209,16 +208,16 @@ export default {
   justify-content: space-around; /* 添加居中对齐 */
 }
 
-.left-side {
+.left_side {
   flex: 2;
   margin-right: 10px;
 }
 
-.right-side {
+.right_side {
 }
 
 /* 使用 Flexbox 来布局你的文章列表 */
-.articles {
+.articlesList {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -241,7 +240,7 @@ export default {
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-.image-container {
+.image_container {
   width: 200px;
   height: 200px;
   padding: 20px;
@@ -253,7 +252,7 @@ export default {
   border-radius: 10px;
 }
 
-.article-details {
+.article_details {
   flex: 2;
   padding: 20px;
   display: flex;
@@ -261,7 +260,7 @@ export default {
   justify-content: space-between;
 }
 
-.article-details h2 {
+.article_details h2 {
   margin-top: 0;
   max-width: 80%; /* 添加最大宽度，根据需要调整 */
   overflow: hidden;
@@ -269,7 +268,7 @@ export default {
   white-space: nowrap;
 }
 
-.article-content {
+.article_content {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -290,11 +289,11 @@ export default {
   border-radius: 10px;
 }
 
-.search-box {
+.search_box {
   margin-bottom: 20px;
 }
 
-.search-box input {
+.search_box input {
   width: 200px;
   padding: 5px;
   border: 1px solid #ccc;
@@ -302,16 +301,16 @@ export default {
   margin-right: 10px;
 }
 
-.filter-header {
+.filter_header {
   margin-bottom: 10px;
 }
 
-.filter-content {
+.filter_content {
   display: flex;
   align-items: center;
 }
 
-.category-select {
+.category_select {
   width: 200px;
   padding: 5px;
   border: 1px solid #ccc;
@@ -319,7 +318,7 @@ export default {
   margin-right: 10px;
 }
 
-.filter-button {
+.filter_button {
   padding: 5px 10px;
   background-color: #007bff;
   color: #fff;
@@ -329,7 +328,7 @@ export default {
   transition: background-color 0.3s;
 }
 
-.filter-button:hover {
+.filter_button:hover {
   background-color: #0056b3;
 }
 </style>
