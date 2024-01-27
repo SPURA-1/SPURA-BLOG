@@ -47,6 +47,7 @@ import {
   Card,
   Carousel,
   CarouselItem,
+  Transfer,
   Header,
   Main,
   Aside,
@@ -86,6 +87,7 @@ Vue.use(Icon);
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Upload);
+Vue.use(Transfer);
 Vue.use(Badge);
 Vue.use(Card);
 Vue.use(Carousel);

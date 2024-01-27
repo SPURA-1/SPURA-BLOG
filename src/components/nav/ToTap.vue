@@ -1,8 +1,18 @@
 <template>
   <!-- 回到顶部按钮容器 -->
-  <div class="backtop" v-show="visible" @click="backTop" :style="style">
+  <div
+    class="backtop"
+    v-show="visible"
+    @click="backTop"
+    :style="style"
+  >
     <!-- 画布用于绘制三角形 -->
-    <canvas id="canvas" width="55" height="55" style="padding: 1.5rem;"></canvas>
+    <canvas
+      id="canvas"
+      width="55"
+      height="55"
+      style="padding: 1.5rem;"
+    ></canvas>
   </div>
 </template>
 
@@ -19,7 +29,7 @@ export default {
       style: {
         position: 'fixed',
         right: '30px',
-        bottom: '20px',
+        bottom: '220px',
         cursor: 'pointer'
       },
       x: 0,
@@ -56,8 +66,8 @@ export default {
       ctx.strokeStyle = color;
       ctx.beginPath();
       ctx.moveTo(this.x - this.x, -(this.y - 15));
-      ctx.lineTo(-this.x, this.y); // left
-      ctx.lineTo(this.x, this.y); // right
+      ctx.lineTo(-this.x, this.y); // 左侧
+      ctx.lineTo(this.x, this.y); // 右侧
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
@@ -119,6 +129,10 @@ export default {
 </script>
 
 <style scoped>
+.backtop {
+  width: 6rem;
+  height: 6rem;
+}
 .container {
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); /* 给容器添加阴影 */
 }

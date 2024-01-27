@@ -34,20 +34,17 @@
         </div>
         <div
           class="menu-item"
-          v-if="!mobileShow"
+          v-if="!isMobile"
         >
           <router-link to="/EsBigScreen">可视化大屏</router-link>
         </div>
         <div
           class="menu-item"
-          v-if="!mobileShow"
+          v-if="!isMobile"
         >
           <router-link to="/blockly">编程</router-link>
         </div>
-        <div
-          class="menu-item"
-          v-if="!mobileShow"
-        >
+        <div class="menu-item">
           <router-link to="/GameBoard">娱乐</router-link>
         </div>
         <div class="menu-item">
@@ -72,11 +69,15 @@ export default {
       hidden: false,
       category: [],
       mobileShow: false,
+      isMobile: false, // 用于判断是否为手机端
     }
   },
   mounted() {
     // 开启监听事件
     window.addEventListener("scroll", this.watchScroll);
+    // 在组件挂载时判断是否为手机端
+    this.isMobile = this.checkIsMobile();
+    console.log(this.isMobile, 'ss');
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.watchScroll)
@@ -96,6 +97,10 @@ export default {
       }
       this.lastScrollTop = scrollTop
     },
+    checkIsMobile() {
+      // 在这里编写判断是否为手机端的逻辑，例如使用窗口宽度来判断
+      return window.innerWidth < 768; // 768 可以根据实际情况调整
+    }
 
   }
 }

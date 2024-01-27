@@ -12,6 +12,15 @@
         @click="currentTab = 'manufacturer'"
       >2</button>
     </div>
+    <div>
+      <el-button
+        class="filter-item"
+        style="float: right"
+        type="primary"
+        icon="el-icon-plus"
+        @click="handleCreate"
+      >新增</el-button>
+    </div>
     <div v-if="currentTab === 'control'">
       <el-form
         ref="form"
@@ -142,6 +151,82 @@
         style="font-size:20px;margin-top:10px;"
       >点击删除触发错误报警提醒</el-tag>
     </div>
+    <el-dialog
+      title="测试"
+      :visible.sync="dialogFormVisible"
+      width="850px"
+    >
+      <el-form
+        ref="dataForm"
+        :model="temp"
+        label-position="left"
+        label-width="100px"
+        style="margin-left:50px;"
+      >
+        <el-form-item
+          label="数据节点"
+          prop="datanode_array"
+        >
+          <el-transfer
+            v-model="datanodeArray"
+            filterable
+            filter-placeholder="请选择数据节点"
+            :data="datanodeData"
+            :titles="['待绑定', '已绑定']"
+            @change="handleTransferChange"
+          >
+          </el-transfer>
+        </el-form-item>
+        <el-form-item>
+          <el-table
+            v-if="tableNodeData.length > 0"
+            :data="tableNodeData"
+          >
+            <el-table-column
+              label="数据节点权限控制"
+              prop="id"
+            >
+              <template slot-scope="scope">
+                {{ getNameById(scope.row.id) }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="属性"
+              prop="perm"
+            >
+              <template slot-scope="scope">
+                <el-select
+                  v-model="scope.row.perm"
+                  placeholder="请选择"
+                  :rules="[{ required: true, message: '请选择属性', trigger: 'blur' }]"
+                >
+                  <!-- 下拉框选项 -->
+                  <el-option
+                    v-for="option in permMap"
+                    :key="option.value"
+                    :label="option.label"
+                    :value="option.value"
+                  ></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <!-- 表格列定义 -->
+            <!-- 这里需要根据实际情况定义表格列 -->
+          </el-table>
+        </el-form-item>
+      </el-form>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          @click="dialogStatus()"
+        >
+          提交
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -196,6 +281,68 @@ export default {
         CreateTime: 1,
         UpdateTime: 1,
       }],
+      temp: {
+        id: undefined,
+        status: '1',
+        datanode_array: [],
+      },
+      dialogFormVisible: false,  // dialog显示
+      datanodeArray: [], // 右边穿梭框选中的数据
+      tableNodeData: [], // 表格数据
+      datanodeData: [],
+      permMap:
+        [
+          { value: 1, label: "普通" },
+          { value: 2, label: "稀有" },
+        ],
+      datanodeList:
+        [
+          {
+            "id": 1,
+            "name": "音响列表",
+            "comment": "备注",
+          },
+          {
+            "id": 2,
+            "name": "键盘列表",
+            "comment": "备注",
+          },
+          {
+            "id": 3,
+            "name": "鼠标列表",
+            "comment": "备注",
+          },
+          {
+            "id": 4,
+            "name": "笔记本列表",
+            "comment": "备注",
+          },
+          {
+            "id": 5,
+            "name": "平板列表",
+            "comment": "备注",
+          },
+          {
+            "id": 6,
+            "name": "手机列表",
+            "comment": "备注",
+          },
+          {
+            "id": 7,
+            "name": "电脑列表",
+            "comment": "备注",
+          },
+          {
+            "id": 8,
+            "name": "机器列表",
+            "comment": "备注",
+          },
+          {
+            "id": 9,
+            "name": "人员列表",
+            "comment": "备注",
+          }
+        ]
     }
   },
   methods: {
@@ -217,6 +364,48 @@ export default {
     delButton(id) {
       console.log(id, '删除');
       // 处理删除按钮点击事件
+    },
+    handleCreate() {
+      // 数据节点
+      this.datanodeData = []
+      for (let i in this.datanodeList) {
+        let item = {
+          key: this.datanodeList[i].id,
+          label: this.datanodeList[i].name
+        }
+        this.datanodeData.push(item)
+      }
+      this.dialogFormVisible = true;
+    },
+    handleTransferChange(newData, direction, movedData) {
+      if (direction === 'right') {
+        // 右移数据时，添加到表格数据中
+        movedData.forEach(item => {
+          const newItem = { id: item, perm: 1 };
+          this.tableNodeData.push(newItem);
+        });
+      } else if (direction === 'left') {
+        // 左移数据时，从表格数据中移除
+        movedData.forEach(item => {
+          const index = this.tableNodeData.findIndex(tableItem => {
+            return tableItem.id === item;
+          });
+          if (index !== -1) {
+            this.tableNodeData.splice(index, 1);
+            // console.log(this.tableNodeData, '删除成功');
+          }
+        });
+
+      }
+    },
+    getNameById(id) {
+      const targetObject = this.datanodeList.find(item => item.id === id);
+      return targetObject ? targetObject.name : '未找到';
+    },
+    dialogStatus() {
+      // 将添加了值的穿梭框数据重新返回给要提交的数据总和
+      this.temp.datanode_array = Object.values(this.tableNodeData)
+      console.log(this.temp);
     }
   }
 }
