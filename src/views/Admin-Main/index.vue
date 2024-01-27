@@ -27,8 +27,9 @@ export default {
   created() {
     const storedSetting = localStorage.getItem('SPURA-setting');
     const parsedSetting = JSON.parse(storedSetting);
-    this.SettingBar = parsedSetting.layout || 'vertical';
-    this.SettingColor = parsedSetting.name || 'gold';
+    // 如果解析成功，则将值应用于组件数据属性，否则使用默认值
+    this.SettingBar = parsedSetting && parsedSetting.layout ? parsedSetting.layout : 'vertical';
+    this.SettingColor = parsedSetting && parsedSetting.name ? parsedSetting.name : 'gold';
   },
   methods: {
   },
