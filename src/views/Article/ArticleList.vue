@@ -1,80 +1,52 @@
 <template>
-  <div class="body">
-    <backTop
-      :defaultProps="55"
-      :date="1000"
-      :color="topColor"
-      style="z-index:999;"
-    ></backTop>
-    <div class="left-side">
-      <div class="articles">
-        <div
-          v-for="article in articles"
-          :key="article.id"
-          class="article"
-          @click="navigateToArticle(article.id)"
-        >
-          <div class="image-container">
-            <img
-              class="image_cover"
-              :src="ImageUrl+article.image_path"
-              alt="文章图片"
-              v-if="article.image_path"
-            />
-          </div>
-          <div class="article-details">
-            <h2>{{ article.title }}</h2>
-            <p class="article-content">{{ truncateContent(article.Introduction) }}</p>
-            <div class="article-meta">
-              <p
-                class=""
-                style="display:flex;justify-content: flex-end;"
-              >{{ article.category }}</p>
-              <p style="display:flex;justify-content: flex-end;">{{ article.publish_date }}</p>
+  <div>
+    <div v-if="isMobile">
+      <!-- 手机端页面内容 -->
+      <div class="mobile-body">
+        <MobileArticleList></MobileArticleList>
+      </div>
+    </div>
+    <div v-else class="body">
+      <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
+      <div class="left-side">
+        <div class="articles">
+          <div v-for="article in articles" :key="article.id" class="article" @click="navigateToArticle(article.id)">
+            <div class="image-container">
+              <img class="image_cover" :src="ImageUrl+article.image_path" alt="文章图片" v-if="article.image_path" />
+            </div>
+            <div class="article-details">
+              <h2>{{ article.title }}</h2>
+              <p class="article-content">{{ truncateContent(article.Introduction) }}</p>
+              <div class="article-meta">
+                <p class="" style="display:flex;justify-content: flex-end;">{{ article.category }}</p>
+                <p style="display:flex;justify-content: flex-end;">{{ article.publish_date }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="right-side">
-      <div class="sidebar">
-        <div class="search-box">
-          <input
-            type="text"
-            v-model="searchQuery"
-            placeholder="搜索文章"
-          />
-          <button
-            class="filter-button"
-            @click="searchArticle"
-          >搜索</button>
-        </div>
-        <div class="category-filter">
-          <div class="filter-header">
-            <h3>分类筛选</h3>
+      <div class="right-side">
+        <div class="sidebar">
+          <div class="search-box">
+            <input type="text" v-model="searchQuery" placeholder="搜索文章" />
+            <button class="filter-button" @click="searchArticle">搜索</button>
           </div>
-          <div class="filter-content">
-            <select
-              class="category-select"
-              v-model="selectedCategory"
-            >
-              <option value="">全部分类</option>
-              <option
-                v-for="category in categories"
-                :key="category.id"
-                :value="category.id"
-                :label="category.name"
-              >{{ category.name }}</option>
-            </select>
-            <button
-              class="filter-button"
-              @click="filterByCategory"
-            >筛选</button>
+          <div class="category-filter">
+            <div class="filter-header">
+              <h3>分类筛选</h3>
+            </div>
+            <div class="filter-content">
+              <select class="category-select" v-model="selectedCategory">
+                <option value="">全部分类</option>
+                <option v-for="category in categories" :key="category.id" :value="category.id" :label="category.name">{{ category.name }}</option>
+              </select>
+              <button class="filter-button" @click="filterByCategory">筛选</button>
+            </div>
           </div>
-        </div>
 
-        <div class="svgicon">
-          <MySvgIcon></MySvgIcon>
+          <div class="svgicon">
+            <MySvgIcon></MySvgIcon>
+          </div>
         </div>
       </div>
     </div>
@@ -85,13 +57,17 @@
 import backTop from '../../components/nav/ToTap.vue'
 import { getart, getCategoriesList, searchArticles } from '@/api/ArticleList.api'
 import MySvgIcon from '@/components/Svg/MySvgIcon.vue'
+import MobileArticleList from '@/views/Article/MobileArticleList.vue'
 export default {
   components: {
     MySvgIcon,
-    backTop
+    backTop,
+    MobileArticleList
   },
   data() {
     return {
+      // 是否为手机端
+      isMobile: false,
       articles: [],
       searchQuery: '',
       selectedCategory: '',
@@ -103,7 +79,14 @@ export default {
   },
   created() {
     this.fetchCategoryList();
-
+    // 在组件创建时检查是否为手机端
+    this.checkIsMobile();
+    // 添加窗口大小改变事件监听器，以便动态检测
+    window.addEventListener('resize', this.checkIsMobile);
+  },
+  destroyed() {
+    // 移除窗口大小改变事件监听器
+    window.removeEventListener('resize', this.checkIsMobile);
   },
   mounted() {
 
@@ -118,6 +101,11 @@ export default {
     }
   },
   methods: {
+    checkIsMobile() {
+      // 设置阈值，小于该值认为是手机端
+      const mobileThreshold = 768;
+      this.isMobile = window.innerWidth < mobileThreshold;
+    },
     // 获取分类列表
     fetchCategoryList() {
       getCategoriesList()
@@ -209,6 +197,16 @@ export default {
   justify-content: space-around; /* 添加居中对齐 */
 }
 
+.mobile-body {
+  width: 100%;
+  /* header = 80px */
+  padding-top: 80px;
+  /* min-height: -moz-calc(100vh - 80px);
+  min-height: -webkit-calc(100vh - 80px);
+  min-height: calc(100vh - 80px); */
+  /*使也页面滚动更顺滑*/
+  scroll-behavior: smooth;
+}
 .left-side {
   flex: 2;
   margin-right: 10px;

@@ -1,35 +1,14 @@
 <template>
   <div>
-    <div v-if="isMobile">
-      <!-- 手机端页面内容 -->
-      <div class="mobile-body">
-        <MobileArticleShow></MobileArticleShow>
-      </div>
+    <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
+    <div>
+      <router-link class="back-button" to="/ArticleList">返回</router-link>
     </div>
-    <div v-else class="body">
-      <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
-      <div>
-        <router-link class="back-button" to="/ArticleList">返回</router-link>
-      </div>
-      <div class="container">
-        <div class="left">
-          <!-- 使用 v-html 指令渲染富文本内容 -->
-          <div class="ArticleShowPage">
-            <div v-html="parsedArticleContent" class="article-content"></div>
-          </div>
-        </div>
-        <!-- 右侧内容 -->
-        <div class="right" v-show="!isConsoleOpen" :class="{ 'fixed': fixed, 'hidden': hidden }">
-          <!-- 使用 this.$route.params.id 获取传递的文章 ID -->
-          <div class="scroll-container">
-            <div class="container_title">目录</div>
-            <br>
-            <ul id="header-container">
-              <li v-for="header in headers" :key="header.id">
-                <a @click="scrollToAnchor(header.id)" :class="['anchor-link', header.className, { 'active': activeAnchor === header.id }]">{{ header.text }}</a>
-              </li>
-            </ul>
-          </div>
+    <div class="container">
+      <div class="left">
+        <!-- 使用 v-html 指令渲染富文本内容 -->
+        <div class="ArticleShowPage">
+          <div v-html="parsedArticleContent" class="article-content"></div>
         </div>
       </div>
     </div>
@@ -42,16 +21,12 @@ import { getarticlesId } from '@/api/ArticleList.api';
 import hljs from 'highlight.js'; // 导入 highlight.js 库
 import 'highlight.js/styles/github.css'; // 导入高亮样式
 import Clipboard from 'clipboard'; // 一键复制
-import MobileArticleShow from '@/views/Article/MobileArticleShow.vue'
 export default {
   components: {
-    backTop,
-    MobileArticleShow
+    backTop
   },
   data() {
     return {
-      // 是否为手机端
-      isMobile: false,
       lastScrollTop: 0,
       fixed: false,
       hidden: false,
@@ -61,89 +36,22 @@ export default {
       activeAnchor: null,
       headers: '',
       codeBlocks: [], // 用于存储所有的代码块内容
-      isConsoleOpen: false, // 控制台是否打开的状态
       // 回到顶部组件颜色
       topColor: '#66ccff',
-    }
-  },
-  watch: {
-    isConsoleOpen: {
-      handler: 'handleConsoleState', // 当 isConsoleOpen 变化时调用 handleConsoleState 方法
-      immediate: true // 立即执行一次，以确保页面加载时也能正确显示目录状态
     }
   },
   created() {
     this.searchPageList();
     // 在页面创建时重置滚动条位置
     window.scrollTo(0, 0);
-    // 在组件创建时检查是否为手机端
-    this.checkIsMobile();
-    // 添加窗口大小改变事件监听器，以便动态检测
-    window.addEventListener('resize', this.checkIsMobile);
   },
   mounted() {
-    // 开启监听事件
-    window.addEventListener("scroll", this.watchScroll);
     // 在组件挂载后调用添加复制按钮的方法
     setTimeout(() => {
       this.addCopyButtonsToCodeBlocks();
     }, 500);
-    // 查看控制台状态取消目录
-    this.handleConsoleState(); // 页面加载时检查一次控制台状态
-    window.addEventListener('scroll', this.handleConsoleState);
-
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.watchScroll);
-    // 查看控制台状态取消目录
-    window.removeEventListener('scroll', this.handleConsoleState);
-  },
-  destroyed() {
-    // 移除窗口大小改变事件监听器
-    window.removeEventListener('resize', this.checkIsMobile);
   },
   methods: {
-    checkIsMobile() {
-      // 设置阈值，小于该值认为是手机端
-      const mobileThreshold = 768;
-      this.isMobile = window.innerWidth < mobileThreshold;
-    },
-    // 查看控制台状态取消目录
-    handleConsoleState() {
-      console.log(this.isConsoleOpen);
-      requestAnimationFrame(() => {
-        this.isConsoleOpen = this.isConsoleOpenConsole();
-      });
-    },
-    // 查看控制台状态取消目录
-    isConsoleOpenConsole() {
-      return window.outerWidth - window.innerWidth > 100 || window.outerHeight - window.innerHeight > 100;
-    },
-    // 监听页面高度，给侧边锚点增加粘性位置
-    watchScroll() {
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      if (scrollTop === 0) {
-        this.fixed = false;
-      } else if (scrollTop >= this.lastScrollTop) {
-        this.fixed = false;
-        this.hidden = true;
-      } else {
-        this.fixed = true
-        this.hidden = false
-      }
-      this.lastScrollTop = scrollTop
-      // 循环遍历所有锚点元素，确定活动的锚点
-      for (const header of this.headers) {
-        const targetElement = document.querySelector(`#${header.id}`);
-        if (targetElement) {
-          const targetRect = targetElement.getBoundingClientRect();
-          if (targetRect.top <= window.innerHeight * 0.5 && targetRect.bottom >= window.innerHeight * 0.5) {
-            this.activeAnchor = header.id;
-            break;
-          }
-        }
-      }
-    },
     // 在文章内容中查找标题，并生成锚点目录
     generateAnchors() {
       const parser = new DOMParser();
@@ -208,18 +116,13 @@ export default {
         // copyButton.classList.add('copy-button'); // 添加类名用于样式控制
 
         // 设置代码块的相对定位，以便容纳复制按钮
-        // codeBlock.style.position = 'relative';
         codeBlock.style.position = 'relative';
         codeBlock.style.border = '#dddddd 1px solid';
         codeBlock.style.margin = '5px';
         codeBlock.style.borderRadius = '5px';
         // 复制按钮样式
-        // copyButton.style.position = 'absolute';
-        // copyButton.style.position = 'absolute';
-        // copyButton.style.right = '-40vw';
-        // copyButton.style.bottom = '-50px';
-        copyButton.style.top = '5px';
-        copyButton.style.right = '5px';
+        copyButton.style.position = 'absolute';
+        copyButton.style.right = '600px';
         copyButton.style.backgroundColor = '#dddddd';
         copyButton.style.color = '#fff';
         copyButton.style.border = 'none';
@@ -258,22 +161,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-.body {
-  margin: 80px 250px 0 340px;
-  padding-top: 80px;
-  padding-bottom: 20px;
-}
-
-.mobile-body {
-  width: 100%;
-  /* header = 80px */
-  padding-top: 80px;
-  /* min-height: -moz-calc(100vh - 80px);
-  min-height: -webkit-calc(100vh - 80px);
-  min-height: calc(100vh - 80px); */
-  /*使也页面滚动更顺滑*/
-  scroll-behavior: smooth;
-}
 .left {
   padding: 20px;
   margin-right: 10px;
@@ -284,6 +171,7 @@ export default {
 }
 
 .back-button {
+  width: 18%;
   display: inline-block;
   padding: 10px 20px;
   background-color: #007bff;
@@ -313,12 +201,7 @@ export default {
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
 }
-// 目录
-.container_title {
-  padding: 10px;
-  font-size: 18px;
-  border-bottom: 1px solid #ccc;
-}
+
 // 锚点
 .container {
   padding-top: 50px; //遮盖元素的高度，即导航栏高度
