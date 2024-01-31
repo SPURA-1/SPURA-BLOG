@@ -2,21 +2,9 @@
   <div>
     <!-- 头部图片走马灯 -->
     <div class="image_body">
-      <el-carousel
-        :interval="4000"
-        arrow="always"
-        indicator-position="none"
-        height="30vh"
-      >
-        <el-carousel-item
-          v-for="(image, index) in carouselImages"
-          :key="index"
-        >
-          <img
-            :src="ImageUrl+image"
-            alt="Carousel Image"
-            style="max-width: 100%; max-height: 100%; object-fit: contain;"
-          />
+      <el-carousel :interval="4000" arrow="always" indicator-position="none" height="30vh">
+        <el-carousel-item v-for="(image, index) in carouselImages" :key="index">
+          <img :src="ImageUrl+image" alt="Carousel Image" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -32,18 +20,11 @@
     </el-card>
     <!-- 最近文章 -->
     <el-card class="card">
-      <div
-        slot="header"
-        class="clearfix"
-      >
+      <div slot="header" class="clearfix">
         <h3>最近文章</h3>
       </div>
       <div class="recent-posts">
-        <div
-          class="post-card"
-          v-for="(post, index) in recentPosts"
-          :key="index"
-        >
+        <div class="post-card" v-for="(post, index) in recentPosts" :key="index">
           <!-- 插入图片 -->
           <!-- <img
             :src="post.thumbnail"
@@ -58,10 +39,7 @@
     </el-card>
     <!-- 下方其他内容 -->
     <el-card class="card">
-      <div
-        slot="header"
-        class="clearfix"
-      >
+      <div slot="header" class="clearfix">
         <h3>能力</h3>
       </div>
       <div>
@@ -106,6 +84,7 @@ export default {
       getlandscapeImages()
         .then(res => {
           if (res.status === 200) {
+            console.log(res.data.images, 'ssssssss');
             this.carouselImages = res.data.images.map(image => image.image_path);
           } else {
             console.log('报错');
