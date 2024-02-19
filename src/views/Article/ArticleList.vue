@@ -6,19 +6,40 @@
         <MobileArticleList></MobileArticleList>
       </div>
     </div>
-    <div v-else class="body">
-      <backTop :defaultProps="55" :date="1000" :color="topColor" style="z-index:999;"></backTop>
-      <div class="left-side">
-        <div class="articles">
-          <div v-for="article in articles" :key="article.id" class="article" @click="navigateToArticle(article.id)">
-            <div class="image-container">
-              <img class="image_cover" :src="ImageUrl+article.image_path" alt="文章图片" v-if="article.image_path" />
+    <div
+      v-else
+      class="body"
+    >
+      <backTop
+        :defaultProps="55"
+        :date="1000"
+        :color="topColor"
+        style="z-index:999;"
+      ></backTop>
+      <div class="left_side">
+        <div class="articlesList">
+          <div
+            v-for="article in articles"
+            :key="article.id"
+            class="article"
+            @click="navigateToArticle(article.id)"
+          >
+            <div class="image_container">
+              <img
+                class="image_cover"
+                :src="ImageUrl+article.image_path"
+                alt="文章图片"
+                v-if="article.image_path"
+              />
             </div>
-            <div class="article-details">
+            <div class="article_details">
               <h2>{{ article.title }}</h2>
-              <p class="article-content">{{ truncateContent(article.Introduction) }}</p>
+              <p class="article_content">{{ truncateContent(article.Introduction) }}</p>
               <div class="article-meta">
-                <p class="" style="display:flex;justify-content: flex-end;">{{ article.category }}</p>
+                <p
+                  class=""
+                  style="display:flex;justify-content: flex-end;"
+                >{{ article.category }}</p>
                 <p style="display:flex;justify-content: flex-end;">{{ article.publish_date }}</p>
               </div>
             </div>
@@ -27,20 +48,38 @@
       </div>
       <div class="right-side">
         <div class="sidebar">
-          <div class="search-box">
-            <input type="text" v-model="searchQuery" placeholder="搜索文章" />
-            <button class="filter-button" @click="searchArticle">搜索</button>
+          <div class="search_box">
+            <input
+              type="text"
+              v-model="searchQuery"
+              placeholder="搜索文章"
+            />
+            <button
+              class="filter_button"
+              @click="searchArticle"
+            >搜索</button>
           </div>
-          <div class="category-filter">
-            <div class="filter-header">
+          <div class="category_filter">
+            <div class="filter_header">
               <h3>分类筛选</h3>
             </div>
             <div class="filter-content">
-              <select class="category-select" v-model="selectedCategory">
+              <select
+                class="category_select"
+                v-model="selectedCategory"
+              >
                 <option value="">全部分类</option>
-                <option v-for="category in categories" :key="category.id" :value="category.id" :label="category.name">{{ category.name }}</option>
+                <option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                  :label="category.name"
+                >{{ category.name }}</option>
               </select>
-              <button class="filter-button" @click="filterByCategory">筛选</button>
+              <button
+                class="filter_button"
+                @click="filterByCategory"
+              >筛选</button>
             </div>
           </div>
 
@@ -188,7 +227,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .body {
   margin: 100px 250px 0 340px;
   padding-top: 80px;
