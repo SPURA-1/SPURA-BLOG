@@ -1,5 +1,13 @@
+<!--
+ * @Autor: yangxh 1269825764@qq.com
+ * @Date: 2024-01-09 14:24:16
+ * @LastEditors: yangxh 1269825764@qq.com
+ * @LastEditTime: 2024-03-18 16:32:47
+ * @FilePath: \SPURA-BLOG\src\components\ECharts\BasicRadarChart.vue
+ * @Description: Do not edit
+-->
 <template>
-  <div>
+  <div :style="{width: chartWidth, height: chartHeight}">
     <div
       ref="BasicRadarChart"
       style="width:100%;height:17rem;"
@@ -14,6 +22,20 @@ let Echarts = require("echarts/lib/echarts");
 require('echarts/lib/component/legend');
 require('echarts/lib/chart/radar');
 export default {
+  props: {
+    chartData: {
+      type: Object,
+      required: true
+    },
+    chartWidth: {
+      type: String,
+      default: '100%'
+    },
+    chartHeight: {
+      type: String,
+      default: '17rem'
+    }
+  },
   data() {
     return {
       chart: null,
@@ -30,7 +52,7 @@ export default {
         legend: {
           left: '1%',
           orient: "vertical", // 垂直排列
-          data: ['Allocated Budget', 'Actual Spending'],
+          data: this.chartData.legendData || [],
           textStyle: {
             fontSize: 12,
             color: "#1E1E1E",
@@ -39,29 +61,13 @@ export default {
         },
         radar: {
           // shape: 'circle',
-          indicator: [
-            { name: '分析能力', max: 500 },
-            { name: '沟通能力', max: 500 },
-            { name: '团队合作', max: 500 },
-            { name: '解决问题能力', max: 500 },
-            { name: '创新思维', max: 500 },
-            { name: '学习能力', max: 500 }
-          ]
+          indicator: this.chartData.indicator || []
         },
         series: [
           {
-            name: 'Budget vs spending',
+            name: this.chartData.seriesName || '',
             type: 'radar',
-            data: [
-              {
-                value: [250, 250, 250, 250, 250, 250],
-                name: '平均'
-              },
-              {
-                value: [500, 500, 500, 500, 500, 500],
-                name: '期望'
-              }
-            ]
+            data: this.chartData.seriesData || []
           }
         ]
       };

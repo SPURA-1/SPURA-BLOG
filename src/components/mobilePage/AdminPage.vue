@@ -2,9 +2,21 @@
   <div>
     <!-- 头部图片走马灯 -->
     <div class="image_body">
-      <el-carousel :interval="4000" arrow="always" indicator-position="none" height="30vh">
-        <el-carousel-item v-for="(image, index) in carouselImages" :key="index">
-          <img :src="ImageUrl+image" alt="Carousel Image" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+      <el-carousel
+        :interval="4000"
+        arrow="always"
+        indicator-position="none"
+        height="30vh"
+      >
+        <el-carousel-item
+          v-for="(image, index) in carouselImages"
+          :key="index"
+        >
+          <img
+            :src="ImageUrl+image"
+            alt="Carousel Image"
+            style="max-width: 100%; max-height: 100%; object-fit: contain;"
+          />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -20,11 +32,18 @@
     </el-card>
     <!-- 最近文章 -->
     <el-card class="card">
-      <div slot="header" class="clearfix">
+      <div
+        slot="header"
+        class="clearfix"
+      >
         <h3>最近文章</h3>
       </div>
       <div class="recent-posts">
-        <div class="post-card" v-for="(post, index) in recentPosts" :key="index">
+        <div
+          class="post-card"
+          v-for="(post, index) in recentPosts"
+          :key="index"
+        >
           <!-- 插入图片 -->
           <!-- <img
             :src="post.thumbnail"
@@ -39,11 +58,14 @@
     </el-card>
     <!-- 下方其他内容 -->
     <el-card class="card">
-      <div slot="header" class="clearfix">
+      <div
+        slot="header"
+        class="clearfix"
+      >
         <h3>能力</h3>
       </div>
       <div>
-        <BasicRadarChart />
+        <BasicRadarChart :chartData="chartData" />
       </div>
     </el-card>
     <el-card class="card">
@@ -70,6 +92,28 @@ export default {
       // 图片走马灯的图片数组
       carouselImages: [],
       recentPosts: [],
+      chartData: {
+        legendData: ['Allocated Budget', 'Actual Spending'],
+        indicator: [
+          { name: '分析能力', max: 500 },
+          { name: '沟通能力', max: 500 },
+          { name: '团队合作', max: 500 },
+          { name: '解决问题能力', max: 500 },
+          { name: '创新思维', max: 500 },
+          { name: '学习能力', max: 500 }
+        ],
+        seriesName: 'Budget vs spending',
+        seriesData: [
+          {
+            value: [250, 250, 250, 250, 250, 250],
+            name: '平均'
+          },
+          {
+            value: [500, 500, 500, 500, 500, 500],
+            name: '期望'
+          }
+        ]
+      }
     };
   },
   created() {

@@ -1,5 +1,8 @@
 <template>
-  <div class="body" ref="fullscreenContainer">
+  <div
+    class="body"
+    ref="fullscreenContainer"
+  >
     <!-- 头部 -->
     <header class="es-screen-header">
       <h1>数据可视化-ECharts</h1>
@@ -53,7 +56,11 @@
             <div class="map3"></div>
           </div>
           <!-- <div class="chart"></div> -->
-          <div ref="echart" id="map" class="chart"></div>
+          <div
+            ref="echart"
+            id="map"
+            class="chart"
+          ></div>
         </div>
       </div>
       <!-- 右侧盒子 -->
@@ -70,7 +77,7 @@
         </div>
         <div class="panel pie2">
           <h2>雷达图</h2>
-          <BasicRadarChart></BasicRadarChart>
+          <BasicRadarChart :chartData="chartData" />
           <div class="panel-footer"></div>
         </div>
       </div>
@@ -399,7 +406,30 @@ export default {
       linePoints: [{ coords: [[116.4074, 39.9042], [121.4737, 31.2304]], lineStyle: { color: '#4ab2e5' } }
         , { coords: [[113.2644, 23.1291], [121.4737, 31.2304]], lineStyle: { color: '#4fb6d2' } }
         , { coords: [[106.55073, 29.56471], [121.4737, 31.2304]], lineStyle: { color: '#4fb6d2' } }
-        , { coords: [[104.06667, 30.66667], [121.4737, 31.2304]], lineStyle: { color: '#52b9c7' } }]
+        , { coords: [[104.06667, 30.66667], [121.4737, 31.2304]], lineStyle: { color: '#52b9c7' } }
+      ],
+      chartData: {
+        legendData: ['Allocated Budget', 'Actual Spending'],
+        indicator: [
+          { name: '分析能力', max: 500 },
+          { name: '沟通能力', max: 500 },
+          { name: '团队合作', max: 500 },
+          { name: '解决问题能力', max: 500 },
+          { name: '创新思维', max: 500 },
+          { name: '学习能力', max: 500 }
+        ],
+        seriesName: 'Budget vs spending',
+        seriesData: [
+          {
+            value: [250, 250, 250, 250, 250, 250],
+            name: '平均'
+          },
+          {
+            value: [500, 500, 500, 500, 500, 500],
+            name: '期望'
+          }
+        ]
+      }
     };
   },
   beforeDestroy() {
