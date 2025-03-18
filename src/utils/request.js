@@ -7,7 +7,7 @@ import Vue from 'vue'
 const service = axios.create({
   // baseURL : "http://127.0.0.1:80",
   //配置对象
-  baseURL: 'http://47.115.231.184:5555',
+  baseURL: 'http://47.121.187.247:5555',
   // baseURL: '/',
   timeout: 5000,
   headers: {

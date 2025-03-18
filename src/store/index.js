@@ -18,7 +18,7 @@ export default new Vuex.Store({
     // 用户名
     useName: null,
     // 图片地址
-    ImageUrl: 'http://47.115.231.184:5555',
+    ImageUrl: 'http://47.121.187.247:5555',
     // 异常状态，用于存储捕获到的错误日志
     errorLogs: [],
   },

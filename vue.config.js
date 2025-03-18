@@ -17,7 +17,7 @@ module.exports = {
     proxy: {
       '/': {
         // target: 'http://127.0.0.1:80/',   // 本地服务器地址
-        target: 'http://47.115.231.184:5555/',   // 网络服务器地址
+        target: 'http://47.121.187.247:5555/',   // 网络服务器地址
         changeOrigin: true, // 是否跨域
         ws: false, // 是否支持 websocket
         // pathRewrite: { // 可以理解为一个重定向或者重新赋值的功能

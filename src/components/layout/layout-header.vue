@@ -77,7 +77,7 @@ export default {
     window.addEventListener("scroll", this.watchScroll);
     // 在组件挂载时判断是否为手机端
     this.isMobile = this.checkIsMobile();
-    console.log(this.isMobile, 'ss');
+    console.log(this.isMobile, '判断是否为手机端');
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.watchScroll)
