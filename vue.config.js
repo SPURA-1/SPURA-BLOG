@@ -40,5 +40,10 @@ module.exports = {
       // 使用 BundleAnalyzerPlugin 插件
       new BundleAnalyzerPlugin(),
     ],
+    resolve: {
+      fallback: {
+        buffer: require.resolve('buffer/')
+      }
+    }
   },
 }

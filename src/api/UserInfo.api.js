@@ -4,6 +4,7 @@ import service from "@/utils/request"
  * @description 获取所有用户信息
  * @url  /my/userinfo
  * */
+/**
 export function getUserMsg(params) {
     const formData = new URLSearchParams(params);
     return service.get('/my/userinfo', formData, {
@@ -13,6 +14,16 @@ export function getUserMsg(params) {
         },
     });
 }
+ * */
+// 前端 API 请求函数（修正后）
+export function getUserMsg(params) {
+    return service.get('/my/userinfo', {
+      params: params, // 将参数作为 GET 查询参数传递
+      headers: {
+        "Authorization": sessionStorage.token,
+      }
+    });
+  }
 
 /**
  * @description 添加用户信息

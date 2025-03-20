@@ -11,10 +11,16 @@ Vue.directive('has', has);
 import TopBar from '@/components/ServeAdmin/components/Breadcrumb.vue';
 Vue.component('top-bar', TopBar); // 注册 TopBar 组件
 
+import { Buffer } from 'buffer'
+window.Buffer = Buffer
+
 // 导入全局错误处理逻辑
 import '@/utils/errorLogs';
 
 import {
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
   Pagination,
   Dialog,
   Menu,
@@ -59,6 +65,9 @@ import {
   calendar,
 } from 'element-ui';
 
+Vue.use(Dropdown);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 Vue.use(Pagination);
 Vue.use(Dialog);
 Vue.use(Menu);

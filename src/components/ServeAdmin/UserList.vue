@@ -24,6 +24,20 @@
             @click="addUserShow"
           >添加用户</el-button>
         </el-col>
+        <el-button type="primary" @click="handleRefresh">刷新</el-button>
+        <!-- 导出按钮 -->
+        <!-- <export-button
+          :export-config="userExportConfig"
+          @export-success="handleSuccess"
+          @export-error="handleError"
+        /> -->
+        <export-button
+          :export-config="userExportConfig"
+          image-base-url="http://47.121.187.247:5555"
+          button-text="导出用户信息"
+          @export-success="handleExportSuccess"
+          @export-error="handleExportError"
+        />
       </el-row>
     </el-card>
     <!-- 添加用户 -->
@@ -221,7 +235,7 @@
     <!-- 分页区域 -->
     <el-pagination
       @size-change="handleSizeChange"
-      @current-change="handeleCurrentChange"
+      @current-change="handleCurrentChange"
       :current-page="queryIofo.pagenum"
       :page-sizes="[2, 4, 6, 8]"
       :page-size="queryIofo.pagesize"
@@ -233,18 +247,21 @@
 </template>
 
 <script>
+import ExportButton from '@/components/button/ExportButton.vue'
 import { getUserMsg, addUserMsg, userUpdstatus, UserReg, userinfoSearch } from '@/api/UserInfo.api'
 import { mapGetters } from 'vuex'; // 导入 mapGetters
 export default {
+  components: {
+    ExportButton
+  },
   data() {
     return {
       ImageUrl: this.$store.state.ImageUrl,
       addUser: false,
       // 获取用户列表的参数
       queryIofo: {
-        query: "",
         pagenum: 1,
-        pagesize: 2,
+        pagesize: 4,
       },
       addUserform: {
         username: '',
@@ -284,6 +301,19 @@ export default {
           },
         ]
       },
+      userExportConfig: {
+        fetchApi: () => getUserMsg({ pagesize: -1 }),
+        fields: {
+          id: 'ID',
+          mg_state: '状态',
+          username: '账号',
+          email: '邮箱',
+          user_role: '角色',
+          nickname: '用户昵称',
+          user_pic: '用户头像',
+        },
+        filename: `用户列表_${new Date().toLocaleDateString().replace(/\//g, '-')}`
+      }
     };
   },
   computed: {
@@ -300,11 +330,14 @@ export default {
   methods: {
     // 获取用户列表
     getUserList() {
-      getUserMsg()
+      const params = {
+        pagenum: this.queryIofo.pagenum, // 当前页码
+        pagesize: this.queryIofo.pagesize // 每页条数
+      };
+      getUserMsg(params)
         .then((res) => {
           if (res.data.status === 200) {
-            this.userList = res.data.data;
-            this.userList = this.userList.map(item => ({
+            this.userList = res.data.data.users.map(item => ({
               id: item.id,
               username: item.username,
               email: item.email,
@@ -313,14 +346,18 @@ export default {
               mg_state: item.mg_state,
               user_role: this.options.find(option => option.value === item.user_role)?.label
             }));
-            this.total = res.data.total;
+            this.total = res.data.data.total;
             // 遍历 ArtList，将不为 null，不为空 且不存在于 evaluatePictureList 中的图片路径添加到列表中
-            this.userList.forEach(item => {
-              const imagePath = this.ImageUrl + item.user_pic;
-              if (item.user_pic !== null && item.user_pic !== "" && !this.evaluatePictureList.includes(imagePath)) {
-                this.evaluatePictureList.push(imagePath);
-              }
-            });
+            // this.userList.forEach(item => {
+            //   const imagePath = this.ImageUrl + item.user_pic;
+            //   if (item.user_pic !== null && item.user_pic !== "" && !this.evaluatePictureList.includes(imagePath)) {
+            //     this.evaluatePictureList.push(imagePath);
+            //   }
+            // });
+            // 处理图片预览列表
+            this.evaluatePictureList = this.userList
+            .filter(item => item.user_pic)
+            .map(item => this.ImageUrl + item.user_pic);
           } else {
             return this.$message.error("获取用户失败");
 
@@ -470,11 +507,25 @@ export default {
       this.getUserList();
     },
     // 监听页码变化
-    handeleCurrentChange(newPage) {
+    handleCurrentChange(newPage) {
       this.queryIofo.pagenum = newPage;
       // 重新用新的queryIofo参数获取用户数据，渲染页面
       this.getUserList();
     },
+    // 刷新数据（重置分页和搜索条件）
+    handleRefresh() {
+      this.queryIofo.pagenum = 1;       // 重置到第一页
+      this.queryIofo.pagesize = 4;      // 恢复初始每页条数
+      this.searchQuery = '';            // 清空搜索关键词（如果有）
+      this.getUserList();               // 重新加载数据
+    },
+    // 数据导出word、Excel
+    handleExportSuccess() {
+      this.$message.success('导出成功！')
+    },
+    handleExportError(error) {
+      this.$message.error(`导出失败：${error.message}`)
+    }
   },
 };
 // this.userList=res.data.users
