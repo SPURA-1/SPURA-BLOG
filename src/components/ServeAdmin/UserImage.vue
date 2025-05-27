@@ -65,9 +65,11 @@
         :http-request="submitUpload"
         :auto-upload="false"
         :on-change="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         name="image"
+        :file-list="fileList"
       >
         <i class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
@@ -90,18 +92,103 @@ import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
-      fileList: [],
+      fileList: [], // 存储处理后的带水印文件
       imageUrl: this.$store.state.ImageUrl,
       uploadedImages: [], // 用于存储已上传的图片 URL
     };
   },
   computed: {
     ...mapGetters(['userData']), // 此处应包含 'userNickname' 的映射
+    ...mapGetters(['userRole']),
+    canChangePassword() {
+      const canChange = this.userRole === 1;
+      return canChange;
+  },
   },
   created() {
     this.AllImage();
   },
   methods: {
+    // 文件上传成功后的钩子 // 修改文件变更处理
+    async handleAvatarSuccess(file, fileList) {
+      try {
+        // 添加水印并生成新文件
+        const watermarkedFile = await this.addWatermark(file.raw);
+        
+        // 替换原始文件
+        const newFile = {
+          ...file,
+          raw: watermarkedFile,
+          url: URL.createObjectURL(watermarkedFile)
+        };
+
+        this.fileList = [newFile];
+      } catch (error) {
+        console.error('水印处理失败:', error);
+        this.$message.error('图片处理失败');
+      }
+    },
+    // Canvas添加水印方法
+    addWatermark(file) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          img.onload = async () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // 设置画布尺寸
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // 绘制原始图片
+            ctx.drawImage(img, 0, 0);
+
+            // 设置水印样式
+            ctx.font = '24px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'bottom';
+
+            // 水印文字
+            const text = '© SPURA-Blog Yyyy';
+            const padding = 20;
+
+            // 绘制背景框
+            const textWidth = ctx.measureText(text).width;
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(
+              canvas.width - textWidth - padding * 2,
+              canvas.height - 40,
+              textWidth + padding * 2,
+              30
+            );
+
+            // 绘制文字
+            ctx.fillStyle = 'rgba(135, 206, 250, 0.65)';
+            ctx.fillText(text, canvas.width - padding, canvas.height - padding);
+
+            // 转换为文件对象
+            canvas.toBlob(blob => {
+              const watermarkedFile = new File([blob], file.name, {
+                type: file.type,
+                lastModified: Date.now()
+              });
+              resolve(watermarkedFile);
+            }, file.type);
+          };
+
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    },
     submitUpload(file) {
       if (this.fileList.length === 0) {
         this.$message({
@@ -141,10 +228,7 @@ export default {
           console.log(err, 'AXIOS报错');
         })
     },
-    // 文件上传成功后的钩子
-    handleAvatarSuccess(res, file, fileList) {
-      this.fileList = file; // 更新文件列表
-    },
+
     // 点击文件列表中已上传的文件时的钩子
     handleRemove(file, fileList) {
     },
@@ -172,17 +256,33 @@ export default {
         })
     },
     deleteImage(index) {
-      // if (this.canChangePassword) {
-      //   console.log(index);
-      // } else {
-      //   this.$message.error("当前账号没有权限！");
-      // }
+      if (this.canChangePassword) {
+        console.log(index);
+      } else {
+        this.$message.error("当前账号没有权限！");
+      }
     },
   }
 };
 </script>
 
 <style scoped>
+/* 添加水印预览样式 */
+.avatar-uploader .el-upload-dragger {
+  position: relative;
+}
+.avatar-uploader .el-upload-dragger::after {
+  content: '© Your Watermark';
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
 .avatar-container {
   text-align: center;
 }
