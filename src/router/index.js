@@ -118,6 +118,11 @@ const routes = [
         component: () => import('../views/Test/Test.vue'),
         meta: { title: '测试', icon: 'el-icon-guide' },
       },
+      {
+        path: '/BigFile',
+        component: () => import('../views/Test/BigFile.vue'),
+        meta: { title: '测试BigFile', icon: 'el-icon-guide' },
+      },
     ]
   },
   // Blog主页
