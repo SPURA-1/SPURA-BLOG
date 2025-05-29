@@ -191,7 +191,7 @@
           const checkRes = await axios.get('/bigFile/check', {
             params: { fileHash: fileItem.hash }
           })
-          console.log(checkRes,'------------')
+          // console.log(checkRes,'------------')
           if (!checkRes.data.shouldUpload) {
             this.updateFileProgress(fileItem, fileItem.size)
             this.updateFileStatus(fileItem, 'success')
@@ -214,16 +214,23 @@
             )
   
             const formData = new FormData()
-            formData.append('file', chunk)
-            formData.append('index', index.toString()) // 确保索引是字符串
+            
+            // formData.append('index', index.toString()) // 确保索引是字符串
+            formData.append('index', index) // 确保索引是字符串
             formData.append('hash', fileItem.hash)    // 确保包含 hash 参数
+            formData.append('file', chunk)    
+            // 注意！！！必须要将file放置在最后！！
+            // 在创建 FormData 时，必须先添加非文件字段（如 hash、index），然后添加文件字段file
+            // 如果文件字段在前，后端multer 在处理文件时可能还没解析到后面的字段
 
+
+            // console.log(formData,'/////////////////formData')
             // 调试：打印 FormData 内容
             console.log(`上传分片 ${index}，hash: ${fileItem.hash}`)
             for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`)
+                console.log(`${key}: ${value}`,'这是formData')
             }
-
+            // console.log(formData,'/////////////////formData')
             chunkTasks.push(() => 
                 axios.post('/bigFile/upload', formData, {
                 signal: fileItem.controller.signal,
