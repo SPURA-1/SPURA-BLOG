@@ -252,8 +252,11 @@
             filename: file.name,
             fileHash: fileItem.hash,  // 包含fileHash
             totalChunks: totalChunks
-          })
-  
+          },{
+            headers: {
+              'Content-Type': 'application/json' // 必须设置
+            }}
+        )
           this.updateFileStatus(fileItem, 'success')
         } catch (err) {
             console.error('上传错误:', err)
