@@ -113,6 +113,7 @@
 <script>
 import axios from 'axios'
 import SparkMD5 from 'spark-md5'
+import { getBigFileList, checkBigFileList, uploadBigFileList, mergeBigFile, BigFileStatus, delBigFile } from '@/api/BigFile.api'
 
 const CHUNK_SIZE = 5 * 1024 * 1024 // 5MB
 const MAX_PARALLEL = 3
@@ -159,13 +160,14 @@ export default {
 
     // 获取已上传文件列表
     async fetchUploadedFiles() {
-      try {
-        const response = await axios.get('/bigFile/files')
-        console.log(response.data,'sssssssssss')
+        // const response = await axios.get('/bigFile/files')
+        await getBigFileList()
+        .then(response=>{
         this.uploadedFiles = response.data.data
-      } catch (error) {
-        console.error('获取文件列表失败:', error)
-      }
+        })
+        .catch(error => {
+          console.error(error);
+        });
     },
 
     // 触发文件选择
@@ -243,6 +245,18 @@ export default {
 
     // 开始上传流程
     async startUpload(file, fileItem) {
+      // const ext = file.name ? '.' + file.name.split('.').pop() : ''
+      // const params = { 
+      //       fileHash: fileItem.hash,
+      //       ext
+      //     }
+      // checkBigFileList(params)
+      // .then(response=>{
+
+      // })
+      // .catch(error=>{
+
+      // })
       try {
         const ext = file.name ? '.' + file.name.split('.').pop() : ''
         const checkRes = await axios.get('/bigFile/check', {
