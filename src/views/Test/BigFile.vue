@@ -1,7 +1,7 @@
 <template>
   <div class="upload-container">
     <!-- 拖拽上传区域 -->
-    <div 
+    <div
       class="drop-zone"
       @dragover.prevent="dragOver = true"
       @dragleave="dragOver = false"
@@ -31,7 +31,10 @@
         <div class="file-info">
           <span class="filename">{{ file.name }}</span>
           <span class="status">{{ statusText[file.status] }}</span>
-          <div class="speed" v-if="file.status === 'uploading'">
+          <div
+            class="speed"
+            v-if="file.status === 'uploading'"
+          >
             {{ formatSpeed(file.speed) }}
           </div>
           <button
@@ -71,7 +74,7 @@
             <span class="file-size">{{ formatSize(file.fileSize) }}</span>
           </div>
           <div class="file-actions">
-            <button 
+            <button
               class="preview-btn"
               @click="previewFile(file)"
               title="预览文件"
@@ -102,8 +105,11 @@
           </div>
         </div>
       </div>
-      
-      <div v-if="uploadedFiles.length === 0" class="empty-list">
+
+      <div
+        v-if="uploadedFiles.length === 0"
+        class="empty-list"
+      >
         暂无已上传文件
       </div>
     </div>
@@ -160,10 +166,10 @@ export default {
 
     // 获取已上传文件列表
     async fetchUploadedFiles() {
-        // const response = await axios.get('/bigFile/files')
-        await getBigFileList()
-        .then(response=>{
-        this.uploadedFiles = response.data.data
+      // const response = await axios.get('/bigFile/files')
+      await getBigFileList()
+        .then(response => {
+          this.uploadedFiles = response.data.data
         })
         .catch(error => {
           console.error(error);
@@ -206,7 +212,7 @@ export default {
       }
 
       this.activeUploads.push(fileItem)
-      
+
       try {
         fileItem.status = 'hashing'
         fileItem.hash = await this.calculateHash(file)
@@ -224,7 +230,7 @@ export default {
         const chunkSize = 2 * 1024 * 1024
         const chunks = Math.ceil(file.size / chunkSize)
         const sampleChunks = Math.min(3, chunks)
-        
+
         let currentChunk = 0
         const loadNext = () => {
           const start = currentChunk * chunkSize
@@ -235,7 +241,7 @@ export default {
         reader.onload = (e) => {
           spark.append(e.target.result)
           currentChunk++
-          
+
           currentChunk < sampleChunks ? loadNext() : resolve(spark.end())
         }
 
@@ -260,7 +266,7 @@ export default {
       try {
         const ext = file.name ? '.' + file.name.split('.').pop() : ''
         const checkRes = await axios.get('/bigFile/check', {
-          params: { 
+          params: {
             fileHash: fileItem.hash,
             ext
           }
@@ -277,6 +283,9 @@ export default {
         const totalChunks = Math.ceil(file.size / CHUNK_SIZE)
         const existedChunks = checkRes.data.existedChunks || []
 
+        // 在 addFile 里初始化
+        fileItem.chunksLoaded = Array(totalChunks).fill(0)
+
         for (let index = 0; index < totalChunks; index++) {
           if (existedChunks.includes(index)) {
             fileItem.loaded += CHUNK_SIZE
@@ -289,18 +298,19 @@ export default {
           )
 
           const formData = new FormData()
-          
-            // formData.append('index', index.toString()) // 确保索引是字符串
-            formData.append('index', index) // 确保索引是字符串
-            formData.append('hash', fileItem.hash)    // 确保包含 hash 参数
-            formData.append('file', chunk)
-          chunkTasks.push(() => 
+
+          // formData.append('index', index.toString()) // 确保索引是字符串
+          formData.append('index', index) // 确保索引是字符串
+          formData.append('hash', fileItem.hash)    // 确保包含 hash 参数
+          formData.append('file', chunk)
+          chunkTasks.push(() =>
             axios.post('/bigFile/upload', formData, {
               signal: fileItem.controller.signal,
               onUploadProgress: (progressEvent) => {
-                const loaded = progressEvent.loaded
-                fileItem.loaded += loaded - (fileItem.chunkLoaded || 0)
-                fileItem.chunkLoaded = loaded
+                // 只更新当前分片的进度
+                fileItem.chunksLoaded[index] = progressEvent.loaded
+                // 汇总所有分片进度
+                fileItem.loaded = fileItem.chunksLoaded.reduce((a, b) => a + b, 0)
                 this.updateFileProgress(fileItem)
               }
             })
@@ -317,7 +327,7 @@ export default {
 
         this.updateFileStatus(fileItem, 'success')
         this.fetchUploadedFiles() // 更新文件列表
-        
+
         // 上传成功后5秒移除
         setTimeout(() => {
           this.activeUploads = this.activeUploads.filter(f => f.hash !== fileItem.hash)
@@ -339,7 +349,7 @@ export default {
           executing.delete(p)
           return res
         })
-        
+
         executing.add(p)
         results.push(p)
 
@@ -372,14 +382,14 @@ export default {
       fileItem.controller.abort()
       this.updateFileStatus(fileItem, 'error')
     },
-    
+
     // 预览文件
     previewFile(file) {
       alert(`预览功能开发中，文件: ${file.name}`)
       // 实际实现：
       // window.open(file.url, '_blank')
     },
-    
+
     // 下载文件
     downloadFile(file) {
       const link = document.createElement('a')
@@ -389,7 +399,7 @@ export default {
       link.click()
       document.body.removeChild(link)
     },
-    
+
     // 删除文件
     async deleteFile(file) {
       if (confirm(`确定要删除文件 ${file.name} 吗？`)) {
@@ -447,7 +457,7 @@ export default {
   padding: 20px;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -512,6 +522,13 @@ button:hover {
   overflow-y: auto;
 }
 
+.upload-list,
+.uploaded-files {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .uploaded-files h3 {
   margin-top: 0;
   padding-bottom: 10px;
@@ -543,6 +560,7 @@ button:hover {
 
 .filename {
   display: block;
+  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -560,7 +578,9 @@ button:hover {
   gap: 8px;
 }
 
-.preview-btn, .download-btn, .delete-btn {
+.preview-btn,
+.download-btn,
+.delete-btn {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -681,7 +701,7 @@ button:hover {
   transform: translateY(-50%);
   font-size: 0.8em;
   color: #fff;
-  text-shadow: 0 0 2px rgba(0,0,0,0.5);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
 /* 图标样式 */

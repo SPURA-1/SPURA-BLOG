@@ -1,18 +1,36 @@
 <template>
   <div class="main-container">
     <!-- 头部区域 -->
-    <AdminMainHeader :activePath="activePath" @saveNavState="saveNavState" :SettingColor="SettingColor" />
+    <AdminMainHeader
+      :activePath="activePath"
+      @saveNavState="saveNavState"
+      :SettingColor="SettingColor"
+    />
     <!-- 页面主体 -->
     <div class="foot-container">
       <!-- 配置主题组件 -->
       <AdminSet :SettingColor="SettingColor" />
       <!-- 侧边栏区域 -->
       <div class="page-scroll">
-        <el-aside width="200px" class="el-aside">
+        <el-aside
+          width="200px"
+          class="el-aside"
+        >
           <!-- 可以设置默认起始 default-active="/UpdateUser" -->
           <!-- unique-opened 只允许展开一个 -->
-          <el-menu unique-opened :default-active="activePath" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" :active-text-color="SettingColor">
-            <AsideItems :menu="menu" style="width:100%" @saveNavState="saveNavState" />
+          <el-menu
+            unique-opened
+            :default-active="activePath"
+            class="el-menu-vertical-demo"
+            background-color="#545c64"
+            text-color="#fff"
+            :active-text-color="SettingColor"
+          >
+            <AsideItems
+              :menu="menu"
+              style="width:100%"
+              @saveNavState="saveNavState"
+            />
           </el-menu>
         </el-aside>
       </div>
@@ -63,34 +81,7 @@ export default {
     this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
-    // 侧边栏展开
-    handleOpen(key, keyPath) {
-    },
-    // 侧边栏关闭
-    handleClose(key, keyPath) {
-    },
-    // 退出提示用户
-    logoutHandler() {
-      this.$confirm("确定退出吗", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "退出成功!",
-          });
-          window.sessionStorage.clear();
-          this.$router.push("/");
-        })
-        .catch((e) => e);
-    },
-    // 创建select菜单激活回调函数，实现路由跳转
-    handleSelect(index) {
-      //index 就是要跳转的路由
-      this.$router.push(index)
-    },
+
     // 保存链接的激活状态
     saveNavState(activePath) {
       // 当点击其他链接时，还需要为activePath重新赋值

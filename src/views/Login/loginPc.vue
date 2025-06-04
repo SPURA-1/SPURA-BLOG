@@ -3,44 +3,112 @@
   <!-- 登录注册页面 -->
   <div class="login-register-container">
     <div class="box">
-      <div class="left" v-show="left_show">
+      <div
+        class="left"
+        v-show="left_show"
+      >
         <div>
           <p>Welcome</p>
           <p>Spura后台系统</p>
         </div>
-        <el-button class="button" round size="small" @click="toRegister(), play()">去注册</el-button>
+        <el-button
+          class="button"
+          round
+          size="small"
+          @click="toRegister(), play()"
+        >去注册</el-button>
       </div>
-      <div class="right" v-show="right_show">
+      <div
+        class="right"
+        v-show="right_show"
+      >
         <div>
           <p>Welcome</p>
           <p>Spura后台系统</p>
         </div>
-        <el-button class="button" round size="small" @click="toLogin(), play()">去登录</el-button>
+        <el-button
+          class="button"
+          round
+          size="small"
+          @click="toLogin(), play()"
+        >去登录</el-button>
       </div>
     </div>
 
     <!-- elementUI 表单组件 -->
-    <div class="form-box" :class="{ move: isMove, back: isBack, newPosition: isNew }" :style="{ left: nowLeft + '%' }">
+    <div
+      class="form-box"
+      :class="{ move: isMove, back: isBack, newPosition: isNew }"
+      :style="{ left: nowLeft + '%' }"
+    >
       <transition name="el-fade-in">
-        <el-form :model="loginForm" status-icon :rules="Rules" ref="loginForm" label-width="100px" class="demo-ruleForm" size="small" @keyup.enter.native="loginHeadler">
+        <el-form
+          :model="loginForm"
+          status-icon
+          :rules="Rules"
+          ref="loginForm"
+          label-width="100px"
+          class="demo-ruleForm"
+          size="small"
+          @keyup.enter.native="loginHeadler"
+        >
           <!-- ⬆ keyup 监视键盘的键抬起来的事件，限定范围 回车 按键，native是原生事件-->
 
           <!-- 登录 -->
-          <div class="right-form" v-show="login_show">
-            <el-form-item label="账 号" prop="username">
-              <el-input ref="inputUsername" type="text" v-model="loginForm.username" autocomplete="off" placeholder="请输入用户名" clearable></el-input>
+          <div
+            class="right-form"
+            v-show="login_show"
+          >
+            <el-form-item
+              label="账 号"
+              prop="username"
+            >
+              <el-input
+                ref="inputUsername"
+                type="text"
+                v-model="loginForm.username"
+                autocomplete="off"
+                placeholder="请输入用户名"
+                clearable
+              ></el-input>
             </el-form-item>
-            <el-form-item label="密 码" prop="Password">
-              <el-input type="password" v-model="loginForm.Password" autocomplete="off" placeholder="请输入密码" show-password></el-input>
+            <el-form-item
+              label="密 码"
+              prop="Password"
+            >
+              <el-input
+                type="password"
+                v-model="loginForm.Password"
+                autocomplete="off"
+                placeholder="请输入密码"
+                show-password
+              ></el-input>
             </el-form-item>
-            <el-form-item label="验 证 码" prop="Captcha">
-              <img :src="captchaImg" @click="refreshCaptcha" style="width:45%;height:45%">
-              <el-input type="text" v-model="loginForm.Captcha" autocomplete="off" placeholder="请输入验证码"></el-input>
+            <el-form-item
+              label="验 证 码"
+              prop="Captcha"
+            >
+              <img
+                :src="captchaImg"
+                @click="refreshCaptcha"
+                style="width:45%;height:45%"
+              >
+              <el-input
+                type="text"
+                v-model="loginForm.Captcha"
+                autocomplete="off"
+                placeholder="请输入验证码"
+              ></el-input>
             </el-form-item>
             <el-form-item>
               <!-- @click="loginHeadler()" -->
               <!-- @click="$router.push('/login')" -->
-              <el-button type="primary" @click="loginHeadler" size="small" round>登录</el-button>
+              <el-button
+                type="primary"
+                @click="loginHeadler"
+                size="small"
+                round
+              >登录</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -48,20 +116,66 @@
 
       <!-- elementUI 表单组件 -->
       <transition name="el-fade-in">
-        <el-form :model="registerForm" status-icon :rules="Rules" ref="registerForm" label-width="100px" class="demo-ruleForm2" size="small" @keyup.enter.native="handleThrottledStatusChange">
+        <el-form
+          :model="registerForm"
+          status-icon
+          :rules="Rules"
+          ref="registerForm"
+          label-width="100px"
+          class="demo-ruleForm2"
+          size="small"
+          @keyup.enter.native="handleThrottledStatusChange"
+        >
           <!-- 注册 -->
-          <div class="left-form" v-show="!login_show">
-            <el-form-item label="账 号" prop="name">
-              <el-input ref="inputName" type="text" v-model="registerForm.name" autocomplete="off" placeholder="请输入账号" clearable></el-input>
+          <div
+            class="left-form"
+            v-show="!login_show"
+          >
+            <el-form-item
+              label="账 号"
+              prop="name"
+            >
+              <el-input
+                ref="inputName"
+                type="text"
+                v-model="registerForm.name"
+                autocomplete="off"
+                placeholder="请输入账号"
+                clearable
+              ></el-input>
             </el-form-item>
-            <el-form-item label="密 码" prop="password">
-              <el-input ref="registerPass" type="password" v-model="registerForm.password" autocomplete="off" placeholder="请输入密码" show-password></el-input>
+            <el-form-item
+              label="密 码"
+              prop="password"
+            >
+              <el-input
+                ref="registerPass"
+                type="password"
+                v-model="registerForm.password"
+                autocomplete="off"
+                placeholder="请输入密码"
+                show-password
+              ></el-input>
             </el-form-item>
-            <el-form-item label="确认密码" prop="checkPass">
-              <el-input type="password" v-model="registerForm.checkPass" autocomplete="off" placeholder="请输入密码" show-password></el-input>
+            <el-form-item
+              label="确认密码"
+              prop="checkPass"
+            >
+              <el-input
+                type="password"
+                v-model="registerForm.checkPass"
+                autocomplete="off"
+                placeholder="请输入密码"
+                show-password
+              ></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" round @click="handleThrottledStatusChange">注册</el-button>
+              <el-button
+                type="primary"
+                size="small"
+                round
+                @click="handleThrottledStatusChange"
+              >注册</el-button>
             </el-form-item>
           </div>
         </el-form>

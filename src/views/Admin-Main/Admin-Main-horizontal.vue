@@ -4,27 +4,63 @@
     <!-- :style="{ backgroundColor: SettingColor }" 可添加配置颜色 -->
     <div class="top-main">
       <div>
-        <img class="Logo" style="margin-left:30px;" src="@/assets/Main/logo.png" alt="Logo" />
+        <img
+          class="Logo"
+          style="margin-left:30px;"
+          src="@/assets/Main/logo.png"
+          alt="Logo"
+        />
       </div>
-      <div style="padding-top:3px;" class="top-menu">
+      <div
+        style="padding-top:3px;"
+        class="top-menu"
+      >
         <!-- 可以设置默认起始 default-active="/UpdateUser" -->
         <!-- unique-opened 只允许展开一个 -->
-        <el-menu mode="horizontal" unique-opened :default-active="activePath" background-color="#545c64" text-color="#fff" :active-text-color="SettingColor">
-          <AsideItems :menu="menu" style="display:flex" @saveNavState="saveNavState" />
+        <el-menu
+          mode="horizontal"
+          unique-opened
+          :default-active="activePath"
+          background-color="#545c64"
+          text-color="#fff"
+          :active-text-color="SettingColor"
+        >
+          <AsideItems
+            :menu="menu"
+            style="display:flex"
+            @saveNavState="saveNavState"
+          />
         </el-menu>
       </div>
       <div>
-        <el-menu mode="horizontal" :default-active="activePath" @select="handleSelect" background-color="#545c64" text-color="#fff" :active-text-color="SettingColor">
+        <el-menu
+          mode="horizontal"
+          :default-active="activePath"
+          @select="handleSelect"
+          background-color="#545c64"
+          text-color="#fff"
+          :active-text-color="SettingColor"
+        >
           <el-submenu index="1">
             <template slot="title">
               <!-- 头像 -->
-              <img :src="ImageUrl + userData.userImage" alt="userImage" class="avatar" />
+              <img
+                :src="ImageUrl + userData.userImage"
+                alt="userImage"
+                class="avatar"
+              />
               <span>个人中心</span>
             </template>
-            <el-menu-item index="/Userimage" @click="saveNavState('/Userimage')"><i class="el-icon-camera"></i>更换头像</el-menu-item>
-            <el-menu-item index="/UpdateUser" @click="saveNavState('/UpdateUser')"><i class="el-icon-key"></i>更换密码</el-menu-item>
+            <el-menu-item
+              index="/Userimage"
+              @click="saveNavState('/Userimage')"
+            ><i class="el-icon-camera"></i>更换头像</el-menu-item>
+            <el-menu-item
+              index="/UpdateUser"
+              @click="saveNavState('/UpdateUser')"
+            ><i class="el-icon-key"></i>更换密码</el-menu-item>
           </el-submenu>
-          <el-menu-item index="10" @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
+          <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
         </el-menu>
       </div>
     </div>

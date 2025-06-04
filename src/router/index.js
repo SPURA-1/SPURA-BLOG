@@ -17,7 +17,7 @@ const routes = [
   {
     name: 'Login',
     path: '/login',
-    component: () => import('../views/login.vue'),
+    component: () => import('../views/Login/LoginMain.vue'),
   },
   // 后台主页的路由
   {
@@ -76,7 +76,7 @@ const routes = [
         children: [
           {
             path: '/UserList',
-            component: () => import('../components/ServeAdmin/UserList.vue'),
+            component: () => import('../components/ServeAdmin/UserList/UserList.vue'),
             meta: { title: '账号管理', icon: 'el-icon-edit-outline' },
           },
           {
@@ -176,6 +176,11 @@ const routes = [
     },
     component: () => import('../views/EsBigScreen/EsBigScreen.vue')
   },
+  {
+    path: '/user/UserListPhone',
+    name: 'UserListPhone',
+    component: () => import('@/components/ServeAdmin/UserList/UserListPhone.vue')
+  }
 
 ]
 

@@ -1,24 +1,49 @@
 <template>
   <el-header class="el-header">
     <!-- 左侧的 logo -->
-    <img class="Logo" style="margin-left:30px;" src="@/assets/Main/logo.png" alt="Logo" />
+    <img
+      class="Logo"
+      style="margin-left:30px;"
+      src="@/assets/Main/logo.png"
+      alt="Logo"
+    />
     <div style="display:flex;align-items: center;">
       <ErrorLog style="padding-right: 20px;" />
       <!-- 右侧的菜单 -->
       <!-- 通过mode属性可以使导航菜单变更为水平模式 -->
       <!-- select	菜单激活回调 -->
       <!-- :default-active 与当前激活的菜单绑定“path” -->
-      <el-menu class="el-menu-top" mode="horizontal" @select="handleSelect" :default-active="activePath" background-color="#23262E" text-color="#fff" :active-text-color="SettingColor">
+      <el-menu
+        class="el-menu-top"
+        mode="horizontal"
+        @select="handleSelect"
+        :default-active="activePath"
+        background-color="#23262E"
+        text-color="#fff"
+        :active-text-color="SettingColor"
+      >
         <el-submenu index="1">
           <template slot="title">
             <!-- 头像 -->
-            <img :src="ImageUrl + userData.userImage" alt="userImage" class="avatar" />
+            <img
+              :src="ImageUrl + userData.userImage"
+              alt="userImage"
+              class="avatar"
+            />
             <span>个人中心</span>
           </template>
-          <el-menu-item class="MenuTop" index="/UserImage" @click="saveNavState('/UserImage')"><i class="el-icon-camera"></i>更换头像</el-menu-item>
-          <el-menu-item class="MenuTop" index="/UpdateUser" @click="saveNavState('/UpdateUser')"><i class="el-icon-key"></i>更换密码</el-menu-item>
+          <el-menu-item
+            class="MenuTop"
+            index="/UserImage"
+            @click="saveNavState('/UserImage')"
+          ><i class="el-icon-camera"></i>更换头像</el-menu-item>
+          <el-menu-item
+            class="MenuTop"
+            index="/UpdateUser"
+            @click="saveNavState('/UpdateUser')"
+          ><i class="el-icon-key"></i>更换密码</el-menu-item>
         </el-submenu>
-        <el-menu-item index="10" @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
+        <el-menu-item @click="logoutHandler"><i class="el-icon-switch-button"></i>退出</el-menu-item>
       </el-menu>
     </div>
   </el-header>
