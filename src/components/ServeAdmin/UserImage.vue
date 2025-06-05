@@ -65,7 +65,6 @@
         :http-request="submitUpload"
         :auto-upload="false"
         :on-change="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         name="image"
@@ -89,6 +88,7 @@
 <script>
 import { GetImages, userUpdAvatar, FileUpdate } from '@/api/UserInfo.api'
 import { mapGetters } from 'vuex';
+import { addWatermark } from '@/utils/addWaterMark';
 export default {
   data() {
     return {
@@ -112,8 +112,16 @@ export default {
     // 文件上传成功后的钩子 // 修改文件变更处理
     async handleAvatarSuccess(file, fileList) {
       try {
-        // 添加水印并生成新文件
-        const watermarkedFile = await this.addWatermark(file.raw);
+        // 添加水印并生成新文件,根据不同参数设置不同的水印格式
+        const watermarkedFile = await addWatermark(file.raw,
+          {
+          text: '© SPURA-Blog Yyyy',
+          font: '28px Microsoft YaHei',
+          textColor: 'rgba(135, 206, 250, 0.65)',
+          bgColor: 'rgba(0, 0, 0, 0.4)',
+          position: 'center' // 居中水印
+        }
+        );
         
         // 替换原始文件
         const newFile = {
@@ -129,66 +137,66 @@ export default {
       }
     },
     // Canvas添加水印方法
-    addWatermark(file) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        const reader = new FileReader();
+    // addWatermark(file) {
+    //   return new Promise((resolve, reject) => {
+    //     const img = new Image();
+    //     const reader = new FileReader();
 
-        reader.onload = (e) => {
-          img.onload = async () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+    //     reader.onload = (e) => {
+    //       img.onload = async () => {
+    //         const canvas = document.createElement('canvas');
+    //         const ctx = canvas.getContext('2d');
 
-            // 设置画布尺寸
-            canvas.width = img.width;
-            canvas.height = img.height;
+    //         // 设置画布尺寸
+    //         canvas.width = img.width;
+    //         canvas.height = img.height;
 
-            // 绘制原始图片
-            ctx.drawImage(img, 0, 0);
+    //         // 绘制原始图片
+    //         ctx.drawImage(img, 0, 0);
 
-            // 设置水印样式
-            ctx.font = '24px Arial';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'bottom';
+    //         // 设置水印样式
+    //         ctx.font = '24px Arial';
+    //         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    //         ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    //         ctx.textAlign = 'right';
+    //         ctx.textBaseline = 'bottom';
 
-            // 水印文字
-            const text = '© SPURA-Blog Yyyy';
-            const padding = 20;
+    //         // 水印文字
+    //         const text = '© SPURA-Blog Yyyy';
+    //         const padding = 20;
 
-            // 绘制背景框
-            const textWidth = ctx.measureText(text).width;
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillRect(
-              canvas.width - textWidth - padding * 2,
-              canvas.height - 40,
-              textWidth + padding * 2,
-              30
-            );
+    //         // 绘制背景框
+    //         const textWidth = ctx.measureText(text).width;
+    //         ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    //         ctx.fillRect(
+    //           canvas.width - textWidth - padding * 2,
+    //           canvas.height - 40,
+    //           textWidth + padding * 2,
+    //           30
+    //         );
 
-            // 绘制文字
-            ctx.fillStyle = 'rgba(135, 206, 250, 0.65)';
-            ctx.fillText(text, canvas.width - padding, canvas.height - padding);
+    //         // 绘制文字
+    //         ctx.fillStyle = 'rgba(135, 206, 250, 0.65)';
+    //         ctx.fillText(text, canvas.width - padding, canvas.height - padding);
 
-            // 转换为文件对象
-            canvas.toBlob(blob => {
-              const watermarkedFile = new File([blob], file.name, {
-                type: file.type,
-                lastModified: Date.now()
-              });
-              resolve(watermarkedFile);
-            }, file.type);
-          };
+    //         // 转换为文件对象
+    //         canvas.toBlob(blob => {
+    //           const watermarkedFile = new File([blob], file.name, {
+    //             type: file.type,
+    //             lastModified: Date.now()
+    //           });
+    //           resolve(watermarkedFile);
+    //         }, file.type);
+    //       };
 
-          img.onerror = reject;
-          img.src = e.target.result;
-        };
+    //       img.onerror = reject;
+    //       img.src = e.target.result;
+    //     };
 
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    },
+    //     reader.onerror = reject;
+    //     reader.readAsDataURL(file);
+    //   });
+    // },
     submitUpload(file) {
       if (this.fileList.length === 0) {
         this.$message({
